@@ -54,9 +54,6 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
         CStats::SetStatValue(STAT_FAT, savedFat);
         CStats::SetStatValue(STAT_MUSCLE, savedMuscle);
     }
-
-    // THIS IS AN EXPERIMENTAL SOLUTION FOR THE 0x4D68BA CRASH
-    m_pPed->m_bStreamingDontDelete = true;
 }
 
 void CNetworkPlayer::DestroyPed()
