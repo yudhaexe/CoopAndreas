@@ -29,6 +29,8 @@ terminate_this_script
 $onmission = 1
 $disable_mod_garage = 1
 script_name 'CPRACE'
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 World.DisableAllEntryExits(True)
 Text.LoadMissionText('RACETOR')
