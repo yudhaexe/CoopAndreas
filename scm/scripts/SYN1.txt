@@ -3,6 +3,7 @@
 
 :SYN1
 script_name 'SYN1'
+Coop.EnableSyncingThisScript()
 gosub @SYN1_1424
 if 
   has_deatharrest_been_executed 
@@ -53,6 +54,18 @@ Blip.SetAsFriendly(379@, True)
 return 
 148@ = Char.CreateInsideCar(PedType.CivMale, 290, 377@)
 381@ = Blip.AddForCar(377@)
+// COOP: map Cesar's car (377@, drive to the vantage point) to network id + per-player convoy blip
+$temp_int = Coop.GetVehicleNetworkId(377@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(377@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 377@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 
 :SYN1_345
 Streaming.RequestModel(510)
@@ -214,6 +227,7 @@ return
 Text.LoadMissionText('SYN1')
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 34@ = 0
 35@ = 0

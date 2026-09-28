@@ -294,7 +294,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Air Raid
 - [ ] Supply Lines...
 - [ ] New Model Army
-- [ ] Photo Opportunity
+- [~] Photo Opportunity
 - [ ] Jizzy
 - [ ] T-Bone Mendez
 - [ ] Mike Toreno
