@@ -3,6 +3,7 @@
 
 :WUZI2
 script_name 'WUZI2'
+Coop.EnableSyncingThisScript()
 gosub @WUZI2_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :WUZI2_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 257@ = Game.GetMaxWantedLevel()
 Text.LoadMissionText('WUZI2')
 $swim_stamina_check = Stat.GetInt(225)
@@ -146,6 +148,8 @@ Camera.RestoreJumpcut
 Camera.SetBehindPlayer
 Player.SetControl($player1, True)
 Char.SetCoordinates($scplayer, -2153.611, 645.31, 51.3516)
+// COOP: brief all players together at Woozie's
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 270.0)
 Camera.DoFade(1, 1500)
 36@ = Blip.AddForCoord(-1641.995, 1309.217, 6.1764)
@@ -4309,6 +4313,8 @@ Player.SetControl($player1, True)
 Text.PrintNow('WZI2_60', 8000, 1)
 
 :WUZI2_27255
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
