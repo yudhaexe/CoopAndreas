@@ -23,6 +23,7 @@ DecisionMakerGroup.AddEventResponse(37@, 36, 1516, 0.0, 100.0, 0.0, 0.0, True, F
 DecisionMakerChar.AddEventResponse(38@, 36, 1000, 0.0, 100.0, 0.0, 0.0, True, True)
 36@ = 32
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Player.AlterWantedLevel($player1, 0)
 if 
   $onmission == 69
@@ -32,6 +33,7 @@ add_continuous_sound 82@ 65535 2320.043 -8.5501 27.2047
 
 :CAT2_256
 script_name 'CAT2'
+Coop.EnableSyncingThisScript()
 Camera.DoFade(0, 800)
 
 :CAT2_274
@@ -90,6 +92,8 @@ if
 goto_if_false @CAT2_629
 Char.SetCoordinates($scplayer, 2297.786, -15.5166, 26.2964)
 Char.SetHeading($scplayer, 180.0)
+// COOP: bring all players to the bank together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 
 :CAT2_629
 goto @CAT2_739
@@ -2615,6 +2619,18 @@ goto_if_false @CAT2_18004
 561@ = 2
 372@ = Blip.AddForChar($catalina)
 Blip.SetAsFriendly(372@, True)
+// COOP: map Catalina (companion) to network id + per-player friendly blip
+$temp_int = Coop.GetPedNetworkId($catalina)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($catalina)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $catalina, True, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 Task.GoStraightToCoord($catalina, 2315.391, -1.6768, 25.75, MoveState.Run, -2)
 169@ = 1
 
@@ -4701,6 +4717,14 @@ Char.MarkAsNoLongerNeeded(94@)
 
 :CAT2_31317
 Sound.Remove(82@)
+// COOP: clear per-player companion blip + regroup players to host on mission end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $catalina)
+    end
+end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 $timer_mobile_start = Clock.GetGameTimer()
 Game.SetWantedMultiplier(1.0)

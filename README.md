@@ -284,7 +284,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Body Harvest
 - [~] Local Liquor Store
 - [!] Against All Odds
-- [ ] Small Town Bank
+- [~] Small Town Bank
 - [ ] Wu Zi Mu
 - [ ] Farewell, My Love...
 - [ ] Are You Going To San Fierro?
