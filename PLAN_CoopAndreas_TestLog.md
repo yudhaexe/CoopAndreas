@@ -96,3 +96,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | STEAL1 Zeroing In | track/follow-car (radar cari mobil target) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | CAT3 Tanker Commander | convoy/escort-vehicle (curi tanker, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | SYN3 Outrider | convoy (host nyetir mission car 34@, gauntlet) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| MUSIC1 Life's a Beach | convoy (curi van, drive back; dance minigame host-solo) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |

@@ -3,6 +3,7 @@
 
 :MUSIC1
 script_name 'MUSIC1'
+Coop.EnableSyncingThisScript()
 gosub @MUSIC1_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STRAP1')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 34@ = 526.84
 35@ = -1885.19
@@ -2317,6 +2319,18 @@ goto_if_false @MUSIC1_14786
 Blip.Remove(273@)
 272@ = Blip.AddForCar(47@)
 Blip.SetAsFriendly(272@, True)
+// COOP: map stolen van (47@, host drives it back) to network id + per-player convoy blip (van is at real coords in this drive-back phase)
+$temp_int = Coop.GetVehicleNetworkId(47@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(47@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 47@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Text.PrintNow('MUS1_6', 7000, 0)
 208@ = 0
 
@@ -2504,6 +2518,13 @@ Streaming.RemoveAnimation("SCRATCHING")
 Blip.Remove(271@)
 Blip.Remove(272@)
 Blip.Remove(273@)
+// COOP: clear per-player convoy blip on mission end (pass/fail) so nothing is left stuck
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 47@)
+    end
+end
 Particle.Kill(37@)
 Particle.Kill(38@)
 Sequence.Clear(173@)
