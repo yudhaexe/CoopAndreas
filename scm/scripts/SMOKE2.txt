@@ -1,11 +1,10 @@
 //-------------Mission 28---------------
 // Originally: Running Dog
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
 
 
 :SMOKE2
 script_name 'SMOKE2'
+Coop.EnableSyncingThisScript()
 gosub @SMOKE2_47
 if 
   has_deatharrest_been_executed 
@@ -20,6 +19,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('SMOKE2')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 36@ = 2068.42
 37@ = -1694.87
@@ -221,6 +221,24 @@ goto_if_false @SMOKE2_1678
 43@ = Char.CreateInsideCar(PedType.Mission2, 109, 42@)
 44@ = Char.Create(25, 109, 0.0, 0.0, -100.0)
 45@ = Char.Create(25, 110, 0.0, 0.0, -100.0)
+// COOP: map convoy car + Big Smoke to network ids
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+$temp_int = Coop.GetPedNetworkId(35@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(35@)
+end
+// COOP: convoy car blip for followers (own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 
 :SMOKE2_1678
 Path.SwitchPedRoadsOff(2458.5, -1410.63, 24.06, 2504.27, -1395.83, 28.55)
@@ -1741,6 +1759,13 @@ Pickup.Remove(40@)
 Blip.Remove(186@)
 Blip.Remove(183@)
 Blip.Remove(184@)
+// COOP: clear followers' convoy car blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 Blip.Remove(185@)
 Sequence.Clear(114@)
 Sequence.Clear(115@)

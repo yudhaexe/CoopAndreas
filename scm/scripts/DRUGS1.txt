@@ -3,6 +3,7 @@
 
 :DRUGS1
 script_name 'DRUGS1'
+Coop.EnableSyncingThisScript()
 gosub @DRUGS1_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :DRUGS1_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('SMOKE4')
 World.ClearArea(1, 2060.0, -1694.0, 50.0, 50.0)
@@ -194,6 +196,17 @@ Car.ChangeColor(34@, 98, 14)
 Car.SetHeading(34@, 271.822)
 Car.SetHealth(34@, 1000)
 $big_smoke = Char.CreateAsPassenger(PedType.Special, 290, 34@, 0)
+// COOP: map convoy car + Big Smoke to network ids
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+$temp_int = Coop.GetPedNetworkId($big_smoke)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($big_smoke)
+end
 Char.SetGetOutUpsideDownCar($big_smoke, False)
 Char.SetSignalAfterKill($big_smoke, False)
 Char.SetHealth($big_smoke, 500)
@@ -295,6 +308,13 @@ if
 goto_if_false @DRUGS1_1854
 87@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(87@, True)
+// COOP: convoy car blip for followers (own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Blip.Remove(88@)
 90@ = 100
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
@@ -8020,6 +8040,13 @@ Char.RemoveElegantly($big_smoke)
 Streaming.UnloadSpecialCharacter(1)
 World.DisableAllEntryExits(False)
 Blip.Remove(87@)
+// COOP: clear convoy car blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 Blip.Remove(88@)
 Blip.Remove(89@)
 Blip.Remove(209@)

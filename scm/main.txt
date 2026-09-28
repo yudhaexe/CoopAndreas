@@ -620,6 +620,7 @@ $temp_int: integer
 end
 
 {$INCLUDE scripts/MAIN.txt}
+{$INCLUDE scripts/DEBUG_LAUNCHER.txt}
 {$INCLUDE scripts/INT.txt}
 {$INCLUDE scripts/SWEET.txt}
 {$INCLUDE scripts/CRASH.txt}

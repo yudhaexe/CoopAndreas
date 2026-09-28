@@ -3,8 +3,7 @@
 
 :SWEET4
 script_name 'SWEET4'
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
+Coop.EnableSyncingThisScript()
 
 gosub @SWEET4_4512
 if 
@@ -429,8 +428,36 @@ World.ClearArea(1, 545@, 546@, 547@, 6.0)
 543@ = Car.Create(492, 545@, 546@, 547@)
 Car.ChangeColor(543@, 59, 34)
 Car.SetHeading(543@, 548@)
+// COOP: map mission entities to network ids
+$temp_int = Coop.GetVehicleNetworkId(543@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(543@)
+end
+$temp_int = Coop.GetPedNetworkId(394@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(394@)
+end
+$temp_int = Coop.GetPedNetworkId(401@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(401@)
+end
+$temp_int = Coop.GetPedNetworkId(408@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(408@)
+end
 544@ = Blip.AddForCar(543@)
 Blip.SetAsFriendly(544@, True)
+// COOP: convoy car blip for followers (drive-by is a roaming chase; blip points to host's gang car)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 543@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Car.SetCanBurstTires(543@, False)
 Car.SetHealth(543@, 1450)
 Player.AlterWantedLevel($player1, 0)
@@ -663,6 +690,7 @@ return
 :SWEET4_4512
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 $sw4_stage = 0
 43@ = 0
@@ -3955,6 +3983,13 @@ Streaming.MarkModelAsNoLongerNeeded(365)
 Streaming.RemoveAnimation("GHANDS")
 Streaming.RemoveAnimation("GANGS")
 Blip.Remove(544@)
+// COOP: clear followers' convoy car blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 543@)
+    end
+end
 Blip.Remove(57@)
 Blip.Remove(58@)
 Blip.Remove(433@)

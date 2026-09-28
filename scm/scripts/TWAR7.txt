@@ -3,6 +3,7 @@
 
 :TWAR7
 script_name 'TWAR7'
+Coop.EnableSyncingThisScript()
 gosub @TWAR7_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :TWAR7_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('SMOKE1')
 if 
@@ -924,6 +926,12 @@ Car.SetCanBurstTires(35@, False)
 Car.SetProofs(35@, True, True, True, True, True)
 World.ClearArea(1, 2483.9, -1280.2, 29.4, 30.0)
 34@ = Char.Create(24, 109, 2483.9, -1280.2, 29.4)
+// COOP: map chase target to network id
+$temp_int = Coop.GetPedNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(34@)
+end
 Char.ShutUpForScriptedSpeech(34@, True)
 Char.SetMoney(34@, 500)
 Char.SetHeading(34@, 261.6)
@@ -1262,6 +1270,13 @@ if
 goto_if_false @TWAR7_8690
 66@ = Blip.AddForChar(34@)
 Blip.SetAsFriendly(66@, False)
+// COOP: blip chase target for every network player
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 
 :TWAR7_8690
 Char.HideWeaponForScriptedCutscene($scplayer, False)
@@ -3376,6 +3391,13 @@ Char.ShutUpForScriptedSpeech($scplayer, False)
 :TWAR7_23311
 Game.ShutAllCharsUp(False)
 Blip.Remove(66@)
+// COOP: clear chase target blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
 Streaming.MarkModelAsNoLongerNeeded(410)
 Streaming.MarkModelAsNoLongerNeeded(461)

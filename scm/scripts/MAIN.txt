@@ -21,6 +21,7 @@ $player2 = Player.Create(1, 2488.562, -1666.865, 12.8757)
 
 :MAIN_177
 display_timer_bars 0
+start_new_script @DEBUG_LAUNCHER
 Game.SetRelationship(RelationshipType.Like, PedType.Gang2, PedType.Player1)
 Game.SetRelationship(RelationshipType.Hate, PedType.Gang2, PedType.Gang1)
 Game.SetRelationship(RelationshipType.Dislike, PedType.Gang2, PedType.Gang3)

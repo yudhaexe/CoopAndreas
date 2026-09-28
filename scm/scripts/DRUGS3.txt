@@ -3,6 +3,7 @@
 
 :DRUGS3
 script_name 'DRUGS3'
+Coop.EnableSyncingThisScript()
 gosub @DRUGS3_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :DRUGS3_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('CRASH3')
 World.SetPedDensityMultiplier(0.0)
@@ -1414,6 +1416,18 @@ Char.SetMoney(101@, 3000)
 Char.SetSuffersCriticalHits(101@, False)
 Char.SetUsesUpperbodyDamageAnimsOnly(101@, True)
 138@ = Blip.AddForChar(101@)
+// COOP: map boss target + blip for every network player
+$temp_int = Coop.GetPedNetworkId(101@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(101@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 101@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 109@ = Char.Create(24, 102, 2129.217, -2281.78, 19.6719)
 Char.SetHeading(109@, 314.7061)
 Char.SetDecisionMaker(109@, 52@)
@@ -2883,6 +2897,13 @@ Object.Delete(51@)
 Path.SwitchRoadsOn(2203.8, -2174.63, 0.0, 2279.2, -2234.63, 18.21)
 Blip.Remove(137@)
 Blip.Remove(138@)
+// COOP: clear boss blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 101@)
+    end
+end
 Streaming.RemoveAnimation("SWAT")
 Streaming.RemoveAnimation("DODGE")
 Pickup.Remove(133@)

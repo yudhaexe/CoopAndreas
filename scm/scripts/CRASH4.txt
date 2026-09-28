@@ -3,6 +3,7 @@
 
 :CRASH4
 script_name 'CRASH4'
+Coop.EnableSyncingThisScript()
 gosub @CRASH4_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :CRASH4_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 $flag_on_doberman_mission = 1
 49@ = 0
 50@ = 0
@@ -786,6 +788,12 @@ Char.SetHeading(34@, 180.0)
 Char.SetOnlyDamagedByPlayer(34@, True)
 Char.GiveWeapon(34@, WeaponType.Tec9, 30000)
 Char.SetProofs(34@, True, True, True, True, True)
+// COOP: map target to network id
+$temp_int = Coop.GetPedNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(34@)
+end
 Camera.SetFadingColor(0, 0, 0)
 Camera.DoFade(1, 1000)
 if 
@@ -913,6 +921,13 @@ if
 goto_if_false @CRASH4_5730
 Char.SetDecisionMaker(34@, 43@)
 35@ = Blip.AddForChar(34@)
+// COOP: blip target for every network player
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 Task.KillCharOnFoot(34@, $scplayer)
 Char.SetProofs(34@, False, False, False, False, False)
 goto @CRASH4_5742
@@ -1076,6 +1091,13 @@ $onmission = 0
 $flag_on_doberman_mission = 0
 Blip.Remove(45@)
 Blip.Remove(35@)
+// COOP: clear target blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 Blip.Remove(52@)
 Game.CanTriggerGangWarWhenOnAMission(False)
 $timer_mobile_start = Clock.GetGameTimer()

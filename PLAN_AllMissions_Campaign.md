@@ -1,0 +1,161 @@
+# PLAN — Campaign Konversi SEMUA Misi ke Co-op
+
+> **Tujuan user:** konversi semua misi ke co-op, jalan autonomous, resumable lintas
+> rate-limit (limit 5 jam habis → tunggu reset → lanjut dari titik terakhir).
+>
+> **Baca dulu:** `PLAN_SWEET3_Conversion.md` (§0 aturan anti-halu, Coop API, idiom, build/compile).
+> File ini KHUSUS ngatur strategi batch + antrean + progress semua misi.
+
+---
+
+## 0. KONTRAK REALISTIS (baca tiap sesi, jangan overpromise)
+
+**⛔ ATURAN #1 (dari user): BUKAN MODE AUTO.** Tiap misi WAJIB tanya keputusan desain dulu
+(via AskUserQuestion) sebelum konversi — sama kayak SWEET3. JANGAN rantai beberapa misi tanpa
+nanya. Alur per misi: analisa struktur → TANYA design forks → draft → self-compile (CLI) →
+update tracker → misi berikutnya (tanya lagi). Lihat memory [[coopandreas-ask-per-mission]].
+
+Yang Claude kirim = **DRAFT konversi**, BUKAN "tested & working".
+- ❌ Tidak bisa compile Sanny Builder → draft belum tentu ke-compile.
+- ❌ Tidak bisa playtest 2 client → desync/crash cuma ketauan dari dev.
+- ❌ Semantik objective & misi mekanik-khusus = keputusan dev, bukan tebakan Claude.
+- ✅ Bisa: draft pola roti-mentega niru `SWEET1.txt`, satu per satu, resumable.
+
+Definisi status per misi (dipakai di tracker §4):
+- `DRAFTED` = Claude udah sisipin Coop.* pola dasar. **Belum di-compile.**
+- `COMPILES` = dev udah compile di Sanny, sukses (atau Claude udah benerin error compile).
+- `TESTED` = dev udah playtest 2 client, happy-path jalan, objective bener. ← DEFINISI "SELESAI".
+
+---
+
+## 1. INVENTARIS (terverifikasi 2026-09-29)
+- 136 misi terdaftar (`DEFINE MISSION` di `main.txt`), 303 file .txt (banyak non-misi/helper).
+- Sudah kelar (>50 calls): `SWEET1`(103), `SWEET1B`(88), `INTRO2`(59), `INTRO1`(58).
+- Stub (2–8 calls): `JFUD`(8), `TATTO/PSHOP/BARB`(4), `SWEET2/3/4/6`, `SMOKE2/3`, `RYDER2/3` (2).
+- Belum disentuh: sisanya (~116).
+
+---
+
+## 2. STRATEGI: PILOT GATE → baru BATCH (WAJIB urut)
+
+### FASE 0 — PILOT (gate, TIDAK boleh dilewati)
+Konversi **SWEET3 (Drive-Thru)** SATU misi sampai **COMPILES** (idealnya TESTED).
+Tujuan: buktiin pola Claude beneran ke-compile SEBELUM diterapin ke 100 misi.
+Kalau pilot nemu kesalahan sistematis → benerin pola dulu. **Ini yang nyegah "100 draft salah semua".**
+Butuh dev: compile di Sanny + kasih daftar error → Claude fix → ulang sampai clean.
+
+### FASE 1 — BATCH misi roti-mentega
+Baru boleh mulai SETELAH minimal 1 pilot `COMPILES`. Proses antrean §4 satu per satu,
+tiap misi commit progress ke tracker. Prioritas: misi Grove Street awal / pola sederhana.
+
+### FASE 2 — Misi butuh keputusan
+Misi mekanik-khusus / objective ambigu → JANGAN di-draft buta. Tulis pertanyaan di §5,
+tunggu jawaban dev, baru implementasi.
+
+### FASE 3 — Misi RE-binary (interior/streaming)
+Di luar jangkauan scripting. Skip, catat di §5. Butuh IDA/Ghidra + dev.
+
+---
+
+## 3. LOOP KERJA AUTONOMOUS + RESUME
+```
+[Claude] ambil misi berikutnya dari antrean (§4)
+   → draft konversi (niru SWEET1)
+   → update status jadi DRAFTED + catat di LOG (§6)
+   → lanjut misi berikutnya
+        │
+   (rate-limit 5 jam habis? sesi mati?)
+        │
+   [resume] baca tracker §4 → lanjut dari misi ber-status paling rendah
+```
+- **Resumable:** semua state ada di file ini (§4 tracker). Interupsi apapun → lanjut dari sini.
+- **Rate-limit:** Claude tak bisa nembus sendiri. Saat sesi hidup lagi → baca §4 → lanjut.
+- **Auto-pacing:** bisa pakai skill `/loop` (self-paced) biar Claude nerusin antrean otomatis.
+- **Aturan commit:** SATU misi = SATU unit kerja. Jangan pindah misi sebelum status ke-update.
+
+---
+
+## 4. ANTREAN + TRACKER (Claude update kolom Status tiap selesai)
+Status: `TODO` → `DRAFTED` → `COMPILES` → `TESTED` | atau `BLOCKED`(butuh keputusan) | `SKIP`(RE-binary)
+
+| # | Misi (file) | Nama | Tipe | Status | Catatan |
+|---|---|---|---|---|---|
+| — | SWEET1 | Tagging Up Turf | butter | TESTED? | referensi template (103 calls) |
+| — | INTRO1/INTRO2/SWEET1B | — | — | done | referensi |
+| **PILOT** | SWEET3 | Drive-Thru | convoy(1-car) | COMPILES | 21 Coop calls, **compile sukses (CLI)**, main.scm ke-deploy ke game. Isi: sync enable + collect players + entity netID map (sweet_car/smoke/sweet/ryder) + convoy blip per-player + checkpoint per-player @3 leg (2404.1,-1891.5 / 2513.3,-1671.9 / 2066.465,-1695.444) + cleanup (remove checkpoint+blip). Desain: host nyetir sweet_car+AI gang, player lain ngikut mobil sendiri, objective any-player. **Nunggu playtest 2-client (desync/crash/objective).** Belum dikonversi: per-player objective TEXT (masih host-only via Text.PrintNow) — bisa ditambah kalau test butuh. |
+| 1 | SWEET2 | Nines and AK's | convoy+foot | COMPILES | 14 Coop calls, compile OK, deployed. Host nyetir $big_smoke_car (Big Smoke penumpang), player lain mobil sendiri + convoy blip + checkpoint (dest 2453.07,-2003.96 & on-foot 2448.96,-1973.545) + cleanup. Nunggu playtest. |
+| 2 | SWEET4 | Drive-By | convoy+combat | COMPILES | 14 Coop calls, compile OK, deployed. Host nyetir gang car 543@ (gang 394@/401@/408@ penumpang, drive-by), player lain mobil sendiri + convoy blip ke 543@. Objektif=kill Balla (world-state, any-player natural). Checkpoint di-skip (musuh roaming, gak cocok fixed checkpoint). Nunggu playtest. |
+| 3 | SMOKE2 | Running Dog | convoy+chase | COMPILES | 10 Coop calls, compile OK, deployed. Host nyetir mobil Smoke 34@ (Big Smoke 35@), player lain mobil sendiri + convoy blip. Objektif kejar-bunuh target (world-state, any-player). ⚠️RISIKO: entity spawn coord placeholder (0,0,-100) lalu di-warp; netID handshake ditaruh tepat setelah create — kalau in-game HANG, pindahin ke setelah warp. Nunggu playtest. |
+| 4 | RYDER2 | Robbing Uncle Sam | convoy+combat | COMPILES | 10 Coop calls, compile OK, deployed. Host nyetir truk 95@ (Ryder penumpang), player lain mobil sendiri + convoy blip. Angkut krat = AI-scripted (Ryder), objektif world-state. CATATAN: blip pindah ke getaway car 99@ di fase akhir — belum di-sync per-player (refinement). Nunggu playtest. |
+| — | SWEET6 | **Cesar Vialpando** | 🎯 MEKANIK-KHUSUS | BLOCKED | minigame dansa lowrider (rhythm+hidraulik). Butuh keputusan "4 player di misi dansa solo?" — TANYA dulu. 5571 baris. |
+| — | RYDER3 | **Catalyst** | 🎯 MEKANIK-KHUSUS | BLOCKED | heist kereta/motor chase — cek mekanik, mungkin butuh keputusan. |
+| — | SMOKE3 | **Wrong Side of the Tracks** | 🎯 MEKANIK-KHUSUS | BLOCKED | misi kereta legendaris (timing ketat di motor, Smoke nembak). Butuh keputusan desain. |
+| 5 | HOODS5 | Sweet's Girl | escort+combat | COMPILES | 8 Coop calls, compile OK, deployed. Bukan convoy — objektif lokasi (ikuti Sweet 75@ + LocateAnyMeans). Pola: netID map Sweet + per-player CHAR blip (UpdateCharBlipForNetworkPlayer) + cleanup. Nunggu playtest. |
+| 6 | CRASH4 | Doberman | territory+kill | COMPILES | 8 Coop calls, compile OK, deployed. Gang war Glen Park + kejar-bunuh target 34@. Pola: netID map target + per-player char blip (merah) + cleanup. Objektif world-state (kill). Nunggu playtest. |
+| 7 | DRUGS3 | Gray Imports | location+kill | COMPILES | 8 calls, compile OK, deployed. Solo docks shootout + kejar boss 101@. netID map boss + char blip merah + cleanup. Nunggu playtest. |
+| 8 | TWAR7 | OG Loc | convoy+chase-kill | COMPILES | 8 calls, compile OK, deployed. netID map target Freddy 34@ + char blip + cleanup. Nunggu playtest. |
+| 9 | DRUGS1 | Just Business | convoy+combat | COMPILES | 10 calls, compile OK, deployed. Host nyetir 34@ (Big Smoke penumpang) + convoy blip + cleanup. Nunggu playtest. |
+| 10 | DRUGS4 | Reuniting the Families | convoy+combat+escort | COMPILES | 10 calls, compile OK, deployed. Host nyetir $sweet_car (Sweet), + convoy blip + cleanup. Misi kompleks (ambush SWAT, rooftop) — blip fase lanjut ($sweet on-foot 2142, getaway) belum di-sync per-player (refinement). Nunggu playtest. |
+| SKIP | JFUD/TATTO/PSHOP/BARB | (shop/minigame, bukan story) | — | SKIP | gak ada header "Originally". |
+| … | (sisa story missions) | — | — | TODO | diisi bertahap |
+
+> Tabel ini bakal dilengkapi pas FASE 1 mulai (Claude enumerate dari `main.txt` DEFINE MISSION).
+> Nama misi di atas = perkiraan urutan story; VERIFIKASI dari file sebelum ngedraft.
+
+---
+
+## 5. BLOCKED / BUTUH KEPUTUSAN DEV (Claude JANGAN nebak)
+Diisi saat ketemu. Format: `[misi] pertanyaan`.
+- [ ] **SWEET3 (Drive-Thru)** — sukses kalau HOST nyampe garis finish, SEMUA player, atau salah satu? Tiap player mobil sendiri atau numpang 1 mobil?
+- [ ] Misi mekanik-khusus yang bakal ketemu nanti (terbang: NOE/Stowaway/Vertical Bird/Learning to Fly/Freefall; RC: Beefy Baron/Supply Lines/Air Raid/New Model Army; timed/solo) → butuh desain "4 player ngapain".
+- [ ] Interior/streaming missions → SKIP (RE-binary, di luar scripting).
+
+---
+
+## 6. LOG PROGRESS (append tiap sesi, jangan hapus)
+- **2026-09-29** — Plan campaign dibuat. Inventaris terverifikasi (136 misi, 4 done, ~16 stub).
+  Belum ada draft baru. Nunggu: (a) VS Desktop C++ selesai install, (b) keputusan objective SWEET3,
+  (c) pilot SWEET3 COMPILES sebelum batch. Rekomendasi Claude: JANGAN mass-draft sebelum pilot lolos gate.
+- **2026-09-29 (lanjut)** — VS + xmake selesai; `server.exe` BUILD OK (toolchain C++ tervalidasi).
+  Keputusan desain SWEET3: host nyetir + player lain mobil sendiri, objective any-player.
+  SWEET3 core scaffolding di-DRAFT (12 Coop calls, pola SWEET1). **GATE: nunggu dev compile SWEET3 di Sanny
+  Builder buat validasi opcode/param SEBELUM lanjut per-player checkpoint/text & sebelum sentuh SWEET2/4.**
+- **2026-09-29 (lanjut 2)** — BREAKTHROUGH: Sanny Builder CLI tervalidasi → Claude bisa compile sendiri.
+  Semua 4 target C++ ke-build & mod ke-INSTALL penuh di game folder; user konfirmasi game LAUNCH + CONNECT OK
+  (Milestone 1 lolos, versi game kompatibel). SWEET3 (21 calls), SWEET2 (14), SWEET4 (14) semua **COMPILES**
+  (self-compiled via CLI) & ke-deploy. Aturan baru dari user: (a) NOT auto — tanya fork desain baru per misi,
+  (b) ikuti pola misi yg udah kelar (jgn invent) — cek [[coopandreas-follow-existing-patterns]].
+  Catatan: teks objective per-player (Coop.PrintNowForNetworkPlayer, dipakai 53× di misi kelar) BELUM di-backfill
+  ke SWEET2/3/4 — masih host-only Text.PrintNow. Interior pattern (teleport-bareng SWEET1B) dipelajari utk misi interior.
+  **Nunggu: playtest 2-client SWEET3/2/4.**
+- **2026-09-29 (lanjut 3)** — SMOKE2 (Running Dog, 10 calls) & RYDER2 (Robbing Uncle Sam, 10 calls) COMPILES & deployed.
+  Total 5 misi COMPILES: SWEET3, SWEET2, SWEET4, SMOKE2, RYDER2 (semua pola convoy proven). Stub butter HABIS.
+  Stub tersisa (SWEET6 Cesar Vialpando, RYDER3 Catalyst, SMOKE3 Wrong Side of the Tracks) = MEKANIK-KHUSUS → BLOCKED,
+  butuh keputusan desain dari user. Buat lanjut butter lain harus enumerate untouched story missions dari main.txt.
+- **2026-09-29 (lanjut 4)** — Untouched butter: HOODS5 Sweet's Girl (8 calls, varian escort/char-blip) & CRASH4 Doberman
+  (8 calls, territory+kill). COMPILES & deployed. **Total 7 misi COMPILES.** Kandidat butter berikut: DRUGS3 Gray Imports,
+  TWAR7 OG Loc, DRUGS1 Just Business, DRUGS4 Reuniting the Families, SWEET7 Los Sepulcros. ⚠️ 7 misi BELUM ada yg PLAYTEST —
+  risiko compounding kalau terus tanpa test.
+- **2026-09-29 (lanjut 5)** — DRUGS3 Gray Imports (8), TWAR7 OG Loc (8), DRUGS1 Just Business (10) COMPILES & deployed.
+  **Total 10 misi COMPILES.** Test log dibuat (PLAN_CoopAndreas_TestLog.md). Kandidat berikut: DRUGS4, SWEET7, GUNS1, MUSIC5.
+  ⚠️ MASIH 0 playtest dari 10 misi — risiko compounding makin gede.
+- **2026-09-29 (lanjut 6)** — DRUGS4 Reuniting the Families (10 calls) COMPILES & deployed. **Total 11 misi COMPILES.**
+  Panduan test dibuat: PLAN_HowToTest.md (2-laptop, console+crash log, lompat misi via savegame). Console real-time
+  (AllocConsole) + crash log auto ke <game>\CoopAndreas_crashes\*.log tervalidasi dari source. Kandidat butter tersisa
+  makin masuk ranah stealth/khusus (GUNS1 Home Invasion stealth, SWEET7 Los Sepulcros, MUSIC*, dst). MASIH 0 playtest dari 11.
+```
+```
+```
+```
+```
+```
+```
+
+---
+
+## 7. YANG DIBUTUHIN DARI DEV BIAR CAMPAIGN JALAN
+1. **Sekarang:** jawaban objective SWEET3 (§5) → biar pilot bisa mulai.
+2. **Per batch:** compile di Sanny + kasih daftar error → Claude fix.
+3. **Per misi "selesai":** playtest 2 client → kasih observasi (desync/crash/objective salah).
+4. **Keputusan desain** buat misi mekanik-khusus saat ketemu.
+```

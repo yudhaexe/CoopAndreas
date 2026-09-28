@@ -3,6 +3,7 @@
 
 :DRUGS4
 script_name 'DRUGS4'
+Coop.EnableSyncingThisScript()
 gosub @DRUGS4_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('LAFIN1')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Streaming.SetAreaVisible(1)
 Cutscene.Load('FINAL1A')
@@ -221,6 +223,24 @@ Blip.SetAsFriendly(183@, True)
 Car.ChangeColor($sweet_car, 59, 34)
 $sweet = Char.Create(23, 290, 2511.005, -1672.268, 12.493)
 Char.SetHeading($sweet, 62.083)
+// COOP: map convoy car + Sweet to network ids
+$temp_int = Coop.GetVehicleNetworkId($sweet_car)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId($sweet_car)
+end
+$temp_int = Coop.GetPedNetworkId($sweet)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($sweet)
+end
+// COOP: convoy car blip for followers (own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Char.SetNeverTargeted($sweet, True)
 Char.SetOnlyDamagedByPlayer($sweet, True)
 Task.EnterCarAsPassenger($sweet, $sweet_car, 1, 5000)
@@ -9891,6 +9911,13 @@ Streaming.RemoveAnimation("GANGS")
 Blip.Remove(185@)
 Blip.Remove(183@)
 Blip.Remove(184@)
+// COOP: clear convoy car blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+    end
+end
 Hud.ClearCounter($sweethealth_f1)
 Particle.Kill(65@)
 Pickup.Remove(127@)

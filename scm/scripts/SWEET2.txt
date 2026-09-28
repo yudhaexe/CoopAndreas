@@ -3,8 +3,7 @@
 
 :SWEET2
 script_name 'SWEET2'
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
+Coop.EnableSyncingThisScript()
 
 gosub @SWEET2_1108
 if 
@@ -121,6 +120,7 @@ return
 :SWEET2_1108
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 36@ = 0
 42@ = 0
 38@ = 0
@@ -231,8 +231,27 @@ Char.SetNextDesiredMoveState(MoveState.Walk)
 Task.EnterCarAsPassenger($big_smoke, $big_smoke_car, 0, 5000)
 Char.SetCantBeDraggedOut($big_smoke, True)
 Char.SetStayInCarWhenJacked($big_smoke, True)
+// COOP: map mission entities to network ids
+$temp_int = Coop.GetVehicleNetworkId($big_smoke_car)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId($big_smoke_car)
+end
+$temp_int = Coop.GetPedNetworkId($big_smoke)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($big_smoke)
+end
 44@ = Blip.AddForCar($big_smoke_car)
 Blip.SetAsFriendly(44@, True)
+// COOP: convoy car blip + destination checkpoint for followers (they use own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+        Coop.UpdateCheckpointForNetworkPlayer(2453.07, -2003.96, 12.56, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 35@ = Blip.AddForCoord(2453.07, -2003.96, 12.56)
 Blip.Remove(35@)
 $blob_flag = 0
@@ -593,6 +612,13 @@ if
 goto_if_false @SWEET2_4209
 Blip.Remove(35@)
 35@ = Blip.AddForCoord(2451.95, -1978.93, 12.55)
+// COOP: on-foot objective checkpoint for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2448.96, -1973.545, 13.3074, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearHelp
 Text.PrintNow('SWE2_J', 10000, 1)
 if 
@@ -3340,6 +3366,14 @@ Streaming.UnloadSpecialCharacter(10)
 Streaming.UnloadSpecialCharacter(1)
 Blip.Remove(35@)
 Blip.Remove(44@)
+// COOP: clear followers' checkpoint + convoy car blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke_car)
+    end
+end
 Game.SetScriptLimitToGangSize(99)
 Weather.Release
 if 

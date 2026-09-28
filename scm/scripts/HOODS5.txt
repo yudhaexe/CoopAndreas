@@ -3,6 +3,7 @@
 
 :HOODS5
 script_name 'HOODS5'
+Coop.EnableSyncingThisScript()
 gosub @HOODS5_251
 if 
   has_deatharrest_been_executed 
@@ -30,6 +31,7 @@ goto_if_false @HOODS5_251
 :HOODS5_251
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Player.SetGroupToFollowAlways($player1, True)
 154@ = 14
 155@ = 15
@@ -340,6 +342,19 @@ goto_if_false @HOODS5_2062
 105@ = Car.Create(492, 2745.545, -1942.74, 12.5394)
 Car.SetHeading(105@, 90.0)
 Char.SetHeading(75@, 0.0)
+// COOP: map Sweet to network id
+$temp_int = Coop.GetPedNetworkId(75@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(75@)
+end
+// COOP: blip Sweet for every network player (follow/escort)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@, True, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 43@ = Char.Create(26, 12, 2751.282, -1948.867, 16.3125)
 Char.SetHeading(43@, 0.0)
 Char.SetDecisionMaker(43@, 99@)
@@ -2358,6 +2373,13 @@ return
 
 :HOODS5_15329
 $onmission = 0
+// COOP: clear Sweet blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)
+    end
+end
 CarGenerator.Switch($gen_car7, 101)
 Game.SetScriptLimitToGangSize(99)
 if 

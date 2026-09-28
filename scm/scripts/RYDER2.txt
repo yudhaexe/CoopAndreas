@@ -1,11 +1,10 @@
 //-------------Mission 26---------------
 // Originally: Robbing Uncle Sam
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
 
 
 :RYDER2
 script_name 'RYDER2'
+Coop.EnableSyncingThisScript()
 gosub @RYDER2_47
 if 
   has_deatharrest_been_executed 
@@ -19,6 +18,7 @@ terminate_this_script
 :RYDER2_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -526,6 +526,24 @@ Car.DoesProvideCover(95@, False)
 CarGenerator.SuppressCarModel(414)
 $ryder = Char.CreateAsPassenger(PedType.Mission2, 290, 95@, 0)
 Char.SetGetOutUpsideDownCar($ryder, False)
+// COOP: map convoy truck + Ryder to network ids
+$temp_int = Coop.GetVehicleNetworkId(95@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(95@)
+end
+$temp_int = Coop.GetPedNetworkId($ryder)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($ryder)
+end
+// COOP: convoy truck blip for followers (own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 95@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Char.GiveWeapon($ryder, WeaponType.Pistol, 99999)
 Char.SetAccuracy($ryder, 70)
 Char.SetMaxHealth($ryder, 500)
@@ -6417,6 +6435,13 @@ goto @RYDER2_41910
 :RYDER2_41942
 Blip.Remove(119@)
 Blip.Remove(120@)
+// COOP: clear followers' convoy truck blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 95@)
+    end
+end
 Blip.Remove(121@)
 Blip.Remove(122@)
 Blip.Remove(123@)

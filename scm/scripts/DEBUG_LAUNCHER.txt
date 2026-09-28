@@ -1,0 +1,92 @@
+//------------- DEBUG MISSION LAUNCHER (TEST ONLY) ---------------
+// Thread debug buat lompat langsung ke misi ter-konversi tanpa main dari awal.
+// Aktif HANYA di freeroam ($onmission == 0). Tahan LEFT SHIFT + numpad:
+//   SHIFT+NUM1=SWEET3(Drive-Thru,15)  SHIFT+NUM2=SWEET2(Nines&AK's,16)  SHIFT+NUM3=SWEET4(Drive-By,17)
+//   SHIFT+NUM4=SMOKE2(Running Dog,28) SHIFT+NUM5=RYDER2(Robbing US,26)  SHIFT+NUM6=HOODS5(Sweet's Girl,18)
+//   SHIFT+NUM7=CRASH4(Doberman,21)    SHIFT+NUM8=DRUGS3(Gray Imp,23)    SHIFT+NUM9=TWAR7(OG Loc,27)
+//   SHIFT+NUM0=DRUGS1(Just Bus.,30)   SHIFT+NUM(.)=DRUGS4(Reuniting,37)
+// Angka = DEFINE MISSION number (main.txt). Start pakai load_and_launch_mission_internal (0417).
+// CATATAN: cuma buat build TEST. Buat rilis: hapus {$INCLUDE scripts/DEBUG_LAUNCHER.txt} di main.txt
+// + baris "start_new_script @DEBUG_LAUNCHER" di scripts/MAIN.txt.
+// DIK scan codes: LSHIFT=42, NUM0=82 NUM1=79 NUM2=80 NUM3=81 NUM4=75 NUM5=76 NUM6=77 NUM7=71 NUM8=72 NUM9=73 DECIMAL=83
+
+:DEBUG_LAUNCHER
+wait 8000
+
+:DEBUG_LAUNCHER_LOOP
+wait 250
+if
+    $onmission == 0
+then
+    if
+        is_ps2_keyboard_key_pressed 42
+    then
+        if
+            is_ps2_keyboard_key_pressed 79
+        then
+            load_and_launch_mission_internal 15
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 80
+        then
+            load_and_launch_mission_internal 16
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 81
+        then
+            load_and_launch_mission_internal 17
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 75
+        then
+            load_and_launch_mission_internal 28
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 76
+        then
+            load_and_launch_mission_internal 26
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 77
+        then
+            load_and_launch_mission_internal 18
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 71
+        then
+            load_and_launch_mission_internal 21
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 72
+        then
+            load_and_launch_mission_internal 23
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 73
+        then
+            load_and_launch_mission_internal 27
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 82
+        then
+            load_and_launch_mission_internal 30
+            wait 6000
+        end
+        if
+            is_ps2_keyboard_key_pressed 83
+        then
+            load_and_launch_mission_internal 37
+            wait 6000
+        end
+    end
+end
+goto @DEBUG_LAUNCHER_LOOP

@@ -3,8 +3,7 @@
 
 :SWEET3
 script_name 'SWEET3'
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} This mission is currently unsupported and not recommended to play!")
-Coop.AddChatMessage("{ffff00}[CoopAndreas Warning]{ffffff} It may cause desyncs, crashes, or other unexpected behavior!")
+Coop.EnableSyncingThisScript()
 
 gosub @SWEET3_1825
 if 
@@ -186,6 +185,7 @@ return
 :SWEET3_1825
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 96@ = 0
 97@ = 0
 41@ = 0
@@ -334,10 +334,43 @@ Char.SetGetOutUpsideDownCar($ryder, False)
 Game.SetRelationship(RelationshipType.Respect, PedType.Gang2, PedType.Mission1)
 Game.SetRelationship(RelationshipType.Respect, PedType.Mission1, PedType.Gang2)
 
+// COOP: map mission entities to network ids so they sync to all clients
+// SWEET'S CAR
+$temp_int = Coop.GetVehicleNetworkId($sweet_car)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId($sweet_car)
+end
+// BIG SMOKE
+$temp_int = Coop.GetPedNetworkId($big_smoke)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($big_smoke)
+end
+// SWEET
+$temp_int = Coop.GetPedNetworkId($sweet)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($sweet)
+end
+// RYDER
+$temp_int = Coop.GetPedNetworkId($ryder)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($ryder)
+end
+
 :SWEET3_2819
 Audio.SetRadioChannel(RadioChannel.BounceFM)
 39@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(39@, True)
+// COOP: convoy car blip for every network player (they follow in their own vehicle)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Camera.SetFadingColor(0, 0, 0)
 World.ClearArea(1, 2516.54, -1671.2, 12.87, 2.0)
 Char.SetCoordinates($scplayer, 2516.54, -1671.2, 12.87)
@@ -406,6 +439,13 @@ Text.PrintNow('TWAR2_A', 6000, 1)
 TIMERB = 0
 $blob_flag = 0
 59@ = 0
+// COOP: leg 1 destination checkpoint for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2404.1, -1891.5, 12.3, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SWEET3_3244
 if or
@@ -1473,7 +1513,14 @@ Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 gosub @SWEET3_47
 TIMERA = 0
 43@ = 0
-if 
+// COOP: leg 2 destination checkpoint for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2513.3, -1671.9, 12.52, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
+if
   not Car.IsDead($sweet_car)
 goto_if_false @SWEET3_9669
 if 
@@ -1820,6 +1867,13 @@ goto @SWEET3_11520
 
 :SWEET3_11513
 $blob_flag = 0
+// COOP: leg 3 destination checkpoint for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2066.465, -1695.444, 12.5547, 4.0, 3.5, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :SWEET3_11520
 if 
@@ -2103,6 +2157,14 @@ Blip.Remove(39@)
 Blip.Remove(52@)
 Blip.Remove(81@)
 Blip.Remove(82@)
+// COOP: clear followers' checkpoint + convoy car blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+    end
+end
 Game.EnableAmbientCrime(True)
 if 
   not Car.IsDead($sweet_car)
