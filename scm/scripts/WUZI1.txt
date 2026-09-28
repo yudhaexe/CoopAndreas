@@ -3,6 +3,7 @@
 
 :WUZI1
 script_name 'WUZI1'
+Coop.EnableSyncingThisScript()
 gosub @WUZI1_47
 if 
   has_deatharrest_been_executed 
@@ -25,6 +26,7 @@ terminate_this_script
 Text.LoadMissionText('WUZI1')
 Text.ClearThisPrint('M_FAIL')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 if 
   71@ == 99
@@ -48,6 +50,8 @@ if
 is_ps2_keyboard_key_pressed 88
 goto_if_false @WUZI1_328
 Char.SetCoordinates($scplayer, -2175.735, 653.6188, 48.4453)
+// COOP: bring all players to the betting shop together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 if 
   not Char.IsDead(35@)
 goto_if_false @WUZI1_328

@@ -303,7 +303,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Ice Cold Killa
 - [ ] Pier 69
 - [ ] Toreno's Last Flight
-- [ ] Mountain Cloud Boys
+- [~] Mountain Cloud Boys
 - [ ] Ran Fa Li
 - [ ] Lure
 - [ ] Amphibious Assault
