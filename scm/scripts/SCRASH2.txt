@@ -3,6 +3,7 @@
 
 :SCRASH2
 script_name 'SCRASH2'
+Coop.EnableSyncingThisScript()
 $g_SCrash2_spookKM = 0
 gosub @SCRASH2_54
 if 
@@ -17,6 +18,7 @@ terminate_this_script
 :SCRASH2_54
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 75@ = 0
 76@ = 0
 77@ = 0
@@ -3597,6 +3599,8 @@ Path.SwitchRoadsBackToOriginal(789.595, -1387.97, 11.5469, 807.2843, -1334.546, 
 Path.SwitchRoadsBackToOriginal(804.9978, -1414.032, 11.3801, 908.0844, -1386.618, 13.5524)
 Path.SwitchRoadsBackToOriginal(802.1913, -1335.066, 11.1828, 911.4662, -1313.045, 13.7469)
 World.SetRailtrackResistanceMult(-1.0)
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 

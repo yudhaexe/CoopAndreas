@@ -299,7 +299,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] T-Bone Mendez
 - [ ] Mike Toreno
 - [~] Outrider
-- [ ] Snail Trail
+- [~] Snail Trail
 - [ ] Ice Cold Killa
 - [ ] Pier 69
 - [ ] Toreno's Last Flight
