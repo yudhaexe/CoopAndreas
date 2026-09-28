@@ -308,7 +308,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Lure
 - [~] Amphibious Assault
 - [~] The Da Nang Thang
-- [ ] Yay Ka-Boom-Boom
+- [~] Yay Ka-Boom-Boom
 - [~] Zeroing In
 - [ ] Test Drive
 - [ ] Customs Fast Track

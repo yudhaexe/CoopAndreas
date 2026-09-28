@@ -3,6 +3,7 @@
 
 :SYN7
 script_name 'SYN7'
+Coop.EnableSyncingThisScript()
 gosub @SYN7_47
 if 
   has_deatharrest_been_executed 
@@ -74,6 +75,8 @@ if
   not Char.IsDead($scplayer)
 goto_if_false @SYN7_420
 Char.SetCoordinates($scplayer, -2031.197, 161.1839, 27.8516)
+// COOP: bring all players to San Fierro together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 268.0468)
 Camera.SetBehindPlayer
 Player.SetControl($player1, False)
@@ -81,6 +84,7 @@ Player.SetControl($player1, False)
 :SYN7_420
 Camera.SetFadingColor(0, 0, 0)
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 48@ = 0
 $s7_timer = 40000
 117@ = 2
@@ -2300,6 +2304,8 @@ goto_if_false @SYN7_16419
 Pickup.Remove(121@)
 
 :SYN7_16419
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Group.SetSeparationRange($Players_Group, 30.0)
 $timer_mobile_start = Clock.GetGameTimer()
