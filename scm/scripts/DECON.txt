@@ -3,6 +3,7 @@
 
 :DECON
 script_name 'DECON'
+Coop.EnableSyncingThisScript()
 gosub @DECON_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :DECON_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -589,6 +591,8 @@ Camera.SetFixedPosition(-2010.461, 171.3564, 41.8495, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(-2011.302, 171.8702, 41.6786, SwitchType.JumpCut)
 Char.SetCoordinates($scplayer, -2030.987, 148.5787, 27.8359)
 Char.SetHeading($scplayer, 359.4339)
+// COOP: bring all players to the construction site together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 50@ = -2011.302
 50@ += 2010.461
 51@ = 171.8702
@@ -3342,6 +3346,8 @@ Game.SetWantedMultiplier(1.0)
 World.SetPedDensityMultiplier(1.0)
 World.SetCarDensityMultiplier(1.0)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 

@@ -290,7 +290,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Are You Going To San Fierro?
 - [~] Wear Flowers In Your Hair
 - [ ] 555 WE TIP
-- [ ] Deconstruction
+- [~] Deconstruction
 - [ ] Air Raid
 - [ ] Supply Lines...
 - [ ] New Model Army
