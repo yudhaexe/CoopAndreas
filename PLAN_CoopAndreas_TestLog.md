@@ -81,6 +81,16 @@ Jadi CRASH1/MUSIC2/CAT4/CASIN10 dll BISA dikonvert pakai pola ini (bukan cuma di
 
 ---
 
+## 3b. DEEPENING SKELETON (2026-09-29) — kenapa cuma sebagian
+Cloud session bikin ~22 misi "skeleton" (EnableSyncing + CollectNetworkPlayers + TeleportPlayersToHostSafely,
+TANPA per-player blip). Investigasi buat perdalam: MAYORITAS gak aman diperdalam buta:
+- **Placeholder-coord entity** (DRIV2 34@ di 0,0,-100; WUZI1 dummy pedtype 8) → netID handshake bisa HANG (L-01/C-02).
+- **Blip phase-toggled** (SYND4: `Blip.AddForChar(39@)` langsung `ChangeDisplay(Neither)` → disembunyiin, dibuka/tutup per fase) → per-player blip naif = bocorin target kepagian.
+- **Multi-target shooting gallery** (SYN5 6 target, MUSIC5 6 target) → blip banyak, low value.
+- **Dance/race/interior/terbang** (CESAR1, CPRACE, MUSIC2, CATCUT, SYN6/7, WUZI2) → teleport-together JUSTRU pola yg bener.
+**Yang AMAN diperdalam & udah dikerjain:** DECON (car 85@) + SYN2 (car 59@) — objektif = 1 car, real-coord, blip friendly normal → netID handshake aman + per-player convoy blip + cleanup. COMPILES.
+**Kesimpulan:** sisa skeleton DIBIARIN (aman apa adanya). Perdalam sisanya HARUS setelah playtest (biar tau handshake mana aman & fidelity blip per fase).
+
 ## 4. RINGKASAN MISI TER-KONVERSI (status test)
 Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum · 🟡 sebagian · ✅ lolos happy-path.
 
