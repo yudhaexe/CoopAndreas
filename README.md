@@ -285,8 +285,8 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Local Liquor Store
 - [~] Against All Odds
 - [~] Small Town Bank
-- [ ] Wu Zi Mu
-- [ ] Farewell, My Love...
+- [~] Wu Zi Mu
+- [~] Farewell, My Love...
 - [~] Are You Going To San Fierro?
 - [ ] Wear Flowers In Your Hair
 - [ ] 555 WE TIP
