@@ -66,6 +66,8 @@ Catatan dari proses konversi — bukan crash, tapi kandidat isu saat test:
 - **SMOKE2 / (entity placeholder coord)**: netID handshake ditaruh tepat setelah create di coord (0,0,-100) lalu di-warp. Kalau HANG in-game → ini tersangka utama (calon L-01).
 - **RYDER2**: blip objektif pindah ke getaway car 99@ di fase akhir, belum di-sync per-player (follower bisa kehilangan arah di fase itu).
 - **Interior missions** (belum digarap): wajib pakai pola teleport-bareng SWEET1B, bukan per-player.
+- **SWEET7 (branch-dependent Ballas)**: 3 target Ballas (289@/290@/291@) cuma di-spawn di salah satu branch (`Game.FindMaxNumberOfGroupMembers()>1` → branch tanpa Ballas). Per-player char-blip create ditaruh di branch yg pasti spawn; removal mirror gate vanilla (296@/297@/298@). Kalau in-game funeral phase gak ada Ballas / blip aneh → cek branch mana yg jalan. Non-fatal (mirror vanilla).
+- **SWEET7 (netID handshake escape car)**: 78@/$sweet netID di-handshake di @SWEET7_3089 (sblm fase kabur). Kalau HANG pas funeral cutscene → tersangka 78@ belum ke-register sync (mirip L-01 risk). Escape car 78@ dibikin awal & di-freeze, harusnya aman.
 
 ---
 
@@ -85,3 +87,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | TWAR7 OG Loc | convoy+chase-kill | ✅ | ⬜ |
 | DRUGS1 Just Business | convoy+combat | ✅ | ⬜ |
 | DRUGS4 Reuniting the Families | convoy+combat | ✅ | ⬜ |
+| SWEET7 Los Sepulcros | escort+combat (drive Sweet home + funeral ambush) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |

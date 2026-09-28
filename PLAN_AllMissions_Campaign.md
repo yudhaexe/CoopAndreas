@@ -96,6 +96,7 @@ Status: `TODO` → `DRAFTED` → `COMPILES` → `TESTED` | atau `BLOCKED`(butuh 
 | 8 | TWAR7 | OG Loc | convoy+chase-kill | COMPILES | 8 calls, compile OK, deployed. netID map target Freddy 34@ + char blip + cleanup. Nunggu playtest. |
 | 9 | DRUGS1 | Just Business | convoy+combat | COMPILES | 10 calls, compile OK, deployed. Host nyetir 34@ (Big Smoke penumpang) + convoy blip + cleanup. Nunggu playtest. |
 | 10 | DRUGS4 | Reuniting the Families | convoy+combat+escort | COMPILES | 10 calls, compile OK, deployed. Host nyetir $sweet_car (Sweet), + convoy blip + cleanup. Misi kompleks (ambush SWAT, rooftop) — blip fase lanjut ($sweet on-foot 2142, getaway) belum di-sync per-player (refinement). Nunggu playtest. |
+| 11 | SWEET7 | **Los Sepulcros** | escort+combat | DRAFTED | 28 Coop calls. ⚠️ **DRAFTED, belum COMPILES** (Sanny CLI ga ada di sesi cloud ini — sanity compile di sesi local). Desain (user): (a) fase kabur = host nyetir escape car 78@ + Sweet penumpang, player lain mobil sendiri + convoy blip ke 78@ + checkpoint dest Grove (799.01,-1074.03,23.01), objektif any-player; (b) 3 Ballas target (289@/290@/291@) = per-player CHAR blip merah, kill world-state. Isi: enable sync + collect + netID map (78@/$sweet @SWEET7_3089, 289/290/291 di branch spawn) + per-player char blip 3 Ballas (dibuang per-kematian di handler vanilla 296@/297@/298@) + convoy blip+checkpoint fase drive-home + cleanup (car blip+checkpoint) di shared cleanup @SWEET7_32503. **Prinsip aman: tiap Coop blip call ditaruh persis sebelah vanilla Blip.* sepadan → reachability/validity identik (hindari hang netID & handle-0).** CATATAN: 289/290/291 spawn branch-dependent (`FindMaxNumberOfGroupMembers()>1`). Teks objektif per-player belum di-backfill. Nunggu: compile local + playtest 2-client. |
 | SKIP | JFUD/TATTO/PSHOP/BARB | (shop/minigame, bukan story) | — | SKIP | gak ada header "Originally". |
 | … | (sisa story missions) | — | — | TODO | diisi bertahap |
 
@@ -143,6 +144,14 @@ Diisi saat ketemu. Format: `[misi] pertanyaan`.
   Panduan test dibuat: PLAN_HowToTest.md (2-laptop, console+crash log, lompat misi via savegame). Console real-time
   (AllocConsole) + crash log auto ke <game>\CoopAndreas_crashes\*.log tervalidasi dari source. Kandidat butter tersisa
   makin masuk ranah stealth/khusus (GUNS1 Home Invasion stealth, SWEET7 Los Sepulcros, MUSIC*, dst). MASIH 0 playtest dari 11.
+- **2026-09-28 (sesi cloud)** — SWEET7 Los Sepulcros (28 Coop calls) **DRAFTED** (escort+combat: drive Sweet home dari kuburan
+  + funeral ambush 3 Ballas). ⚠️ Sesi CLOUD ga punya Sanny CLI → status DRAFTED, belum COMPILES; sanity compile nyusul di sesi
+  local. Desain diputusin user via AskUserQuestion (host nyetir escape car 78@ + Sweet; 3 Ballas per-player char blip merah).
+  Prinsip konversi diperketat user: (a) commit tanpa atribusi Claude (git message polos), (b) pastikan cleanup + end-to-end
+  after-mission + gak ada stuck/hang, (c) TANPA refactor code vanilla (light-touch insert doang). Prinsip aman baru:
+  **tiap Coop per-player blip call ditaruh PERSIS sebelah vanilla Blip.* yg sepadan** → reachability & entity-validity identik
+  sama vanilla (nutup risiko hang netID handshake `while==-1` & RemoveCharBlip(handle-0)). Cleanup di shared routine @SWEET7_32503
+  (jalan di pass & fail) → gak ada blip/checkpoint nyangkut. Lanjut autonomous sampai limit habis.
 ```
 ```
 ```
