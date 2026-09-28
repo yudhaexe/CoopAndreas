@@ -270,7 +270,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Robbing Uncle Sam
 - [~] Life's A Beach
 - [~] Madd Dogg's Rhymes
-- [ ] Management Issues
+- [~] Management Issues
 - [ ] House Party
 - [!] High Stakes, Low Rider
 - [!] Burning Desire

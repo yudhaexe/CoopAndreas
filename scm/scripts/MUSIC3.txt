@@ -3,6 +3,7 @@
 
 :MUSIC3
 script_name 'MUSIC3'
+Coop.EnableSyncingThisScript()
 gosub @MUSIC3_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :MUSIC3_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STRAP3')
 if 
@@ -2285,6 +2287,60 @@ goto_if_false @MUSIC3_14963
 121@ = Blip.AddForChar(110@)
 
 :MUSIC3_14963
+// COOP: reveal all party targets to every player (kill = world-state any-player). All 8 exist by this reveal point.
+$temp_int = Coop.GetPedNetworkId(75@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(75@)
+end
+$temp_int = Coop.GetPedNetworkId(77@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(77@)
+end
+$temp_int = Coop.GetPedNetworkId(104@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(104@)
+end
+$temp_int = Coop.GetPedNetworkId(105@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(105@)
+end
+$temp_int = Coop.GetPedNetworkId(106@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(106@)
+end
+$temp_int = Coop.GetPedNetworkId(108@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(108@)
+end
+$temp_int = Coop.GetPedNetworkId(109@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(109@)
+end
+$temp_int = Coop.GetPedNetworkId(110@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(110@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 77@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 104@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 105@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 106@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 108@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 109@, false, BlipDisplay.Both, BlipColor.Red, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 110@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 Text.PrintNow('STP3_26', 11000, 1)
 123@ = 1
 
@@ -2485,6 +2541,20 @@ Path.SwitchRoadsBackToOriginal(1072.8, -1135.0, 10.0, 1092.4, -1045.5, 50.0)
 Path.SwitchPedRoadsBackToOriginal(1072.8, -1135.0, 10.0, 1092.4, -1045.5, 50.0)
 Game.EnableAmbientCrime(True)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: clear all per-player enemy blips on mission end (pass/fail) so nothing is left stuck
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 77@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 104@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 105@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 106@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 108@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 109@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 110@)
+    end
+end
 $onmission = 0
 Mission.Finish
 return 
