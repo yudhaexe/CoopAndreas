@@ -3,6 +3,7 @@
 
 :SYND4
 script_name 'SYND4'
+Coop.EnableSyncingThisScript()
 gosub @SYND4_47
 if 
   has_deatharrest_been_executed 
@@ -669,6 +670,7 @@ Char.SetAreaVisible(102@(40@,10i), 3)
   40@ >= 4
 goto_if_false @SYND4_4417
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 54@ = Blip.AddForCoord(-2655.075, 1431.789, 912.4016)
 Blip.SetEntryExit(54@, -2661.74, 1423.483, 100.0)
@@ -2048,6 +2050,8 @@ Player.ClearWantedLevel($player1)
 :SYND4_12730
 Streaming.RemoveAnimation("SWAT")
 Streaming.UnloadSpecialCharacter(1)
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Weather.Release
 Mission.Finish

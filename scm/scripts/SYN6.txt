@@ -3,6 +3,7 @@
 
 :SYN6
 script_name 'SYN6'
+Coop.EnableSyncingThisScript()
 gosub @SYN6_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :SYN6_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 $tlf_underway = 1
 Stat.RegisterMissionGiven
 Player.SetControl($player1, False)
@@ -183,6 +185,8 @@ Audio.LoadMissionAudio(20804, 3)
 TIMERA = 0
 Hud.SwitchWidescreen(True)
 Char.SetCoordinates($scplayer, -2030.25, 148.8279, 27.8359)
+// COOP: bring all players to San Fierro together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 350.0)
 Camera.SetFixedPosition(-2024.214, 147.8178, 28.9808, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(-2025.159, 148.1366, 29.046, SwitchType.JumpCut)
@@ -1561,6 +1565,8 @@ Streaming.MarkModelAsNoLongerNeeded(413)
 Streaming.MarkModelAsNoLongerNeeded(330)
 Streaming.MarkModelAsNoLongerNeeded(348)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
