@@ -301,7 +301,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Outrider
 - [~] Snail Trail
 - [~] Ice Cold Killa
-- [ ] Pier 69
+- [~] Pier 69
 - [~] Toreno's Last Flight
 - [~] Mountain Cloud Boys
 - [~] Ran Fa Li

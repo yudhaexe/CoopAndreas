@@ -3,6 +3,7 @@
 
 :SYN5
 script_name 'SYN5'
+Coop.EnableSyncingThisScript()
 gosub @SYN5_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :SYN5_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('SYN5')
 if 
@@ -160,6 +162,8 @@ Camera.SetBehindPlayer
 Blip.SetAsFriendly(79@, True)
 World.ClearArea(1, -1717.5, 1281.6, 6.2, 1.0)
 Char.SetCoordinates($scplayer, -1717.5, 1281.6, 6.2)
+// COOP: bring all players to the pier together for the assault
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 143.8)
 Game.SwitchRandomTrains(False)
 Path.SwitchPedRoadsOff(-1755.6, 1256.6, 0.0, -1598.2, 1660.1, 50.0)
@@ -3543,6 +3547,8 @@ Streaming.UnloadSpecialCharacter(3)
 Streaming.UnloadSpecialCharacter(4)
 Game.EnableAmbientCrime(True)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
