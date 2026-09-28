@@ -3,6 +3,7 @@
 
 :GROVE2
 script_name 'GROVE2'
+Coop.EnableSyncingThisScript()
 gosub @GROVE2_47
 if 
   has_deatharrest_been_executed 
@@ -18,6 +19,7 @@ Game.MakeRoomInPlayerGangForMissionPeds(1)
 Text.LoadMissionText('GROVE2')
 Camera.SetFadingColor(0, 0, 0)
 Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Camera.SetFadingColor(0, 0, 0)
 Camera.DoFade(0, 1000)
 
@@ -124,6 +126,18 @@ $g2_sweet_hlth /= 10
 Hud.DisplayCounterWithString($g2_sweet_hlth, CounterDisplay.Bar, 'GR2_01')
 34@ = Blip.AddForChar($sweet)
 Blip.SetAsFriendly(34@, True)
+// COOP: map Sweet (companion) to network id + per-player friendly blip so followers can locate the group
+$temp_int = Coop.GetPedNetworkId($sweet)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($sweet)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet, True, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 36@ = Blip.AddForCoord(2002.815, -1613.084, 12.3828)
 55@ = Blip.AddForCoord(2507.184, -1672.906, 12.3824)
 Blip.ChangeDisplay(34@, BlipDisplay.Neither)
@@ -558,6 +572,13 @@ goto_if_false @GROVE2_3381
 Blip.Remove(55@)
 
 :GROVE2_3381
+// COOP: clear per-player companion blip on mission end (pass/fail) so nothing is left stuck
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet)
+    end
+end
 Hud.ClearCounter($g2_sweet_hlth)
 Streaming.UnloadSpecialCharacter(1)
 Streaming.MarkModelAsNoLongerNeeded(355)
