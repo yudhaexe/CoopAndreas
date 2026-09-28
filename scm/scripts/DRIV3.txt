@@ -3,6 +3,7 @@
 
 :DRIV3
 script_name 'DRIV3'
+Coop.EnableSyncingThisScript()
 gosub @DRIV3_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :DRIV3_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 wait 0
 Player.SetControl($player1, False)
@@ -2921,6 +2923,8 @@ Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
 return 
 
 :DRIV3_16025
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 $flag_is_farlie3_running = 0
 if 

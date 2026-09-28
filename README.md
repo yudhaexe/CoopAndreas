@@ -297,7 +297,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Photo Opportunity
 - [~] Jizzy
 - [~] T-Bone Mendez
-- [ ] Mike Toreno
+- [~] Mike Toreno
 - [~] Outrider
 - [~] Snail Trail
 - [~] Ice Cold Killa
