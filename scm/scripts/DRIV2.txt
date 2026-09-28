@@ -3,6 +3,7 @@
 
 :DRIV2
 script_name 'DRIV2'
+Coop.EnableSyncingThisScript()
 gosub @DRIV2_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :DRIV2_47
 Stat.RegisterMissionGiven
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('FARLIE2')
 $onmission = 1
 wait 0
@@ -167,6 +169,8 @@ goto @DRIV2_889
 :DRIV2_928
 Streaming.LoadScene(-2625.26, 1407.32, 5.62)
 Char.SetCoordinates($scplayer, -2625.26, 1407.32, 5.62)
+// COOP: bring all players to the mission start together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 224.0)
 Garage.ChangeType('TBON', GarageType.ForScriptToOpenAndClose)
 Camera.SetBehindPlayer
@@ -2075,6 +2079,8 @@ Char.HideWeaponForScriptedCutscene($scplayer, False)
 
 :DRIV2_13321
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 

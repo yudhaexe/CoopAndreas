@@ -296,7 +296,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] New Model Army
 - [~] Photo Opportunity
 - [~] Jizzy
-- [ ] T-Bone Mendez
+- [~] T-Bone Mendez
 - [ ] Mike Toreno
 - [~] Outrider
 - [~] Snail Trail
