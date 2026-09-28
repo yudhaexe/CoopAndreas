@@ -307,7 +307,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Ran Fa Li
 - [~] Lure
 - [~] Amphibious Assault
-- [ ] The Da Nang Thang
+- [~] The Da Nang Thang
 - [ ] Yay Ka-Boom-Boom
 - [~] Zeroing In
 - [ ] Test Drive

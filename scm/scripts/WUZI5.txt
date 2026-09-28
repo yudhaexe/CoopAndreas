@@ -3,6 +3,7 @@
 
 :WUZI5
 script_name 'WUZI5'
+Coop.EnableSyncingThisScript()
 gosub @WUZI5_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :WUZI5_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('WUZI4')
 if 
@@ -129,6 +131,8 @@ Char.SetLoadCollisionFlag(35@, True)
 Char.SetDecisionMaker(35@, 158@)
 World.ClearArea(1, -2168.4, 639.0, 69.9, 1.0)
 Char.SetCoordinates($scplayer, -2168.4, 639.0, 69.9)
+// COOP: brief all players together at Woozie's
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 189.4)
 Streaming.LoadScene(-2168.4, 639.0, 69.9)
 
@@ -3049,6 +3053,8 @@ Pickup.Remove(64@)
 Pickup.Remove(72@)
 Pickup.Remove(73@)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
