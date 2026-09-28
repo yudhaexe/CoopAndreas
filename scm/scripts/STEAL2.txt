@@ -3,6 +3,7 @@
 
 :STEAL2
 script_name 'STEAL2'
+Coop.EnableSyncingThisScript()
 gosub @STEAL2_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :STEAL2_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STEAL2')
 Text.ClearPrints
@@ -103,6 +105,8 @@ Player.SetGroupToFollowAlways($player1, True)
 Streaming.LoadScene(-2032.4, 171.8, 27.8)
 World.ClearArea(1, -2032.4, 171.8, 27.8, 1.0)
 Char.SetCoordinates($scplayer, -2032.4, 171.8, 27.8)
+// COOP: bring all players to the mission start together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 308.7)
 World.ClearArea(1, -2032.3, 161.9, 28.0, 1.0)
 $cesar = Char.Create(24, 290, -2032.3, 161.9, 28.0)
@@ -3953,6 +3957,8 @@ Streaming.RemoveAnimation("PLAYIDLES")
 Blip.Remove(98@)
 Streaming.UnloadSpecialCharacter(1)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
