@@ -3,6 +3,7 @@
 
 :TRUTH1
 script_name 'TRUTH1'
+Coop.EnableSyncingThisScript()
 gosub @TRUTH1_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('TRU1')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Streaming.SetAreaVisible(12)
 Cutscene.Load('TRUTH_1')
@@ -461,6 +463,18 @@ Char.SetAccuracy(38@, 30)
 Car.SetHealth(34@, 9000)
 116@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(116@, True)
+// COOP: map harvester (mission vehicle host drives) to network id + per-player convoy blip so followers escort it
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Car.SetCanBurstTires(34@, False)
 56@ = Car.Create(531, -1029.287, -1183.826, 128.184)
 Car.SetHeading(56@, 90.725)
@@ -2508,6 +2522,13 @@ Streaming.MarkModelAsNoLongerNeeded(424)
 Streaming.MarkModelAsNoLongerNeeded(337)
 Streaming.UnloadSpecialCharacter(1)
 Blip.Remove(116@)
+// COOP: clear per-player convoy blip on mission end (pass/fail) so nothing is left stuck
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 Car.MarkAsNoLongerNeeded(56@)
 Game.SetWantedMultiplier(1.0)
 $timer_mobile_start = Clock.GetGameTimer()
