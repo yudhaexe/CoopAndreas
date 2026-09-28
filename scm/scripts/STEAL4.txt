@@ -3,6 +3,7 @@
 
 :STEAL4
 script_name 'STEAL4'
+Coop.EnableSyncingThisScript()
 gosub @STEAL4_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :STEAL4_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -345,6 +347,8 @@ Char.SetMaxHealth(68@, 400)
 Char.SetCantBeDraggedOut(68@, True)
 Char.SetSuffersCriticalHits(68@, False)
 Char.SetCoordinates($scplayer, -2035.53, 180.7482, 27.8359)
+// COOP: bring all players to the garage start together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 209.6339)
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
@@ -5582,6 +5586,8 @@ World.SetPedDensityMultiplier(1.0)
 World.SetCarDensityMultiplier(1.0)
 Game.SetWantedMultiplier(1.0)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 

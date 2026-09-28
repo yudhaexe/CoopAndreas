@@ -311,7 +311,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Yay Ka-Boom-Boom
 - [~] Zeroing In
 - [~] Test Drive
-- [ ] Customs Fast Track
+- [~] Customs Fast Track
 - [ ] Puncture Wounds
 - [ ] Monster
 - [ ] Highjack
