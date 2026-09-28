@@ -295,7 +295,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Supply Lines...
 - [ ] New Model Army
 - [~] Photo Opportunity
-- [ ] Jizzy
+- [~] Jizzy
 - [ ] T-Bone Mendez
 - [ ] Mike Toreno
 - [~] Outrider

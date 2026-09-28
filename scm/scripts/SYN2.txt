@@ -3,6 +3,7 @@
 
 :SYN2
 script_name 'SYN2'
+Coop.EnableSyncingThisScript()
 gosub @SYN2_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :SYN2_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -433,6 +435,8 @@ goto @SYN2_3046
 Streaming.SetAreaVisible(0)
 Char.SetCoordinates($scplayer, -2031.254, 161.408, 28.0391)
 Char.SetHeading($scplayer, 270.0)
+// COOP: bring all players to San Fierro together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Camera.DoFade(1, 500)
@@ -4751,6 +4755,8 @@ Game.SetWantedMultiplier(1.0)
 CarGenerator.DontSuppressCarModel(575)
 CarGenerator.DontSuppressCarModel(545)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
