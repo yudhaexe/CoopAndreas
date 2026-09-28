@@ -3,6 +3,7 @@
 
 :CESAR1
 script_name 'CESAR1'
+Coop.EnableSyncingThisScript()
 gosub @CESAR1_1165
 if 
   has_deatharrest_been_executed 
@@ -158,6 +159,7 @@ return
 :CESAR1_1165
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('CESAR1')
 Player.SetGroupRecruitment($player1, False)
