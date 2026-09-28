@@ -166,6 +166,19 @@ Diisi saat ketemu. Format: `[misi] pertanyaan`.
   target 284@ per-player char blip merah + removal pas mati + cleanup. 28 insert / 0 delete (100% additive). Belum COMPILES
   (cloud tanpa Sanny CLI). Kandidat berikut: MUSIC3 (Management Issues, 8-target party — kompleks), MUSIC5 (House Party, defense),
   CAT1-4 (Catalina robberies), CATALIN (First Date). Prioritas pola bersih (single/multi target + blip, atau convoy).
+- **2026-09-28 (sesi cloud, batch besar)** — 7 misi DRAFTED + 1 fix, semua additive-only, no-refactor, per instruksi user
+  (commit git-message polos tanpa atribusi, lanjut sampai limit, pastikan cleanup end-to-end & no stuck):
+  SWEET7 Los Sepulcros (28), BCRASH1 Badlands (10), GROVE2 Grove 4 Life (8), TRUTH1 Body Harvest (8),
+  MANSIO3 Home Coming (29), STEAL1 Zeroing In (8), CAT3 Tanker Commander (8). Semua nunggu compile Sanny CLI di sesi local + playtest.
+  **Lesson C-02 lahir**: netID handshake `while==-1` di entity yg belum dibuat = HANG (STEAL1 & CAT3 ketauan: entity dibuat di
+  gosub SETELAH $onmission=1). Aturan tetap: taruh tiap Coop blip call PERSIS di sebelah vanilla Blip.* sepadan. STEAL1 di-fix.
+  BLOCKED (butuh keputusan/di luar scripting): CASIN10 (plane+interior), CAT4 (interior toko), CRASH1 Burning Desire (interior+kompleks arr=405).
+  **STATUS POOL**: butter Grove-arc HABIS (semua done/blocked). Sisa untouched = mid/late-game (San Fierro/Desert/Venturas) yg
+  mayoritas mekanik-khusus (terbang: NOE/Stowaway/Learning to Fly/Vertical Bird/Freefall; RC; race: Monster/Quarry/Kickstart;
+  tailing: Snail Trail; interior: Jizzy/Madd Dogg's Rhymes/bistro; heist) ATAU target-count gede (WUZI1 char=26, RIOT2 char=65,
+  MAF4 char=68). Ini butuh keputusan desain per-misi (ATURAN #1 ask-per-mission) atau RE-binary (interior/streaming) → TANYA user.
+  Kandidat mid-game yg MASIH bisa pola-bersih (kalau user mau lanjut): SYN3 Outrider (escort/convoy), SYN1 Photo Opportunity
+  (chase, tapi foto host-only), DRIV2/DRIV3 (chase-kill, array-heavy), MANSON5 Cut Throat Business, SCRASH2 Snail Trail (tailing).
 ```
 ```
 ```
