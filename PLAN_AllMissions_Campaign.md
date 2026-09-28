@@ -190,6 +190,7 @@ Diisi saat ketemu. Format: `[misi] pertanyaan`.
   MAF4 char=68). Ini butuh keputusan desain per-misi (ATURAN #1 ask-per-mission) atau RE-binary (interior/streaming) → TANYA user.
   Kandidat mid-game yg MASIH bisa pola-bersih (kalau user mau lanjut): SYN3 Outrider (escort/convoy), SYN1 Photo Opportunity
   (chase, tapi foto host-only), DRIV2/DRIV3 (chase-kill, array-heavy), MANSON5 Cut Throat Business, SCRASH2 Snail Trail (tailing).
+- **2026-09-28 (sesi cloud, batch order-pass)** — Lanjut konvert SESUAI URUTAN MISI (user: garap SEMUA, bukan cuma gampang; update README; push OK sekarang setelah GitHub App di-authorize). Ditambah lesson interior teleport-bareng (SWEET1B) → misi interior BISA dikonvert (bukan auto-BLOCKED). Batch: SYN3 Outrider(8), MUSIC1 Life's a Beach(8, van convoy), MUSIC2 Madd Dogg's Rhymes(6, INTERIOR teleport-bareng, stealth), MUSIC3 Management Issues(36, 8-target party), MUSIC5 House Party(4, wave-defense teleport), CPRACE(2 baseline race), CESAR1(2 baseline rhythm), LA1FIN2 Green Sabre(5, multi-teleport), CATALIN First Date(8, companion), CAT1 Local Liquor Store(9), CAT2 Small Town Bank(10), CAT4 Against All Odds(8, INTERIOR area-sync — dulu BLOCKED sekarang converted), CATCUT King in Exile(4), TRUTH2 San Fierro(9, mothership convoy), BCESAR4(5 baseline race), GARAG1 Wear Flowers(9, convoy), DECON Deconstruction(4). Semua additive-only, no vanilla logic changed, di-push ke origin. README di-update ([~]/[!] legend). Race/rhythm = baseline sync+teleport (per-player scoring butuh desain). Lanjut terus.
 ```
 ```
 ```
