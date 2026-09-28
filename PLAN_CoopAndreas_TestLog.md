@@ -53,6 +53,7 @@ _(belum ada entry — nunggu playtest pertama)_
 | ID | Lesson (dari crash apa) | Aturan koreksi | Applied to |
 |----|--------------------------|----------------|-----------|
 | C-01 | Compile "A jump to offset 0 found" — bukan crash game, tapi COMPILE. Salah opcode buat thread & mission-launch. | Bikin background thread = `start_new_script @label` (004F), BUKAN `create_thread`. Start misi = `load_and_launch_mission_internal <number>` (0417) pakai NOMOR DEFINE MISSION, BUKAN `launch_mission @missionlabel` (label misi beda offset-space → offset 0). | DEBUG_LAUNCHER ✅ |
+| C-02 | Potensi HANG: netID handshake `while GetXNetworkId(h)==-1` di entity yg BELUM dibuat (handle=0/garbage) → -1 selamanya → misi stuck. Label order ≠ runtime order (entity sering dibuat di gosub SETELAH $onmission=1). | JANGAN taruh netID handshake di init cuma krn keliatan "setelah $onmission=1". Taruh PERSIS di sebelah vanilla `Blip.AddFor{Car,Char}(h)` yg sepadan — di situ h dijamin exist (vanilla nge-blip-nya). Prinsip umum: tiap Coop per-player blip call = tetangga langsung vanilla Blip.* yg sepadan. | CAT3 ✅ (ketauan pas draft: 327@ dibuat di CAT3_710, dipindah ke @CAT3_5488) / semua misi baru ikut prinsip ini |
 
 <!-- contoh format:
 | L-01 | Handshake nyangkut utk entity yg spawn di coord placeholder | netID handshake HARUS setelah entity di-warp ke posisi nyata, jangan pas Char/Car.Create di (0,0,-100) | SWEET4 ✅ / SMOKE2 ⬜ |
@@ -93,3 +94,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | TRUTH1 Body Harvest | convoy/escort-vehicle (curi harvester, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | MANSIO3 Home Coming | territory-clear+kill (6 dealer targets di Grove) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | STEAL1 Zeroing In | track/follow-car (radar cari mobil target) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| CAT3 Tanker Commander | convoy/escort-vehicle (curi tanker, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
