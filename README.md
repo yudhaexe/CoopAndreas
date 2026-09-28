@@ -287,7 +287,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Small Town Bank
 - [ ] Wu Zi Mu
 - [ ] Farewell, My Love...
-- [ ] Are You Going To San Fierro?
+- [~] Are You Going To San Fierro?
 - [ ] Wear Flowers In Your Hair
 - [ ] 555 WE TIP
 - [ ] Deconstruction

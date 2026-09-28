@@ -3,6 +3,7 @@
 
 :TRUTH2
 script_name 'TRUTH2'
+Coop.EnableSyncingThisScript()
 gosub @TRUTH2_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :TRUTH2_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('TRU2')
 if 
@@ -163,6 +165,8 @@ World.ClearArea(1, -913.3, -1720.5, 76.6, 300.0)
 World.ClearArea(1, -913.3, -1720.5, 76.6, 1.0)
 Char.ClearTasksImmediately($scplayer)
 Char.SetCoordinates($scplayer, -913.3, -1720.5, 76.6)
+// COOP: bring all players to the weed farm together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.GiveWeapon($scplayer, WeaponType.Flamethrower, 3000)
 World.ClearArea(1, -1079.404, -1640.694, 75.375, 20.0)
 $truth = Char.Create(24, 290, -1079.404, -1640.694, 75.375)
@@ -1189,6 +1193,18 @@ Car.LockDoors(34@, CarLock.Unlocked)
 Blip.Remove(42@)
 42@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(42@, True)
+// COOP: map the mothership (34@, host drives it to San Fierro) to network id + per-player convoy blip
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 88@ = 0
 87@ = 2
 goto @TRUTH2_9383
@@ -1790,6 +1806,13 @@ Blip.Remove(84@)
 Blip.Remove(85@)
 Blip.Remove(86@)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: clear per-player convoy blip on mission end (pass/fail)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 $onmission = 0
 Mission.Finish
 return 
