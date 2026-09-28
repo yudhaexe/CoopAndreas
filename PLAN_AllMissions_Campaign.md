@@ -97,6 +97,7 @@ Status: `TODO` → `DRAFTED` → `COMPILES` → `TESTED` | atau `BLOCKED`(butuh 
 | 9 | DRUGS1 | Just Business | convoy+combat | COMPILES | 10 calls, compile OK, deployed. Host nyetir 34@ (Big Smoke penumpang) + convoy blip + cleanup. Nunggu playtest. |
 | 10 | DRUGS4 | Reuniting the Families | convoy+combat+escort | COMPILES | 10 calls, compile OK, deployed. Host nyetir $sweet_car (Sweet), + convoy blip + cleanup. Misi kompleks (ambush SWAT, rooftop) — blip fase lanjut ($sweet on-foot 2142, getaway) belum di-sync per-player (refinement). Nunggu playtest. |
 | 11 | SWEET7 | **Los Sepulcros** | escort+combat | DRAFTED | 28 Coop calls. ⚠️ **DRAFTED, belum COMPILES** (Sanny CLI ga ada di sesi cloud ini — sanity compile di sesi local). Desain (user): (a) fase kabur = host nyetir escape car 78@ + Sweet penumpang, player lain mobil sendiri + convoy blip ke 78@ + checkpoint dest Grove (799.01,-1074.03,23.01), objektif any-player; (b) 3 Ballas target (289@/290@/291@) = per-player CHAR blip merah, kill world-state. Isi: enable sync + collect + netID map (78@/$sweet @SWEET7_3089, 289/290/291 di branch spawn) + per-player char blip 3 Ballas (dibuang per-kematian di handler vanilla 296@/297@/298@) + convoy blip+checkpoint fase drive-home + cleanup (car blip+checkpoint) di shared cleanup @SWEET7_32503. **Prinsip aman: tiap Coop blip call ditaruh persis sebelah vanilla Blip.* sepadan → reachability/validity identik (hindari hang netID & handle-0).** CATATAN: 289/290/291 spawn branch-dependent (`FindMaxNumberOfGroupMembers()>1`). Teks objektif per-player belum di-backfill. Nunggu: compile local + playtest 2-client. |
+| 12 | BCRASH1 | **Badlands** | location+kill | DRAFTED | 10 Coop calls (pola DRUGS3/CRASH4). ⚠️ DRAFTED, belum COMPILES (cloud tanpa CLI). Target 284@ (Char model 147 @ farm -2814,-1522) = per-player char blip merah, kill world-state any-player. Isi: enable sync + collect + netID map 284@ + per-player char blip (di sebelah `285@ = Blip.AddForChar`) + removal pas target mati (@BCRASH1_12477) + cleanup. CATATAN: mekanik foto+snipe (Char.HasBeenPhotographed) host-primary (kamera), kill bisa any-player. Additive-only. Nunggu compile local + playtest. |
 | SKIP | JFUD/TATTO/PSHOP/BARB | (shop/minigame, bukan story) | — | SKIP | gak ada header "Originally". |
 | … | (sisa story missions) | — | — | TODO | diisi bertahap |
 
@@ -152,6 +153,12 @@ Diisi saat ketemu. Format: `[misi] pertanyaan`.
   **tiap Coop per-player blip call ditaruh PERSIS sebelah vanilla Blip.* yg sepadan** → reachability & entity-validity identik
   sama vanilla (nutup risiko hang netID handshake `while==-1` & RemoveCharBlip(handle-0)). Cleanup di shared routine @SWEET7_32503
   (jalan di pass & fail) → gak ada blip/checkpoint nyangkut. Lanjut autonomous sampai limit habis.
+  Diverifikasi: konversi lama (commit ab3a6e4) TIDAK ubah vanilla — 426 insert / 11 delete, semua delete = stub warning
+  `Coop.AddChatMessage("...unsupported...")` + 1 whitespace `if `→`if` di SWEET3. Aturan run ini: additive-only, no refactor.
+- **2026-09-28 (sesi cloud, lanjut)** — BCRASH1 Badlands (10 Coop calls) **DRAFTED**. Location+kill (pola DRUGS3/CRASH4):
+  target 284@ per-player char blip merah + removal pas mati + cleanup. 28 insert / 0 delete (100% additive). Belum COMPILES
+  (cloud tanpa Sanny CLI). Kandidat berikut: MUSIC3 (Management Issues, 8-target party — kompleks), MUSIC5 (House Party, defense),
+  CAT1-4 (Catalina robberies), CATALIN (First Date). Prioritas pola bersih (single/multi target + blip, atau convoy).
 ```
 ```
 ```

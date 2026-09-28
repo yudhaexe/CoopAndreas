@@ -88,3 +88,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | DRUGS1 Just Business | convoy+combat | ✅ | ⬜ |
 | DRUGS4 Reuniting the Families | convoy+combat | ✅ | ⬜ |
 | SWEET7 Los Sepulcros | escort+combat (drive Sweet home + funeral ambush) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| BCRASH1 Badlands | location+kill (snipe target + escape) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |

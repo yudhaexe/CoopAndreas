@@ -3,6 +3,7 @@
 
 :BCRASH1
 script_name 'BCRASH1'
+Coop.EnableSyncingThisScript()
 gosub @BCRASH1_922
 if 
   has_deatharrest_been_executed 
@@ -147,6 +148,7 @@ return
 :BCRASH1_922
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('BCRASH1')
 107@ = -2815.382
@@ -731,6 +733,18 @@ if and
   not Car.IsDead(322@)
 goto_if_false @BCRASH1_5490
 285@ = Blip.AddForChar(284@)
+// COOP: map target to network id + per-player enemy blip (kill = world-state any-player)
+$temp_int = Coop.GetPedNetworkId(284@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(284@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 284@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 $bc1_stage = 1
 $bc1_cut = 7
 282@ = Sequence.Open()
@@ -1864,6 +1878,13 @@ if
   Char.IsDead(284@)
 goto_if_false @BCRASH1_12477
 Blip.Remove(285@)
+// COOP: target dead -> clear per-player enemy blip
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 284@)
+    end
+end
 52@ = 1
 
 :BCRASH1_12477
@@ -2094,6 +2115,13 @@ Blip.Remove(64@)
 Blip.Remove(65@)
 Blip.Remove(66@)
 Blip.Remove(271@)
+// COOP: clear per-player enemy blip on mission end (pass/fail)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 284@)
+    end
+end
 Pickup.Remove(270@)
 $onmission = 0
 $timer_mobile_start = Clock.GetGameTimer()
