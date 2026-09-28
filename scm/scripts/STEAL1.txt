@@ -100,18 +100,6 @@ return
 Stat.RegisterMissionGiven
 $onmission = 1
 $NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
-// COOP: map target car (435@, the vehicle to track/follow) to network id + per-player blip
-$temp_int = Coop.GetVehicleNetworkId(435@)
-while $temp_int == -1
-    wait 0
-    $temp_int = Coop.GetVehicleNetworkId(435@)
-end
-for $temp_int = 0 to 2
-    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-    then
-        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@, false, BlipDisplay.Both, BlipColor.Yellow, 3)
-    end
-end
 wait 0
 34@ = 0
 36@ = 0
@@ -790,7 +778,19 @@ StuckCarCheck.Remove(435@)
 Blip.Remove(436@)
 436@ = Blip.AddForCar(435@)
 Blip.SetAsFriendly(436@, True)
-if 
+// COOP: map target car to network id + per-player blip (placed here, next to vanilla blip, where 435@ is guaranteed created)
+$temp_int = Coop.GetVehicleNetworkId(435@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(435@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@, false, BlipDisplay.Both, BlipColor.Yellow, 3)
+    end
+end
+if
   Car.IsStopped(435@)
 goto_if_false @STEAL1_5187
 Task.LeaveCarAndFlee(443@, 435@, 438@, 439@, 440@)
