@@ -92,3 +92,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | GROVE2 Grove 4 Life | escort/companion+combat (follow Sweet, gang war) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | TRUTH1 Body Harvest | convoy/escort-vehicle (curi harvester, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | MANSIO3 Home Coming | territory-clear+kill (6 dealer targets di Grove) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| STEAL1 Zeroing In | track/follow-car (radar cari mobil target) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |

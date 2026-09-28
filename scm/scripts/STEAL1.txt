@@ -3,6 +3,7 @@
 
 :STEAL1
 script_name 'STEAL1'
+Coop.EnableSyncingThisScript()
 gosub @STEAL1_581
 if 
   has_deatharrest_been_executed 
@@ -98,6 +99,19 @@ return
 :STEAL1_581
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+// COOP: map target car (435@, the vehicle to track/follow) to network id + per-player blip
+$temp_int = Coop.GetVehicleNetworkId(435@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(435@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@, false, BlipDisplay.Both, BlipColor.Yellow, 3)
+    end
+end
 wait 0
 34@ = 0
 36@ = 0
@@ -1199,6 +1213,13 @@ Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
 Blip.Remove(436@)
 Blip.Remove(53@)
 Blip.Remove(436@)
+// COOP: clear per-player target-car blip before the car is deleted (no stuck blip on pass/fail)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@)
+    end
+end
 Weather.Release
 Char.Delete(443@)
 Car.Delete(435@)
