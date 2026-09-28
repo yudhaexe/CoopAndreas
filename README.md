@@ -312,7 +312,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Zeroing In
 - [~] Test Drive
 - [~] Customs Fast Track
-- [ ] Puncture Wounds
+- [~] Puncture Wounds
 - [ ] Monster
 - [ ] Highjack
 - [ ] Interdiction

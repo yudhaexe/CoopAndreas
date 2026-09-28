@@ -3,6 +3,7 @@
 
 :STEAL5
 script_name 'STEAL5'
+Coop.EnableSyncingThisScript()
 gosub @STEAL5_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :STEAL5_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STEAL5')
 if 
@@ -141,6 +143,8 @@ Hud.DisplayCounterWithString($s5_stingers_left, CounterDisplay.Number, 'STE5_04'
 Text.PrintNow('STE5_12', 7000, 1)
 World.ClearArea(1, -2028.6, 162.9, 27.8, 1.0)
 Char.SetCoordinates($scplayer, -2028.6, 162.9, 27.8)
+// COOP: bring all players to the mission start together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 336.6)
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
@@ -928,6 +932,8 @@ Streaming.MarkModelAsNoLongerNeeded(549)
 Streaming.MarkModelAsNoLongerNeeded(40)
 Streaming.MarkModelAsNoLongerNeeded(#TEMP_STINGER2)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
