@@ -278,7 +278,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Doberman
 - [~] Los Sepulcros
 - [~] Reuniting The Families
-- [ ] The Green Sabre
+- [~] The Green Sabre
 - [~] Badlands
 - [~] Tanker Commander
 - [~] Body Harvest
