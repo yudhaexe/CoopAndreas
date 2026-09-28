@@ -3,6 +3,7 @@
 
 :CAT1
 script_name 'CAT1'
+Coop.EnableSyncingThisScript()
 gosub @CAT1_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :CAT1_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Camera.DoFade(0, Fade.Out)
 34@ = 0
 35@ = 0
@@ -563,6 +565,8 @@ if
 goto_if_false @CAT1_3908
 Char.SetCoordinates($scplayer, 259.9737, -78.3268, 0.6181)
 Char.SetHeading($scplayer, 38.3173)
+// COOP: bring all players to the store together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 goto @CAT1_3938
 
 :CAT1_3908
@@ -3961,6 +3965,18 @@ if
 goto_if_false @CAT1_25758
 87@ = Blip.AddForChar($catalina)
 Blip.SetAsFriendly(87@, True)
+// COOP: map Catalina (companion) to network id + per-player friendly blip
+$temp_int = Coop.GetPedNetworkId($catalina)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId($catalina)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $catalina, True, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 
 :CAT1_25758
 64@ = 1
@@ -5001,6 +5017,13 @@ Streaming.UnloadSpecialCharacter(5)
 World.SetPedDensityMultiplier(1.0)
 World.SetCarDensityMultiplier(1.0)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: clear per-player companion blip on mission end (pass/fail)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $catalina)
+    end
+end
 $onmission = 0
 Mission.Finish
 return 

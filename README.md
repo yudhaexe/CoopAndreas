@@ -282,7 +282,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Badlands
 - [~] Tanker Commander
 - [~] Body Harvest
-- [ ] Local Liquor Store
+- [~] Local Liquor Store
 - [!] Against All Odds
 - [ ] Small Town Bank
 - [ ] Wu Zi Mu
