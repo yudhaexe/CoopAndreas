@@ -3,6 +3,7 @@
 
 :CATCUT
 script_name 'CATCUT'
+Coop.EnableSyncingThisScript()
 gosub @CATCUT_302
 if 
   has_deatharrest_been_executed 
@@ -42,6 +43,7 @@ return
 :CATCUT_302
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('BCESAR2')
 wait 0
 Streaming.SetAreaVisible(2)
@@ -97,6 +99,8 @@ Audio.LoadMissionAudio(23000, 3)
 gosub @CATCUT_47
 Char.SetCoordinates($scplayer, -2042.129, -2528.791, 29.625)
 Char.SetHeading($scplayer, 284.27)
+// COOP: keep all players together through this cutscene transition
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Streaming.LoadScene(-2042.129, -2528.791, 29.625)
 Camera.RestoreJumpcut
 Camera.DoFade(1, 1000)
@@ -179,6 +183,8 @@ $number_of_save_icons = 15
 return 
 
 :CATCUT_912
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 $timer_mobile_start = Clock.GetGameTimer()
 Mission.Finish
