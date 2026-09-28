@@ -3,6 +3,7 @@
 
 :MUSIC5
 script_name 'MUSIC5'
+Coop.EnableSyncingThisScript()
 gosub @MUSIC5_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :MUSIC5_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STRAP4')
 Text.ClearPrints
@@ -385,6 +387,8 @@ Streaming.RequestCarRecording(22)
 Streaming.RequestCarRecording(23)
 World.ClearArea(1, 2492.4, -1632.0, 12.4, 1.0)
 Char.SetCoordinates($scplayer, 2492.4, -1632.0, 12.4)
+// COOP: bring all players to the party so everyone defends the wave attack together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Camera.SetFixedPosition(2483.0, -1649.8, 12.5, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(2494.3, -1650.3, 16.6, SwitchType.JumpCut)
 Game.ShutAllCharsUp(True)
@@ -2389,6 +2393,8 @@ CarGenerator.Switch($gen_car10, 101)
 Pickup.Remove(62@)
 Game.EnableAmbientCrime(True)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end (pass/fail)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 

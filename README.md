@@ -271,7 +271,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Life's A Beach
 - [~] Madd Dogg's Rhymes
 - [~] Management Issues
-- [ ] House Party
+- [~] House Party
 - [!] High Stakes, Low Rider
 - [!] Burning Desire
 - [~] Gray Imports

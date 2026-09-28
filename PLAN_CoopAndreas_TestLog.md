@@ -108,3 +108,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | MUSIC1 Life's a Beach | convoy (curi van, drive back; dance minigame host-solo) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | MUSIC2 Madd Dogg's Rhymes | INTERIOR (teleport-bareng masuk/keluar mansion; stealth) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | MUSIC3 Management Issues | multi-kill (8 target pesta, per-player enemy blip) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| MUSIC5 House Party | wave-defense (teleport-bareng ke pesta, fight bareng) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
