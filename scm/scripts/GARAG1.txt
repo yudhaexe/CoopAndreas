@@ -3,6 +3,7 @@
 
 :GARAG1
 script_name 'GARAG1'
+Coop.EnableSyncingThisScript()
 gosub @GARAG1_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :GARAG1_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Weather.ForceNow(WeatherType.SunnySf)
 Stat.RegisterMissionGiven
 Text.LoadMissionText('GARAGE1')
@@ -377,6 +379,8 @@ goto @GARAG1_3297
 34@ = Car.Create(585, -2030.628, 170.7956, 27.8359)
 Car.SetHealth(34@, 3000)
 Char.SetCoordinates($scplayer, -2031.0, 162.0, 27.83)
+// COOP: bring all players to San Fierro together
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Car.SetHeading(34@, 270.0)
 Streaming.LoadSpecialCharacter('TRUTH', 2)
 
@@ -622,6 +626,18 @@ if
 goto_if_false @GARAG1_5345
 127@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(127@, True)
+// COOP: map mission car (34@) to network id + per-player convoy blip
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Text.PrintNow('GAR1_22', 5000, 1)
 
 :GARAG1_4928
@@ -3838,6 +3854,13 @@ $flag_is_zero_on_bike = 0
 117@ = 0
 118@ = 0
 Particle.Stop(350@)
+// COOP: clear per-player convoy blip on mission end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 $onmission = 0
 Mission.Finish
 return 
