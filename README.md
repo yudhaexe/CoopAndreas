@@ -305,7 +305,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Toreno's Last Flight
 - [~] Mountain Cloud Boys
 - [~] Ran Fa Li
-- [ ] Lure
+- [~] Lure
 - [ ] Amphibious Assault
 - [ ] The Da Nang Thang
 - [ ] Yay Ka-Boom-Boom
