@@ -95,3 +95,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | MANSIO3 Home Coming | territory-clear+kill (6 dealer targets di Grove) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | STEAL1 Zeroing In | track/follow-car (radar cari mobil target) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | CAT3 Tanker Commander | convoy/escort-vehicle (curi tanker, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| SYN3 Outrider | convoy (host nyetir mission car 34@, gauntlet) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |

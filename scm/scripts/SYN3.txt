@@ -3,6 +3,7 @@
 
 :SYN3
 script_name 'SYN3'
+Coop.EnableSyncingThisScript()
 gosub @SYN3_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('SYN3')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 38@ = -1832.33
 39@ = -14.59
@@ -305,6 +307,18 @@ Car.SetHeading(34@, 134.44)
 Car.ChangeColor(34@, 84, 84)
 212@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(212@, True)
+// COOP: map mission vehicle (34@ 'OMEGA', host drives it through the outrider gauntlet) to network id + per-player convoy blip
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 Car.FreezePosition(34@, True)
 Text.PrintNow('SYN3_18', 10000, 0)
 
@@ -3413,6 +3427,13 @@ Blip.Remove(214@)
 Blip.Remove(247@)
 Blip.Remove(215@)
 Blip.Remove(216@)
+// COOP: clear per-player convoy blip on mission end (pass/fail) so nothing is left stuck
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 gosub @SYN3_11584
 gosub @SYN3_11665
 gosub @SYN3_11785

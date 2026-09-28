@@ -236,40 +236,54 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [X] Sync moon sniper rifle shot changing size easter egg with all players
 
 ## TODO Missions
+
+> **Status legend:**
+> - `[X]` = **tested & playable** in co-op (happy-path verified with 2 clients).
+> - `[~]` = **co-op conversion drafted** — Coop sync scaffolding added (EnableSyncing +
+>   CollectNetworkPlayers + per-player blips/checkpoints + cleanup), **additive-only (no vanilla
+>   logic changed)**. Still needs Sanny compile + 2-client playtest before it counts as done.
+> - `[ ]` = not started.
+> - `[!]` = **blocked / needs decision** — special mechanic (flying/RC/race/tailing) or engine
+>   limitation (single-active-interior, needs per-player world instancing / RE-binary work).
+>
+> See `PLAN_AllMissions_Campaign.md` (tracker + design decisions), `PLAN_CoopAndreas_TestLog.md`
+> (crash/lesson log, incl. lesson C-02: netID handshakes must sit next to the vanilla blip of an
+> already-created entity, or the mission hangs), and `PLAN_HowToTest.md` (2-laptop playtest guide).
+
 ### Already Done ✓
 ### Current Tasks
 - [X] Big Smoke
 - [X] Ryder
 - [X] Tagging Up Turf
 - [X] Cleaning The Hood
-- [ ] Drive-Thru
-- [ ] Nines And AK's
-- [ ] Drive-By
-- [ ] Sweet's Girl
-- [ ] Cesar Vialpando
-- [ ] OG Loc
-- [ ] Running Dog
-- [ ] Wrong Side Of The Tracks
-- [ ] Just Business
-- [ ] Home Invasion
-- [ ] Catalyst
-- [ ] Robbing Uncle Sam
+- [~] Drive-Thru
+- [~] Nines And AK's
+- [~] Drive-By
+- [~] Sweet's Girl
+- [!] Cesar Vialpando
+- [~] OG Loc
+- [~] Running Dog
+- [!] Wrong Side Of The Tracks
+- [~] Just Business
+- [!] Home Invasion
+- [!] Catalyst
+- [~] Robbing Uncle Sam
 - [ ] Life's A Beach
 - [ ] Madd Dogg's Rhymes
 - [ ] Management Issues
 - [ ] House Party
-- [ ] High Stakes, Low Rider
-- [ ] Burning Desire
-- [ ] Gray Imports
-- [ ] Doberman
-- [ ] Los Sepulcros
-- [ ] Reuniting The Families
+- [!] High Stakes, Low Rider
+- [!] Burning Desire
+- [~] Gray Imports
+- [~] Doberman
+- [~] Los Sepulcros
+- [~] Reuniting The Families
 - [ ] The Green Sabre
-- [ ] Badlands
-- [ ] Tanker Commander
-- [ ] Body Harvest
+- [~] Badlands
+- [~] Tanker Commander
+- [~] Body Harvest
 - [ ] Local Liquor Store
-- [ ] Against All Odds
+- [!] Against All Odds
 - [ ] Small Town Bank
 - [ ] Wu Zi Mu
 - [ ] Farewell, My Love...
@@ -284,7 +298,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Jizzy
 - [ ] T-Bone Mendez
 - [ ] Mike Toreno
-- [ ] Outrider
+- [~] Outrider
 - [ ] Snail Trail
 - [ ] Ice Cold Killa
 - [ ] Pier 69
@@ -295,7 +309,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Amphibious Assault
 - [ ] The Da Nang Thang
 - [ ] Yay Ka-Boom-Boom
-- [ ] Zeroing In
+- [~] Zeroing In
 - [ ] Test Drive
 - [ ] Customs Fast Track
 - [ ] Puncture Wounds
@@ -323,12 +337,12 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [ ] Madd Dogg
 - [ ] Freefall
 - [ ] High Noon
-- [ ] Saint Mark's Bistro
+- [!] Saint Mark's Bistro
 - [ ] A Home In The Hills
 - [ ] Vertical Bird
-- [ ] Home Coming
+- [~] Home Coming
 - [ ] Beat Down On B Dup
-- [ ] Grove 4 Life
+- [~] Grove 4 Life
 - [ ] Cut Throat Business
 - [ ] Riot
 - [ ] Los Desperados
