@@ -3,6 +3,7 @@
 
 :MUSIC2
 script_name 'MUSIC2'
+Coop.EnableSyncingThisScript()
 gosub @MUSIC2_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :MUSIC2_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('STRAP2')
 Camera.SetFadingColor(0, 0, 0)
@@ -100,6 +102,8 @@ goto @MUSIC2_321
 :MUSIC2_363
 61@ = Blip.AddForCoord(1239.032, -741.106, 94.76)
 Char.SetCoordinates($scplayer, 790.0, -1626.0, 12.5)
+// COOP: bring all players to the mission start together (interior mission -> everyone shares host's area)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Streaming.LoadScene(790.0, -1626.0, 12.5)
 Camera.SetBehindPlayer
 Char.SetHeading($scplayer, 356.0)
@@ -189,6 +193,8 @@ Camera.SetFixedPosition(1256.623, -801.0125, 1084.091, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(1255.93, -801.7316, 1084.044, SwitchType.JumpCut)
 Char.SetCoordinates($scplayer, 1299.352, -792.6416, 1083.008)
 Char.SetHeading($scplayer, 0.0)
+// COOP: entering Madd Dogg's mansion interior -> teleport all players in together (share the one interior instance)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 World.ClearArea(0, 1299.352, -792.6416, 200.0, 200.0)
 Streaming.RequestAnimation("CRIB")
 Streaming.RequestAnimation("VENDING")
@@ -1030,6 +1036,8 @@ goto @MUSIC2_8333
 :MUSIC2_8357
 Char.SetCoordinates($scplayer, 1299.664, -800.546, 83.148)
 Char.SetHeading($scplayer, 271.284)
+// COOP: exiting the mansion interior back outside -> bring all players out together (no stranding)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Camera.SetBehindPlayer
 85@ = 2
 70@ = 4
@@ -1428,6 +1436,8 @@ Streaming.RemoveAnimation("CRIB")
 Streaming.RemoveAnimation("VENDING")
 Streaming.MarkModelAsNoLongerNeeded(335)
 $onmission = 0
+// COOP: on mission end regroup any players still inside back to the host (no stranding on pass/fail)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 World.DisableAllEntryExits(False)
 $timer_mobile_start = Clock.GetGameTimer()
 Mission.Finish

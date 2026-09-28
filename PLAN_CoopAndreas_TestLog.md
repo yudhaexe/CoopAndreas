@@ -67,6 +67,15 @@ Catatan dari proses konversi — bukan crash, tapi kandidat isu saat test:
 - **SMOKE2 / (entity placeholder coord)**: netID handshake ditaruh tepat setelah create di coord (0,0,-100) lalu di-warp. Kalau HANG in-game → ini tersangka utama (calon L-01).
 - **RYDER2**: blip objektif pindah ke getaway car 99@ di fase akhir, belum di-sync per-player (follower bisa kehilangan arah di fase itu).
 - **Interior missions** (belum digarap): wajib pakai pola teleport-bareng SWEET1B, bukan per-player.
+
+### POLA INTERIOR (dari SWEET1B — dipakai buat konvert misi interior, BUKAN auto-BLOCKED)
+Engine GTA cuma render 1 interior aktif global → co-op interior JALAN kalau SEMUA player masuk barengan (share 1 instance). Pola:
+1. Di tiap titik host di-teleport masuk misi/interior (`Char.SetCoordinates($scplayer, x,y,z)`), tepat SETELAHNYA panggil:
+   `Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])` → semua player ikut.
+2. Buat transisi interior, samain area follower dulu:
+   `for $temp_int = 0 to 2 / if Coop.IsNetworkPlayerActorValid(...) then Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], <area>) end end` lalu teleport.
+3. Cleanup akhir misi: set area follower balik ke 0 (exterior) + teleport bareng (SWEET1B line ~2500).
+Jadi CRASH1/MUSIC2/CAT4/CASIN10 dll BISA dikonvert pakai pola ini (bukan cuma di-skip) — asal semua player masuk bareng.
 - **SWEET7 (branch-dependent Ballas)**: 3 target Ballas (289@/290@/291@) cuma di-spawn di salah satu branch (`Game.FindMaxNumberOfGroupMembers()>1` → branch tanpa Ballas). Per-player char-blip create ditaruh di branch yg pasti spawn; removal mirror gate vanilla (296@/297@/298@). Kalau in-game funeral phase gak ada Ballas / blip aneh → cek branch mana yg jalan. Non-fatal (mirror vanilla).
 - **SWEET7 (netID handshake escape car)**: 78@/$sweet netID di-handshake di @SWEET7_3089 (sblm fase kabur). Kalau HANG pas funeral cutscene → tersangka 78@ belum ke-register sync (mirip L-01 risk). Escape car 78@ dibikin awal & di-freeze, harusnya aman.
 
@@ -97,3 +106,4 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 | CAT3 Tanker Commander | convoy/escort-vehicle (curi tanker, drive back) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | SYN3 Outrider | convoy (host nyetir mission car 34@, gauntlet) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
 | MUSIC1 Life's a Beach | convoy (curi van, drive back; dance minigame host-solo) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
+| MUSIC2 Madd Dogg's Rhymes | INTERIOR (teleport-bareng masuk/keluar mansion; stealth) | 🟡 draft (belum compile: cloud tanpa CLI) | ⬜ |
