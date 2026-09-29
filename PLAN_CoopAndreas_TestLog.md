@@ -56,7 +56,18 @@ Milestone lolos. 2 bug misi ditemukan (di bawah).
 - **KONFIRMASI (2026-09-29):** Drive-By ASLINYA ditandai UNSUPPORTED oleh dev upstream (commit "add some unadapted mission warnings" — warning "may cause crashes"). Dev SENGAJA gak convert. User konfirmasi: Tagging Up Turf & Cleaning the Hood (dev-converted, JALAN KAKI, enemy statis) kill-ped AMAN; Drive-By (DI MOBIL + enemy WAVE/respawn) crash. → Akar = limitasi engine sync utk ped-mati-di-kendaraan + churn wave, BUKAN bug SCM-ku. Fix = C++ engine (guard ped-death-in-vehicle), butuh debug live.
 - **KATEGORISASI MISI (pedoman konversi):**
   - ✅ AMAN diconvert: tempur JALAN KAKI (gang war, kill-target on-foot), drive-to-destination, escort. Contoh proven: Tagging Up Turf, Cleaning the Hood.
-  - ⚠️ CRASH-PRONE (hindari / butuh C++ dulu): tempur DI KENDARAAN (drive-by), enemy WAVE-respawn, misi mekanik-khusus (dansa/RC/terbang/kereta). Drive-By di sini.
+  - ⚠️ DICURIGAI (bukan divonis — TEST dulu): tempur DRIVE-BY di kendaraan (TASK_SIMPLE_GANG_DRIVEBY), misi mekanik-khusus (dansa/RC/terbang/kereta).
+  - ❌ KONFIRMASI crash: Drive-By (in-vehicle driveby + ped-group death).
+  - **KOREKSI:** "wave/enemy respawn" BUKAN penyebab crash (dulu sempat kutulis begitu, SALAH). Bukti: Tagging Up Turf & Cleaning the Hood punya kill-geng banyak/berkelompok tapi AMAN. Aturan: JANGAN pre-ban kategori; convert → test → hanya yg beneran crash & susah difix yg di-unsupported.
+- **INVESTIGASI C++ SELESAI (2026-09-29, via PDB symbol + llvm-symbolizer):** Chain crash Drive-By =
+  CGame::Process (0x53E981) → Events::gameProcessEvent (hook per-frame mod, injector call_hooks @DLL RVA 0x42FFB) →
+  lambda mod (DLL RVA 0x1A6A3, Main.cpp gameProcessEvent handler) → game 0x83BBF6 → 0x841ADB → **0x642067 null-deref
+  (area CPedGroups)**. Pas geng-LAWAN mati, proses per-frame mod micu kode ped-group game yg deref null di non-host.
+  Fungsi game 0x83BBF6/0x841ADB/0x642067 UNLABELED di plugin-sdk (engine internal) → gak bisa dipetakan lebih jauh
+  tanpa debugger live. Build symbol (PDB) di-deploy; crash log dari mesin ber-PDB ke-simbolisasi di frame mod.
+  KESIMPULAN: bug engine-level ped-group↔sync saat ped mati; kategori yg upstream tandai unsupported. Bukan quick-fix.
+  Next kalau mau lanjut: buka .dmp di Visual Studio (ada disassembly+register di 0x642067) — effort multi-sesi.
+  TODO housekeeping: balikin xmake client ke set_strip("all") (skrg set_symbols debug utk diagnosis).
 
 ### [2026-09-29] STARTUP CRASH — modloader.asi (bentrok mod repack, BUKAN kode kita)
 - Kapan/Gejala: crash pas startup game (sebelum masuk), "Active scripts: (empty)" = SEBELUM SCM load. Player: host. Konsisten (3x berturut 14:38–14:39).
