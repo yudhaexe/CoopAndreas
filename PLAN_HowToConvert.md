@@ -34,6 +34,27 @@ Definisi resmi: `sdk/Sanny Builder 4/data/sa_sbl_coopandreas/opcodes.txt`. Kalau
 
 ---
 
+## 0.5 PRINSIP PEMERSATU (TERUJI) — "auto-synced vs mirror manual"
+**Ini KENAPA di balik semua pola.** Layer C++ `client/src/COpCodeSync.cpp` punya DAFTAR opcode yang
+**otomatis di-replikasi** dari host ke semua client saat script bertanda EnableSyncing menjalankannya.
+Jadi aturannya DETERMINISTIK, bukan tebakan:
+
+- **Opcode ADA di list `syncedOpcodes` → BIARKAN VANILLA (jangan mirror, jangan sentuh).** Otomatis nular ke semua.
+  Termासuk: `print_big`(0x00BA), `clear_prints`(0x00BE), `print_with_number_big`(0x01E3), `register_mission_passed`(0x0318),
+  `print_help`(0x03E5), `load_mission_text`(0x054C), `do_fade`(0x016A), `load/start/clear_cutscene`(0x02E4/E7/EA),
+  `set_area_visible`(0x04BB), semua camera ops, `clear_area`, densities, `switch_widescreen`, dan **ped-task**
+  (`task_enter_car_as_driver/passenger`, `task_go_to_coord_any_means`, `task_kill_char`, `task_stand_still`, dll —
+  task di ped MISSION otomatis jalan sama di semua client).
+- **Opcode TIDAK di list + menghadap player → MIRROR MANUAL per-player pakai `Coop.*ForNetworkPlayer`.**
+  Yang paling penting: **`Text.PrintNow`(0x00BC show_text_highpriority) TIDAK di list** → makanya dev mirror pakai
+  `PrintNowForNetworkPlayer`. Blip & checkpoint juga TIDAK ada di list → pakai `UpdateCar/CharBlip/CheckpointForNetworkPlayer`.
+
+**Konsekuensi praktis saat konversi:**
+- Cutscene, camera, fade, print_big/help, area_visible, ped-task → **JANGAN diapa-apain** (auto-sync). Ini kenapa
+  4 misi dev gak nge-wrap cutscene sama sekali.
+- Cuma `Text.PrintNow`, blip, checkpoint (+ hal non-list yg player-facing) yg perlu loop+guard mirror.
+- Kalau ragu opcode X auto-sync apa nggak: **cek `syncedOpcodes[]` di COpCodeSync.cpp**. In-list = vanilla; else = mirror.
+
 ## 1. INIT (selalu, urutannya persis)
 ```
 :MISSIONLABEL
@@ -233,6 +254,21 @@ Klaim di panduan ini diuji ke INTRO1/INTRO2/SWEET1/SWEET1B:
 - ✅ Interior: SetAreaVisible(area) masuk + per-index SetCoordinates; exit SetAreaVisible(0) + TeleportPlayersToHostSafely (SWEET1B).
 Koreksi yg lahir dari uji: handshake itu barrier bukan mapping; gate & handshake punya 2 idiom; text mirror selektif;
 cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di poin2 ini — sekarang dibetulin.)
+- ✅ **PRINSIP PEMERSATU (§0.5):** mirroring itu DETERMINISTIK, bukan judgment. Opcode di `syncedOpcodes[]`
+  (COpCodeSync.cpp) auto-replikasi (print_big/help, cutscene, camera, fade, area_visible, ped-task) → vanilla.
+  Yg TIDAK (Text.PrintNow 0x00BC, blip, checkpoint) → mirror manual. Verified: 0x00BA in-list, 0x00BC NOT in-list.
+- ✅ IsHost = 0x pemakaian di 4 misi. deatharrest/fail = vanilla. Cutscene = 0x wrapping (auto-synced).
+- ✅ GetNetworkPlayerInternalId → player-index utk Player.* opcodes (INTRO2 clothes).
+
+## 10.5 CATATAN TAMBAHAN (teruji)
+- **`Coop.IsHost` TIDAK dipakai di 4 misi dev** (0x). Misi jalan IDENTIK di semua client; otoritas host dari
+  layer sync C++, bukan cabang SCM. JANGAN reach for IsHost pas konversi misi kecuali ada alasan sangat spesifik.
+- **deatharrest (fail-on-death) = VANILLA, jangan sentuh** (baris 10 tiap misi: `has_deatharrest_been_executed`).
+  Misi gagal kalau HOST ($scplayer) mati (vanilla). Follower mati → respawn via layer sync, gak nge-fail misi.
+- **`Coop.GetNetworkPlayerInternalId($NETWORK_PLAYER[i])`** → convert network-player jadi **player-index** buat
+  opcode `Player.*` yg butuh index (mis. `Player.GetClothesItem`). Beda dari ped-handle. Dipakai INTRO2 utk baca clothes.
+- **`Coop.TeleportPlayersToHostSafely(p0,p1,p2)`** → tarik follower ke host (transisi paksa / interior). CATATAN:
+  masih 3-arg di API lama; utk 8-player perlu cek apakah API-nya cukup (lihat R-01 TestLog soal warp saat di mobil).
 
 ## 11. BATAS (jujur — bukan semua misi cocok)
 - Tempur DRIVE-BY di kendaraan + ped mati (Drive-By/SWEET4) → crash engine ped-group (TestLog). Skip/unsupported.
