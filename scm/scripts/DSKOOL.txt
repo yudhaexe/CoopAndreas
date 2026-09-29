@@ -3,6 +3,7 @@
 
 :DSKOOL
 script_name 'DSKOOL'
+Coop.EnableSyncingThisScript()
 gosub @DSKOOL_47
 if 
   has_deatharrest_been_executed 
@@ -15,6 +16,7 @@ terminate_this_script
 
 :DSKOOL_47
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
 if 
   $driving_test_passed == 0
 goto_if_false @DSKOOL_74
@@ -137,6 +139,8 @@ Player.SetControl($player1, False)
 Hud.SwitchWidescreen(True)
 Char.HideWeaponForScriptedCutscene($scplayer, True)
 Char.SetCoordinates($scplayer, -2031.7, -116.4, 1034.2)
+// COOP: bring all players into the driving school together (interior)
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 Char.SetHeading($scplayer, 86.9)
 Streaming.RequestModel(50)
 Streaming.LoadAllModelsNow
@@ -4528,6 +4532,8 @@ Blip.Remove(35@)
 Checkpoint.Delete(42@)
 Game.EnableAmbientCrime(True)
 $timer_mobile_start = Clock.GetGameTimer()
+// COOP: regroup players to host on mission end
+Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
 $onmission = 0
 Mission.Finish
 return 
