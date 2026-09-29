@@ -293,10 +293,19 @@ PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRe
             *pPlayerPed->m_pPlayerData->m_pPedClothesDesc = pRebuildPlayer->clothesDesc;
             if (pPlayerPed->m_pRwClump)
             {
+                // CClothes::RebuildPlayer reads GLOBAL fat/muscle stats, so temporarily swap them
+                // to this network player's values, rebuild their body, then restore ours.
+                // (Otherwise everyone renders with the local player's body -> "all buff" bug.)
+                float savedFat = CStats::GetStatValue(STAT_FAT);
+                float savedMuscle = CStats::GetStatValue(STAT_MUSCLE);
+                CStats::SetStatValue(STAT_FAT, pRebuildPlayer->clothesDesc.m_fFatStat);
+                CStats::SetStatValue(STAT_MUSCLE, pRebuildPlayer->clothesDesc.m_fMuscleStat);
+
                 CClothes::RebuildPlayer(pPlayerPed, false);
+
+                CStats::SetStatValue(STAT_FAT, savedFat);
+                CStats::SetStatValue(STAT_MUSCLE, savedMuscle);
             }
         }
-
-        //CStatsSync::ApplyLocalContext();
     }
 }

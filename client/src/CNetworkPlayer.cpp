@@ -41,7 +41,19 @@ void CNetworkPlayer::CreatePed(int id, CVector position)
 
     *m_pPed->m_pPlayerData->m_pPedClothesDesc = m_pPedClothesDesc;
 
-    CClothes::RebuildPlayer(m_pPed, false);
+    // Rebuild with THIS player's fat/muscle (RebuildPlayer reads global stats) then restore ours,
+    // so a new remote player doesn't spawn wearing the local player's body.
+    {
+        float savedFat = CStats::GetStatValue(STAT_FAT);
+        float savedMuscle = CStats::GetStatValue(STAT_MUSCLE);
+        CStats::SetStatValue(STAT_FAT, m_pPedClothesDesc.m_fFatStat);
+        CStats::SetStatValue(STAT_MUSCLE, m_pPedClothesDesc.m_fMuscleStat);
+
+        CClothes::RebuildPlayer(m_pPed, false);
+
+        CStats::SetStatValue(STAT_FAT, savedFat);
+        CStats::SetStatValue(STAT_MUSCLE, savedMuscle);
+    }
 
     // THIS IS AN EXPERIMENTAL SOLUTION FOR THE 0x4D68BA CRASH
     m_pPed->m_bStreamingDontDelete = true;
