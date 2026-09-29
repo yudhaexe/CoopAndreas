@@ -179,8 +179,8 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
   - [ ] sync money
   - [ ] breath level bar
   - [X] stamina sync
-  - [ ] max hp sync
-- [ ] fire sync
+  - [X] max hp sync
+- [X] fire sync
 - [ ] cheat code sync
 - [ ] anim sync
   - [X] sprunk drinking
