@@ -50,8 +50,9 @@ Milestone lolos. 2 bug misi ditemukan (di bawah).
 - Active scripts: SWEET4 TIDAK ada di list (thread misi udah ilang/entity invalid pas crash).
 - Diagnosa (hipotesis): entity yg di-sync (gang ped 394@/401@/408@ atau drive-by car 543@) jadi invalid/null di sisi non-host → mod proses task ped null → crash. Konversiku map ke-4 entity itu ke network id (handshake) = nambah sync surface. Drive-by (AI ped nembak dari mobil gerak) emang berat buat sync.
 - Fix kandidat: kurangi sync surface — JANGAN handshake/map gang PEDS (394@/401@/408@), sisain car 543@ blip aja. ATAU guard null. Belum pasti akar; butuh test ulang.
-- Lesson umum? Mungkin → hati2 map ped AI-heavy ke network id di misi combat kompleks.
-- Status: OPEN (nunggu keputusan fix + test)
+- **CLUE dari user (2026-09-29): crash terjadi PAS NON-HOST MEMBUNUH (ped/musuh).** → ini ped-DEATH sync: pas ped mati, jalur sync mod proses ped (null) → deref. Kemungkinan besar isu CORE CoopAndreas (sync kematian ped), BUKAN dari edit SCM-ku (aku cuma map gang friendly + car, gak map Balla musuh). Fix butuh investigasi C++ (guard null di ped-death sync handler), kemungkinan gak bisa dari SCM.
+- Lesson umum? Ped-death sync di client rawan null-deref. Perlu cek C++ PacketHandlers/peds.cpp (death) + CNetworkPed destroy.
+- Status: OPEN (butuh investigasi C++ ped-death, bukan SCM)
 
 ### [2026-09-29] STARTUP CRASH — modloader.asi (bentrok mod repack, BUKAN kode kita)
 - Kapan/Gejala: crash pas startup game (sebelum masuk), "Active scripts: (empty)" = SEBELUM SCM load. Player: host. Konsisten (3x berturut 14:38–14:39).
@@ -137,7 +138,7 @@ Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum ·
 
 | Misi | Pola | Compile | Playtest |
 |------|------|---------|----------|
-| SWEET3 Drive-Thru | convoy 1-mobil | ✅ | ⬜ |
+| SWEET3 Drive-Thru | convoy 1-mobil +SWEET1-gate | ✅ | ⬜ (re-test) |
 | SWEET2 Nines and AK's | convoy+kaki | ✅ | ⬜ |
 | SWEET4 Drive-By | convoy+combat | ✅ | ⬜ |
 | SMOKE2 Running Dog | convoy+chase | ✅ | ⬜ |

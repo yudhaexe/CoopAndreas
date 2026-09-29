@@ -448,10 +448,23 @@ for $temp_int = 0 to 2
 end
 
 :SWEET3_3244
+// COOP (SWEET1 pattern): wait until every teammate is also near this destination
+206@ = 0
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2404.1, -1891.5, 12.3, 12.0, 12.0, 12.0)
+        then
+            206@ = 1
+        end
+    end
+end
 if or
   not Car.Locate3D($sweet_car, $blob_flag, 2404.1, -1891.5, 12.3, 4.0, 4.0, 4.0)
   not Char.IsSittingInCar($scplayer, $sweet_car)
   not Car.IsOnAllWheels($sweet_car)
+  206@ <> 0
 goto_if_false @SWEET3_4433
 wait 0
 if 
@@ -1533,10 +1546,23 @@ goto @SWEET3_9669
 Text.PrintNow('TW2_X', 6000, 1)
 
 :SWEET3_9669
+// COOP (SWEET1 pattern): wait until every teammate is also near this destination
+206@ = 0
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2513.3, -1671.9, 12.52, 12.0, 12.0, 12.0)
+        then
+            206@ = 1
+        end
+    end
+end
 if or
   not Car.Locate3D($sweet_car, $blob_flag, 2513.3, -1671.9, 12.52, 4.0, 4.0, 4.0)
   not Char.IsSittingInCar($scplayer, $sweet_car)
   not Car.IsOnAllWheels($sweet_car)
+  206@ <> 0
 goto_if_false @SWEET3_10709
 wait 0
 if 
@@ -1889,10 +1915,23 @@ goto @SWEET3_11594
 Text.PrintNow('TW2_X', 6000, 1)
 
 :SWEET3_11594
+// COOP (SWEET1 pattern): wait until every teammate is also near this destination
+206@ = 0
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2066.465, -1695.444, 12.5547, 12.0, 12.0, 12.0)
+        then
+            206@ = 1
+        end
+    end
+end
 if or
   not Car.Locate3D($sweet_car, $blob_flag, 2066.465, -1695.444, 12.5547, 4.0, 3.5, 4.0)
   not Char.IsSittingInCar($scplayer, $sweet_car)
   not Car.IsOnAllWheels($sweet_car)
+  206@ <> 0
 goto_if_false @SWEET3_12398
 wait 0
 if 

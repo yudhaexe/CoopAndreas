@@ -1,0 +1,59 @@
+# PEDOMAN — Refactor Slot Misi Co-op 4 → 8 (host + 7)
+
+> Tujuan user: misi co-op bisa 8 player (skrg cap 4 = host + 3). Pakai pola SWEET1
+> "any means near destination" biar teman GAK wajib naik mobil misi → soal kursi kelar
+> (yang gak muat tinggal nyusul ke tujuan). Freeroam SUDAH 8; ini KHUSUS misi.
+
+---
+
+## ⚠️ TEMUAN BLOCKER (wajib dibaca dulu)
+Arity opcode `Coop.CollectNetworkPlayersForTheMission` = **3 output** (player1/2/3), didefinisikan di:
+- `sdk/Sanny Builder 4/data/sa_sbl_coopandreas/sa_coop.json` (id `1D02`, `num_params: 3`, output 3 Char) — SOURCE
+- **`classes.db` / `sa_coop.db` (SQLite, BINARY)** — yang DIPAKAI COMPILER sanny.exe saat compile.
+
+**Blocker:** ubah JSON aja kemungkinan TIDAK cukup — compiler baca dari .db biner. Harus:
+- regenerate .db dari json (butuh tooling Sanny yg belum kita punya scripted), ATAU
+- edit langsung SQLite `classes.db`/`sa_coop.db` (butuh sqlite tool + tau skema).
+Kalau arity di-compiler tetap 3 tapi SCM manggil 7-var → **compile error**. Kalau C++ StoreParameters(7)
+tapi SCM baca 3 → **var space script KORUP** (runtime rusak). Ketiganya WAJIB konsisten.
+
+**STATUS: BELUM feasible tanpa beresin arity di compiler DB dulu.** Ini langkah #0 refactor.
+
+---
+
+## LANGKAH REFACTOR (urut, semua wajib konsisten)
+0. **[BLOCKER] Ubah arity opcode 1D02 di compiler DB** jadi 7 output (player1..player7), num_params 7.
+   - Edit sa_coop.json + regenerate/edit classes.db & sa_coop.db. Verifikasi: compile 1 call 7-var sukses.
+1. **C++** `client/src/Commands/Commands/CCommandCollectNetworkPlayersForTheMission.cpp`:
+   - `memset(ScriptParams, 0, 7 * sizeof(int))`, loop isi sampai 7, `StoreParameters(7)`.
+   - Rebuild client DLL (xmake build client).
+2. **main.txt** (`scm/main.txt:617`): `$NETWORK_PLAYER: array 3 of integer` → `array 7`.
+   (opsional `$NETWORK_PLAYER_VEHICLE: array 3` → 7 kalau dipakai.)
+3. **Semua 57 pemanggilan Collect()** (pola IDENTIK, mechanical replace):
+   `$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()`
+   → `$NETWORK_PLAYER[0], ..., $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()`
+   (HARUS semua, termasuk upstream SWEET1/1B/INTRO1/INTRO2 — kalau nggak, mismatch arity → compile error.)
+4. **Loop per-player** `for $temp_int = 0 to 2` → `for $temp_int = 0 to 6`:
+   - **HANYA di misi hasil konversi kita.** JANGAN sentuh loop upstream (SWEET1=35, SWEET1B=27, INTRO2=18)
+     — logika mereka di-tune buat 3 network player (special-case index 2, distribusi mobil). Ubah = rawan rusak.
+   - Total loop kita: ~50 lokasi tersebar (LA1FIN2, DECON, SWEET2/3/4, SMOKE2, RYDER2, DRUGS1/3/4, HOODS5, CRASH4, TWAR7, dst).
+5. **Objektif "any means near destination"** (pola SWEET1): teman GAK wajib naik mobil misi.
+   Tiap objektif drive/lokasi, gate pakai loop `Char.LocateAnyMeans3D($NETWORK_PLAYER[i], dest, R)` utk i=0..6
+   → set flag kalau ada yg jauh → tambah ke kondisi OR (kayak 206@ di SWEET2). Ini yg bikin kursi gak masalah.
+6. **Rebuild DLL + recompile main.scm (CLI) + verify + deploy.** Kirim `main.scm` (+DLL krn C++ berubah) ke teman.
+
+## URUTAN PENGERJAAN (user: FOKUS LOS SANTOS DULU)
+Karena arity opcode global (all-or-nothing di langkah 0-3), begitu langkah 0-3 kelar, loop (langkah 4-5)
+bisa incremental per-misi. Prioritas misi Los Santos: SWEET2/3/4, SMOKE2, RYDER2, DRUGS1, DRUGS3, DRUGS4,
+HOODS5, CRASH4, TWAR7, MUSIC5, LA1FIN2.
+
+## RISIKO
+- Untestable runtime oleh Claude → wajib playtest user tiap tahap.
+- Arity mismatch = korup var (silent, susah didiagnosa). Compile-check nangkep mismatch SCM↔def, TAPI
+  TIDAK nangkep mismatch def↔C++ (StoreParameters) — itu cuma ketauan runtime. HATI-HATI.
+- Banyak misi SP cutscene/objektif diracik ≤4 orang; 8 orang bisa aneh walau gak crash.
+
+## REKOMENDASI SEQUENCING (Claude)
+Beresin dulu bug misi dasar (SWEET4 crash ped-death, validasi pola SWEET1 di convoy LS) + playtest,
+BARU kerjain refactor 8-slot sbg effort terpisah (mulai dari langkah 0 blocker). Refactor gede di atas
+misi yg belum stabil = numpuk risiko.
