@@ -43,6 +43,7 @@ unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
 bool lastOnMissionFlag;
 bool lastLocalOnFire = false;
+float lastLocalMaxHealth = -1.0f;
 uint32_t startTime;
 
 class CoopAndreas
@@ -140,6 +141,15 @@ public:
                         GetPacketFactory().Send(firePacket);
                     }
                     lastLocalOnFire = onFire;
+                }
+
+                // Max health sync: broadcast when the local player's max health changes
+                if (localPlayer && localPlayer->m_fMaxHealth != lastLocalMaxHealth)
+                {
+                    lastLocalMaxHealth = localPlayer->m_fMaxHealth;
+                    Packets::Players::PlayerMaxHealth maxHpPacket{};
+                    maxHpPacket.maxHealth = localPlayer->m_fMaxHealth;
+                    GetPacketFactory().Send(maxHpPacket);
                 }
 
                 CDriveBy::Process(localPlayer);

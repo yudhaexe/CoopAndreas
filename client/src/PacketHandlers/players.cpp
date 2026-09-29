@@ -264,6 +264,19 @@ PACKET_HANDLER(ePacketType::PLAYER_ON_FIRE, Packets::Players::PlayerOnFire* pPla
     plugin::CallMethod<0x53A050>(&gFireManager, pPed, pPed, 1.0f, (uint8_t)0, pPlayerOnFire->timeMs, (char)1);
 }
 
+PACKET_HANDLER(ePacketType::PLAYER_MAX_HEALTH, Packets::Players::PlayerMaxHealth* pPlayerMaxHealth)
+{
+    auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerMaxHealth->playerid);
+    if (pNetworkPlayer == nullptr)
+        return;
+
+    CPed* pPed = pNetworkPlayer->m_pPed;
+    if (pPed == nullptr || !pPed->IsVTableValid())
+        return;
+
+    pPed->m_fMaxHealth = pPlayerMaxHealth->maxHealth;
+}
+
 PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRebuildPlayer)
 {
     if (auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pRebuildPlayer->playerid))

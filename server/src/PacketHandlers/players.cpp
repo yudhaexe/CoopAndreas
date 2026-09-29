@@ -22,6 +22,12 @@ PACKET_HANDLER(ePacketType::PLAYER_ON_FIRE, Packets::Players::PlayerOnFire* pPla
     GetPacketFactory().SendToAll(*pPlayerOnFire, pNetworkPlayer);
 }
 
+PACKET_HANDLER(ePacketType::PLAYER_MAX_HEALTH, Packets::Players::PlayerMaxHealth* pPlayerMaxHealth, CNetworkPlayer* pNetworkPlayer)
+{
+    pPlayerMaxHealth->playerid = pNetworkPlayer->m_iPlayerId;
+    GetPacketFactory().SendToAll(*pPlayerMaxHealth, pNetworkPlayer);
+}
+
 PACKET_HANDLER(ePacketType::PLAYER_CAMERA_SYNC, Packets::Players::PlayerCameraSync* pPlayerCameraSync, CNetworkPlayer* pNetworkPlayer)
 {
     pPlayerCameraSync->playerid = pNetworkPlayer->m_iPlayerId;

@@ -162,6 +162,23 @@ public:
     }
 };
 
+class PlayerMaxHealth : public Packet
+{
+    DEFINE_PACKET_TYPE(PlayerMaxHealth, ePacketType::PLAYER_MAX_HEALTH, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId playerid{};
+    float maxHealth{};
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, playerid);
+        serialize_float(stream, maxHealth);
+        return true;
+    }
+};
+
 class KeyPressed : public Packet
 {
     DEFINE_PACKET_TYPE(KeyPressed, ePacketType::PLAYER_KEY_SYNC, ePacketChannel::SYNC);
