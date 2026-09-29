@@ -145,6 +145,23 @@ private:
     }
 };
 
+class PlayerOnFire : public Packet
+{
+    DEFINE_PACKET_TYPE(PlayerOnFire, ePacketType::PLAYER_ON_FIRE, ePacketChannel::EVENT);
+
+public:
+    SenderPlayerId playerid{};
+    uint32_t timeMs{};  // how long the fire should burn on the remote ped
+
+    template <typename Stream>
+    bool Serialize(Stream& stream)
+    {
+        serialize_object(stream, playerid);
+        serialize_uint32(stream, timeMs);
+        return true;
+    }
+};
+
 class KeyPressed : public Packet
 {
     DEFINE_PACKET_TYPE(KeyPressed, ePacketType::PLAYER_KEY_SYNC, ePacketChannel::SYNC);

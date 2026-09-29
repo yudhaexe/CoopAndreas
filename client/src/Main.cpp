@@ -42,6 +42,7 @@ unsigned int lastWeatherTimeSyncTickRate = 0;
 unsigned int lastPlayerAimSyncTickRate = 0;
 bool bBeenConnected;
 bool lastOnMissionFlag;
+bool lastLocalOnFire = false;
 uint32_t startTime;
 
 class CoopAndreas
@@ -128,6 +129,18 @@ public:
                 CPassengerEnter::Process();
 
                 CPlayerPed* localPlayer = FindPlayerPed(0);
+
+                // Fire sync: when the local player just caught fire, tell everyone so they see us burn
+                {
+                    bool onFire = localPlayer && localPlayer->m_pFire != nullptr;
+                    if (onFire && !lastLocalOnFire)
+                    {
+                        Packets::Players::PlayerOnFire firePacket{};
+                        firePacket.timeMs = localPlayer->m_pFire->m_nTimeToBurn;
+                        GetPacketFactory().Send(firePacket);
+                    }
+                    lastLocalOnFire = onFire;
+                }
 
                 CDriveBy::Process(localPlayer);
 

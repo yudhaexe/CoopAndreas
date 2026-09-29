@@ -4,6 +4,7 @@
 #include <CAimSync.h>
 #include <CEntryExitTransitionSync.h>
 #include <CProjectileInfo.h>
+#include <CFireManager.h>
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
 {
@@ -244,6 +245,23 @@ PACKET_HANDLER(ePacketType::PLAYER_STATS, Packets::Players::PlayerStats* pPlayer
             pNetworkPlayer->m_stats[statId] = pPlayerStats->stats[i];
         }
     }
+}
+
+PACKET_HANDLER(ePacketType::PLAYER_ON_FIRE, Packets::Players::PlayerOnFire* pPlayerOnFire)
+{
+    auto pNetworkPlayer = CNetworkPlayerManager::GetPlayer(pPlayerOnFire->playerid);
+    if (pNetworkPlayer == nullptr)
+        return;
+
+    CPed* pPed = pNetworkPlayer->m_pPed;
+    if (pPed == nullptr || !pPed->IsVTableValid())
+        return;
+
+    if (pPed->m_pFire != nullptr)  // already burning
+        return;
+
+    // CFireManager::StartFire(target, creator, size, arg, time, numGenerations) @0x53A050
+    plugin::CallMethod<0x53A050>(&gFireManager, pPed, pPed, 1.0f, (uint8_t)0, pPlayerOnFire->timeMs, (char)1);
 }
 
 PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRebuildPlayer)

@@ -148,6 +148,17 @@ TANPA per-player blip). Investigasi buat perdalam: MAYORITAS gak aman diperdalam
 - **MUSIC5 (House Party) DIBIARIN skeleton:** 8 target musuh × blip toggle 3-4× di 8 label terpisah (20 add point).
   Mirror faithful = kompleks & rawan; value rendah (defense 1 lokasi, player udah co-located via teleport). Skip sampai playtest.
 
+## 3d. TIER KESIAPAN TEST (per 2026-09-29) — urut story
+- **TIER 1 (paling pede, buatan dev/upstream):** Big Smoke(11), Ryder(12), Tagging Up Turf(13), Cleaning The Hood(14).
+- **TIER 2 (pede — konversi hati-hati Los Santos, kategori AMAN, PERLU DITEST):** Drive-Thru(15,✅gate SWEET1),
+  Nines And AK's(16,✅gate SWEET1), Sweet's Girl(18), Doberman(21), Gray Imports(23), Robbing Uncle Sam(26),
+  OG Loc(27), Running Dog(28), Just Business(30), Reuniting The Families(37). **Prioritas re-test: Drive-Thru + Nines And AK's.**
+- **SKIP:** Drive-By(17) — unsupported (engine ped-group crash).
+- **TIER 3 (draft dangkal cloud, teleport-together, BELUM divalidasi):** Los Sepulcros(20), Life's a Beach(31),
+  Madd Dogg's Rhymes(32), Management Issues(33), House Party(34), The Green Sabre(38), + SEMUA San Fierro/desert
+  (Badlands 39 ke atas: CAT*, TRUTH*, WUZI*, SYN*, DRIV*, STEAL*, MANSIO3, GROVE2, dst). Ekspektasi rendah, test hati2.
+- Aturan: convert → TEST → hanya yg beneran crash & susah difix yg di-unsupported (jangan pre-ban kategori).
+
 ## 4. RINGKASAN MISI TER-KONVERSI (status test)
 Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum · 🟡 sebagian · ✅ lolos happy-path.
 
