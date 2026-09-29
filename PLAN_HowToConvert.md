@@ -45,19 +45,38 @@ $NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], 
 ```
 > Collect HARUS di-panggil SEBELUM blok per-player manapun jalan (isi array dulu).
 
-## 2. HANDSHAKE netID (entity misi yg harus muncul & sync di semua client)
-Tiap mobil/ped penting (yg vanilla bikin & pakai) di-map ke network id, TARUH DEKAT tempat entity dibuat
-(di situ handle dijamin exist — lihat lesson C-02 di TestLog):
+## 2. HANDSHAKE netID = BARRIER TUNGGU REPLIKASI (bukan "mapping") — TERUJI
+**Fakta teruji:** hasil `GetVehicleNetworkId/GetPedNetworkId` selalu DIBUANG (SWEET1 buang ke `$temp_int`
+= loop var; INTRO1 simpan ke `86@` lalu di-RESET ke 0 di baris berikutnya). Jadi TUJUANNYA bukan ambil ID —
+tapi **BLOCK sampai server replikasi entity** (`!= -1` artinya "entity udah ada di semua client"). Entity
+auto-sync karena script EnableSyncing'd + host yg bikin; handshake cuma barrier "tunggu sampai siap".
+Taruh DEKAT pembuatan entity (handle dijamin exist di situ).
+
+**Dua idiom sah (pilih salah satu):**
 ```
+// Idiom A (SWEET1) — per-entity, hasil dibuang ke throwaway var:
 $temp_int = Coop.GetVehicleNetworkId($sweet_car)
 while $temp_int == -1
     wait 0
     $temp_int = Coop.GetVehicleNetworkId($sweet_car)
 end
-// idem GetPedNetworkId utk ped ($sweet, $big_smoke, dst)
+// (ulang blok utk tiap ped/mobil)
+
+// Idiom B (INTRO1) — tunggu SEMUA entity sekaligus dalam 1 loop (lebih efisien):
+while true
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(41@)
+    86@ = Coop.GetPedNetworkId($big_smoke)
+    if and
+        $temp_int <> -1
+        86@ <> -1
+    then
+        break
+    end
+end
 ```
-⚠️ JANGAN taruh handshake di entity yg belum dibuat / spawn di coord placeholder (0,0,-100 lalu di-warp) →
-`while ==-1` bisa hang. Taruh sebelah `Blip.AddFor*` vanilla yg sepadan.
+⚠️ JANGAN handshake entity yg belum dibuat / spawn di coord placeholder (0,0,-100 lalu di-warp) →
+gak pernah dapet netID → **HANG selamanya** (persis kenapa entity placeholder rawan; lesson C-02 TestLog).
 
 ## 3. IDIOM PER-PLAYER (jantung konversi — SELALU loop+guard)
 ```
@@ -70,7 +89,9 @@ end
 ```
 Kegunaan umum:
 - **Setup awal:** ClearTasks / SetCoordinates / SetAreaVisible tiap follower.
-- **Teks objektif:** pasangkan dgn vanilla. Dev SELALU nulis lokal DULU baru mirror:
+- **Teks objektif — SELEKTIF (teruji):** vanilla lokal DULU, baru mirror. TAPI dev TIDAK mirror SEMUA teks —
+  cuma teks **instruksi/objektif yg tiap player perlu tau** ("go beat up the dealer", "get in car"). Teks
+  status/ambient berulang (SWEET1B `SW1B_G` muncul 15x) TIDAK di-mirror. Jangan over-mirror (spam player lain).
   ```
   Text.PrintNow('SWE1_A', 7000, 1)          // buat host (vanilla, JANGAN dihapus)
   for $temp_int = 0 to 6
@@ -85,29 +106,51 @@ Kegunaan umum:
 - Mobil objektif/konvoi: `Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[i], <car>, true, BlipDisplay.Both, BlipColor.Purple, 3)`
 - NPC yg dikawal/dikejar: `Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[i], <ped>, <friendly?>, BlipDisplay.Both, BlipColor.Blue/Red, 3)`
 - Titik tujuan on-foot/drive: `Coop.UpdateCheckpointForNetworkPlayer(x, y, z, sx, sy, sz, $NETWORK_PLAYER[i])`
-- **Cleanup WAJIB** (di label akhir misi + tiap fail path): `Coop.RemoveCarBlipForNetworkPlayer / RemoveCharBlipForNetworkPlayer / RemoveCheckpointForNetworkPlayer`,
-  atau borongan `Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[i])`.
+- **Cleanup WAJIB (teruji):** dua cara sah — (a) individual `Remove*ForNetworkPlayer`, ATAU (b) borongan
+  `Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[i])`. INTRO1 buktinya Update car/char tanpa Remove
+  individual sama sekali — dibersihin pakai ClearAllEntityBlips di akhir. Jadi TIDAK wajib 1:1 Update↔Remove.
+- **Over-remove itu SENGAJA & aman (teruji):** checkpoint Remove sering LEBIH banyak dari Update (SWEET1 cp U4/R8)
+  karena Remove ditaruh di BANYAK path (tiap fail + sukses + transisi fase). Under-remove = blip nyangkut; over-remove aman.
 
-## 5. GATE "TUNGGU SEMUA PLAYER" (biar objektif gak selesai duluan / follower gak ke-tinggal)
-Pola `206@` dari SWEET1 — tambahkan ke kondisi objektif drive/lokasi:
+## 5. GATE "TUNGGU SEMUA PLAYER" (biar objektif gak selesai duluan / follower gak ke-tinggal) — TERUJI di 4 misi
+Ada DUA idiom sah (dua-duanya dipakai dev; pilih salah satu):
 ```
+// Idiom A (SWEET1) — flag "ada yg belum", tanpa Break:
 206@ = 0
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, <destX>, <destY>, <destZ>, 12.0, 12.0, 12.0)
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, <destX>, <destY>, <destZ>, 10.0, 10.0, 10.0)
         then
-            206@ = 1     // ada yg belum sampai
+            206@ = 1
         end
     end
 end
 if or
   not <kondisi vanilla objektif ...>
-  206@ <> 0            // <- gate: jangan lanjut sampai semua sampai
+  206@ <> 0
+goto_if_false @NEXT
+
+// Idiom B (INTRO2) — flag "semua ok", pakai Break (berhenti lebih awal, lebih efisien):
+150@ = 1
+FOR $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, <destX>, <destY>, <destZ>, 12.0, 12.0, 12.0)
+        then
+            150@ = 0
+            Break
+        end
+    end
+end
+if or
+  not <kondisi vanilla objektif ...>
+  150@ == 0
 goto_if_false @NEXT
 ```
-> `Char.LocateAnyMeans3D` = "any means" → follower boleh datang naik mobil sendiri / numpang / jalan kaki. Radius agak longgar (10-12m).
-> Pakai var lokal yg BEBAS di misi itu (SWEET1 pakai 206@; verifikasi gak dipakai hal lain).
+> `Char.LocateAnyMeans3D` = "any means" → follower boleh datang naik mobil sendiri / numpang / jalan kaki. Radius longgar (10-12m). Ada juga varian `Char.LocateOnFoot3D` (INTRO2:668) buat objektif yg wajib jalan kaki.
+> Pakai var lokal BEBAS per-misi (SWEET1: 206@, INTRO2: 150@; verifikasi gak dipakai hal lain).
+> Idiom B (Break) lebih disaranin utk 8-player (gak iterasi sisa slot begitu ketemu 1 yg jauh).
 
 ## 6. KENDARAAN untuk follower (satu-satunya bagian positional)
 Dua gaya sah:
@@ -121,7 +164,11 @@ Dua gaya sah:
       Car.SetHealth(...) / SetHeading(...) / SetCanBurstTires(..., False)
   end
   ```
-  lalu warp/track pakai loop+guard biasa. `$NETWORK_PLAYER_VEHICLE` = array 7.
+  `$NETWORK_PLAYER_VEHICLE` = array 7.
+  > **TERUJI — JANGAN warp follower ke kendaraan!** Dev spawn kendaraan + BLIP-nya, lalu manusia-nya naik SENDIRI.
+  > `Task.EnterCar` di INTRO1 CUMA buat host ($scplayer) & AI homie — network player TIDAK di-warp (dia kontrol
+  > ped-nya sendiri, hormati agency). Misi cuma CEK: `if not Char.IsInCar($NETWORK_PLAYER[i], $NETWORK_PLAYER_VEHICLE[i])`
+  > → kasih teks "naik ke kendaraan" (per-player). Blip kendaraan + IsInCar-check = cukup; jangan force warp.
   > Idealnya loop dgn offset terhitung (Y = base + i*step) drpd blok copy-paste — sama fungsinya, lebih rapi.
 
 ## 7. INTERIOR (misi masuk ruangan) — teleport-bareng, BUKAN per-player instance
@@ -169,6 +216,23 @@ Keluar interior akhir misi: set area follower balik 0 + teleport bareng. `Coop.T
 - ❌ Handshake netID di entity placeholder-coord → hang.
 - ❌ Update blip/checkpoint tanpa Remove di cleanup → blip nyangkut.
 - ❌ Misi interior dibikin per-player instance → gak bisa (engine single-interior); pakai teleport-bareng.
+- ❌ Force-warp follower ke kendaraan (WarpCharIntoCar/EnterCar) → jangan; spawn+blip+IsInCar-check aja (hormati agency).
+- ❌ Mirror SEMUA Text.PrintNow → cuma teks objektif/instruksi; teks status/ambient jangan (spam).
+
+---
+
+## 12. LOG VERIFIKASI (teruji empiris ke kode dev 2026-09-30 — bukan asersi)
+Klaim di panduan ini diuji ke INTRO1/INTRO2/SWEET1/SWEET1B:
+- ✅ EnableSyncing di baris 6 (keempat misi) + Collect sebelum blok per-player.
+- ✅ Handshake = BARRIER tunggu replikasi (netID value DIBUANG: SWEET1→$temp_int loop-var; INTRO1→86@ di-reset ke 0
+  baris berikutnya lalu jadi phase-counter). Dua idiom: per-entity `while ==-1` (SWEET1) & combined `while true..break` (INTRO1).
+- ✅ Wait-for-all gate ada di KEEMPAT misi (bukan cuma SWEET1). Dua idiom: 206@ set-1-noBreak (SWEET1) & 150@ set-0-Break (INTRO2).
+- ✅ Text mirror SELEKTIF (SWEET1B: SW1B_A/SWE1_YH/SW1B_B di-mirror; SW1B_G ambient 15x TIDAK). Ordering lokal-dulu benar.
+- ✅ Blip cleanup: individual Remove* ATAU bulk ClearAllEntityBlips (INTRO1 car U2/R0 + clearAll:3). Over-remove sengaja (SWEET1 cp U4/R8).
+- ✅ Follower TIDAK di-warp ke kendaraan (INTRO1: EnterCar cuma host+AI; NETWORK_PLAYER via blip+IsInCar-check).
+- ✅ Interior: SetAreaVisible(area) masuk + per-index SetCoordinates; exit SetAreaVisible(0) + TeleportPlayersToHostSafely (SWEET1B).
+Koreksi yg lahir dari uji: handshake itu barrier bukan mapping; gate & handshake punya 2 idiom; text mirror selektif;
+cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di poin2 ini — sekarang dibetulin.)
 
 ## 11. BATAS (jujur — bukan semua misi cocok)
 - Tempur DRIVE-BY di kendaraan + ped mati (Drive-By/SWEET4) → crash engine ped-group (TestLog). Skip/unsupported.
