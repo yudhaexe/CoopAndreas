@@ -204,7 +204,7 @@ wait 0
 goto @INTRO1_1339
 :INTRO1_1370
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
   if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
   then
     Char.ClearTasks($NETWORK_PLAYER[$temp_int])
@@ -337,7 +337,7 @@ Camera.ResetNewScriptables
 Char.Delete($big_smoke)
 Streaming.UnloadSpecialCharacter(10)
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
   if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
   then
     Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 946.2651, -1061.212, 24.9441)
@@ -488,6 +488,39 @@ then
     Car.SetHealth($NETWORK_PLAYER_VEHICLE[2], 2000)
     Car.SetHeading($NETWORK_PLAYER_VEHICLE[2], 140.0)
     Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[2], False)
+end
+
+// COOP 8-player: bikes for network players 4-7 (same pattern as [0..2], offset row)
+if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[3])
+then
+    $NETWORK_PLAYER_VEHICLE[3] = Car.Create(481, 974.3, -1106.0, 23.1)
+    Car.SetHealth($NETWORK_PLAYER_VEHICLE[3], 2000)
+    Car.SetHeading($NETWORK_PLAYER_VEHICLE[3], 140.0)
+    Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[3], False)
+end
+
+if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[4])
+then
+    $NETWORK_PLAYER_VEHICLE[4] = Car.Create(481, 974.3, -1104.0, 23.1)
+    Car.SetHealth($NETWORK_PLAYER_VEHICLE[4], 2000)
+    Car.SetHeading($NETWORK_PLAYER_VEHICLE[4], 140.0)
+    Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[4], False)
+end
+
+if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[5])
+then
+    $NETWORK_PLAYER_VEHICLE[5] = Car.Create(481, 974.3, -1102.0, 23.1)
+    Car.SetHealth($NETWORK_PLAYER_VEHICLE[5], 2000)
+    Car.SetHeading($NETWORK_PLAYER_VEHICLE[5], 140.0)
+    Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[5], False)
+end
+
+if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[6])
+then
+    $NETWORK_PLAYER_VEHICLE[6] = Car.Create(481, 974.3, -1100.0, 23.1)
+    Car.SetHealth($NETWORK_PLAYER_VEHICLE[6], 2000)
+    Car.SetHeading($NETWORK_PLAYER_VEHICLE[6], 140.0)
+    Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[6], False)
 end
 
 37@ = Car.Create(481, 971.8, -1108.0, 23.1)
@@ -880,7 +913,7 @@ goto_if_false @INTRO1_6047
 Char.ClearTasksImmediately($scplayer)
 Task.GoStraightToCoord($scplayer, 971.181, -1108.193, 22.8672, MoveState.Run, 10000)
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
   if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
   then
     Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
@@ -1060,7 +1093,7 @@ Camera.RestoreJumpcut
 Char.ClearLookAt($scplayer)
 Char.HideWeaponForScriptedCutscene($scplayer, False)
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if and   
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         not Car.IsDead($NETWORK_PLAYER_VEHICLE[$temp_int])
@@ -1191,7 +1224,7 @@ goto @INTRO1_7891
 
 :INTRO1_7966
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.PrintNowForNetworkPlayer('INTRO2E', 10000, 1, $NETWORK_PLAYER[$temp_int])
@@ -1219,7 +1252,7 @@ gosub @INTRO1_47
 
 :INTRO1_8092
 150@ = 1
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1945,7 +1978,7 @@ Text.PrintNow('INTRO2E', 10000, 1)
 :INTRO1_12493
 92@ = 2
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1999,7 +2032,7 @@ TIMERA = 0
 
 
 World.SwitchEntryExit('CARLS', False)
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCheckpointForNetworkPlayer(2493.82, -1669.91, 12.8, 4.0, 3.5, 4.0, $NETWORK_PLAYER[$temp_int])
@@ -2008,7 +2041,7 @@ end
 
 :INTRO1_12688
 150@ = 1
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2354,7 +2387,7 @@ goto @INTRO1_12688
 
 // *******************************Mission Passed CUT SCENE********************************************************
 :INTRO1_14787
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
@@ -3164,7 +3197,7 @@ Audio.PlayMissionPassedTune(1)
 Stat.PlayerMadeProgress(1)
 Blip.Remove($intro_contact_blip)
 World.SwitchEntryExit('CARLS', True)
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
@@ -3516,7 +3549,7 @@ Sequence.Clear(82@)
 83@ = 2
 :INTRO1_21633
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if and
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         not Car.IsDead($NETWORK_PLAYER_VEHICLE[$temp_int])
@@ -3597,7 +3630,7 @@ then
             if Char.IsInCar(65@(48@,3i), 76@(48@,3i)) // bmx_gang[index_intro], bmx_bikes[index_intro]
             then
                 150@ = 1
-                FOR $temp_int = 0 to 2
+                FOR $temp_int = 0 to 6
                     if
                         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
                     then
@@ -3692,7 +3725,7 @@ if
 goto_if_false @INTRO1_22510
 Text.PrintNow($intro1_chat(86@,14s), 4000, 1)
 
-FOR $temp_int = 0 to 2
+FOR $temp_int = 0 to 6
     if
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then

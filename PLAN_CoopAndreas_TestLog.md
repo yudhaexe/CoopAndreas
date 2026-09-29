@@ -91,6 +91,28 @@ Milestone lolos. 2 bug misi ditemukan (di bawah).
 
 ---
 
+### [2026-09-29 21:14] CRASH baru — null-deref anim/task ped (build fitur baru)
+- Crash log: CoopAndreas_crashes/2026-09-29_21-14-01.log. Exception 0x0061CBD9 gta_sa.exe AV read, EAX=0 (null deref), EDI=0xC.
+- Chain: 0x61CBD9 <- 0x4C726C <- 0x4C72EE <- 0x6244EA <- 0x827BA9 <- ... <- 0x687xxx (CPad) <- CPad__DuckJustDown_Hook (mod, jalan tiap frame) <- CoopAndreasSA.dll (stackwalk sisa-nya korup/loop).
+- 0x61CBD9 ada di range anim/streaming (meta CAnimBlendAssociation/CStreaming) → proses ANIMASI/TASK ped. DuckJustDown_Hook kemungkinan cuma kebetulan di stack (hook per-frame pad).
+- Build: 21:03 (fire+maxhp+wanted+8player+body-fix). Kejadian SEKALI. Trigger BELUM diketahui (butuh konteks user: lagi ngapain/solo-coop/misi-freeroam/aksi spesifik/ada friend).
+- Kandidat kalau tied ke perubahanku: body-fix (RebuildPlayer swap stat mid-frame) rawan kalau ke-trigger pas anim rebuild; ATAU synced ped anim/task state buruk. BELUM konfirmasi.
+- Status: OPEN (nunggu konteks + apakah reproducible).
+
+### [2026-09-30] Playtest 6 player — 2 problem
+**P1: Tagging Up Turf cuma spawn 4 sepeda (2 player ke-teleport doang).** Misi UPSTREAM (dev, 103 calls);
+loop follower-nya sengaja kubiarin `0 to 2` (3 follower) + spawn kendaraan fixed 4. Jadi cuma handle 4 player.
+Buat 8-player butuh per-misi: spawn sepeda tambahan + bump loop upstream (yg sengaja kuhindari). = kerjaan "besar".
+Konsekuensi wajar dari naikin cap ke 8 tanpa nyentuh logika spawn tiap misi.
+
+**P2: CRASH sering pas 6 player main iseng (freeroam/misi).** Logs 21:55-16 & 21:56-26, build 21:03:25 (arity-7, MATCH scm — bukan mismatch).
+Crash 0x004D68BA = **known ped streaming/render crash** (mod ada komentar "EXPERIMENTAL SOLUTION FOR THE 0x4D68BA CRASH"
++ mitigasi m_bStreamingDontDelete=true di CNetworkPed & CNetworkPlayer). Chain lewat gameProcessEvent (0x53E986) -> mod
+per-frame network ped processing. Mitigasi ngurangin tapi gak ilang; 6 player = lebih banyak ped = lebih sering crash.
+Masuk TODO "stream in/out players/peds" yg BELUM dikerjain (fragility engine). BUKAN dari perubahan baruku.
+FAKTA KUNCI: makin banyak player (6-8) makin sering crash — cost nyata dari naikin cap 8. Di 4 player jauh lebih stabil.
+Status: OPEN (engine streaming; fix beneran = rework streaming, effort besar+RE).
+
 ## 2. LESSONS → REVISI RETROAKTIF (aturan yang lahir dari crash nyata)
 > Tiap lesson di sini WAJIB dicek & diterapin ke SEMUA misi yang udah/akan dikonversi.
 > Kolom "Applied to" dicentang saat misi udah direvisi.

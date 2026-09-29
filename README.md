@@ -170,7 +170,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
   - [X] Player map pin
     - [ ] fix proportion
   - [X] Player mark (waypoint)
-- [X] wanted level
+- [ ] wanted level
 - [ ] stats sync
   - [X] fat
   - [X] muscle
