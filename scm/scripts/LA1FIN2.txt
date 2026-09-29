@@ -277,6 +277,12 @@ goto @LA1FIN2_1494
 40@ = Car.Create(401, 1625.087, -1857.438, 12.5549)
 Car.ChangeColor(40@, 32, 1)
 Car.FreezePosition(40@, True)
+// COOP: map mission car to network id (real coord, safe)
+$temp_int = Coop.GetVehicleNetworkId(40@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(40@)
+end
 Car.SetProofs(40@, True, True, True, True, True)
 Car.SetHeading(40@, 180.0)
 wait 500
@@ -389,6 +395,13 @@ goto_if_false @LA1FIN2_2293
 Blip.Remove(50@)
 50@ = Blip.AddForCar(40@)
 Blip.SetAsFriendly(50@, True)
+// COOP: mission car blip for followers (own vehicle to docks)
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 40@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 
 :LA1FIN2_2293
 Text.Print('LA1_35', 4000, 1)
@@ -3225,6 +3238,13 @@ Car.MarkAsNoLongerNeeded(40@)
 
 :LA1FIN2_22204
 Blip.Remove(50@)
+// COOP: clear mission car blip for followers
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 40@)
+    end
+end
 267@ = 0
 
 :LA1FIN2_22216

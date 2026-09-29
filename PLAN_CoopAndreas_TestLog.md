@@ -91,6 +91,18 @@ TANPA per-player blip). Investigasi buat perdalam: MAYORITAS gak aman diperdalam
 **Yang AMAN diperdalam & udah dikerjain:** DECON (car 85@) + SYN2 (car 59@) — objektif = 1 car, real-coord, blip friendly normal → netID handshake aman + per-player convoy blip + cleanup. COMPILES.
 **Kesimpulan:** sisa skeleton DIBIARIN (aman apa adanya). Perdalam sisanya HARUS setelah playtest (biar tau handshake mana aman & fidelity blip per fase).
 
+## 3c. TEMUAN RISIKO (dari baca source, belum tentu crash — cek pas playtest)
+- **R-01 Teleport player di dalam mobil:** `TeleportPlayerScripted` handler (scripts.cpp:124) cuma panggil
+  `pPlayerPed->Teleport(pos)` — TIDAK warp player keluar mobil dulu. Kalau follower lagi NYETIR pas host
+  trigger `TeleportPlayersToHostSafely`, ped-nya bisa ke-yank keluar/desync dari mobilnya (ghost car / glitch).
+  Semua misi skeleton pakai teleport-together di awal — RISIKO kalau player mulai misi sambil di mobil.
+  Mitigasi kalau kejadian: sebelum teleport, warp player keluar mobil dulu (belum diimplement).
+- **R-02 Player limit >8:** butuh refactor SEDANG (bukan kecil). Detail di PLAN_AllMissions §7 / jawaban chat.
+- **LA1FIN2 (Green Sabre) DIPERDALAM:** car 40@ (drive ke docks) → per-player convoy blip (fase car-blip @390) +
+  handshake real-coord + cleanup. Fase coord-blip tetap teleport-together. COMPILES.
+- **MUSIC5 (House Party) DIBIARIN skeleton:** 8 target musuh × blip toggle 3-4× di 8 label terpisah (20 add point).
+  Mirror faithful = kompleks & rawan; value rendah (defense 1 lokasi, player udah co-located via teleport). Skip sampai playtest.
+
 ## 4. RINGKASAN MISI TER-KONVERSI (status test)
 Sinkron dengan tracker `PLAN_AllMissions_Campaign.md`. Status test: ⬜ belum · 🟡 sebagian · ✅ lolos happy-path.
 
