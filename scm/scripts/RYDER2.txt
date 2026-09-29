@@ -18,7 +18,7 @@ terminate_this_script
 :RYDER2_47
 Stat.RegisterMissionGiven
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -538,7 +538,7 @@ while $temp_int == -1
     $temp_int = Coop.GetPedNetworkId($ryder)
 end
 // COOP: convoy truck blip for followers (own vehicle)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 95@, true, BlipDisplay.Both, BlipColor.Purple, 3)
@@ -6436,7 +6436,7 @@ goto @RYDER2_41910
 Blip.Remove(119@)
 Blip.Remove(120@)
 // COOP: clear followers' convoy truck blip
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 95@)

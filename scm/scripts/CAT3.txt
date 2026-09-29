@@ -228,7 +228,7 @@ return
 
 :CAT3_1452
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('CAT')
 34@ = 5000
@@ -775,7 +775,7 @@ while $temp_int == -1
     wait 0
     $temp_int = Coop.GetVehicleNetworkId(327@)
 end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 327@, true, BlipDisplay.Both, BlipColor.Purple, 3)
@@ -2797,7 +2797,7 @@ Char.RemoveElegantly($catalina)
 
 :CAT3_17366
 // COOP: clear per-player convoy blip on mission end (pass/fail) so nothing is left stuck
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 327@)

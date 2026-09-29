@@ -17,7 +17,7 @@ terminate_this_script
 :DECON_47
 Stat.RegisterMissionGiven
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -1830,7 +1830,7 @@ while $temp_int == -1
     wait 0
     $temp_int = Coop.GetVehicleNetworkId(85@)
 end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 85@, true, BlipDisplay.Both, BlipColor.Purple, 3)
@@ -3353,7 +3353,7 @@ Blip.Remove(124@)
 Blip.Remove(125@)
 Blip.Remove(126@)
 // COOP: clear objective car blip for followers
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 85@)

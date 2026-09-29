@@ -77,7 +77,7 @@ Camera.SetFadingColor(0, 0, 0)
 Camera.DoFade(1, 1000)
 Stat.RegisterMissionGiven
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Path.SwitchRoadsOff(-1478.294, -65.4014, 0.0, -1395.423, 2.7054, 10.0)
 Game.SetRelationship(RelationshipType.Hate, PedType.Mission1, PedType.Player1)
 Game.SetRelationship(RelationshipType.Like, PedType.Mission1, PedType.Mission1)
@@ -152,7 +152,7 @@ while $temp_int == -1
     wait 0
     $temp_int = Coop.GetVehicleNetworkId(34@)
 end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
@@ -1260,7 +1260,7 @@ return
 :FARLIE4_8352
 $onmission = 0
 // COOP: clear per-player convoy blip on mission end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)

@@ -99,7 +99,7 @@ return
 :STEAL1_581
 Stat.RegisterMissionGiven
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 34@ = 0
 36@ = 0
@@ -784,7 +784,7 @@ while $temp_int == -1
     wait 0
     $temp_int = Coop.GetVehicleNetworkId(435@)
 end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@, false, BlipDisplay.Both, BlipColor.Yellow, 3)
@@ -1214,7 +1214,7 @@ Blip.Remove(436@)
 Blip.Remove(53@)
 Blip.Remove(436@)
 // COOP: clear per-player target-car blip before the car is deleted (no stuck blip on pass/fail)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 435@)

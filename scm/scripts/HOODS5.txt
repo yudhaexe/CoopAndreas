@@ -31,7 +31,7 @@ goto_if_false @HOODS5_251
 :HOODS5_251
 Stat.RegisterMissionGiven
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Player.SetGroupToFollowAlways($player1, True)
 154@ = 14
 155@ = 15
@@ -349,7 +349,7 @@ while $temp_int == -1
     $temp_int = Coop.GetPedNetworkId(75@)
 end
 // COOP: blip Sweet for every network player (follow/escort)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@, True, BlipDisplay.Both, BlipColor.Blue, 3)
@@ -2374,7 +2374,7 @@ return
 :HOODS5_15329
 $onmission = 0
 // COOP: clear Sweet blip for followers
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)

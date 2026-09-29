@@ -16,7 +16,7 @@ terminate_this_script
 
 :TWAR7_47
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('SMOKE1')
 if 
@@ -1271,7 +1271,7 @@ goto_if_false @TWAR7_8690
 66@ = Blip.AddForChar(34@)
 Blip.SetAsFriendly(66@, False)
 // COOP: blip chase target for every network player
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
@@ -3392,7 +3392,7 @@ Char.ShutUpForScriptedSpeech($scplayer, False)
 Game.ShutAllCharsUp(False)
 Blip.Remove(66@)
 // COOP: clear chase target blip for followers
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)

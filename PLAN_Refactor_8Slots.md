@@ -19,6 +19,29 @@ tapi SCM baca 3 → **var space script KORUP** (runtime rusak). Ketiganya WAJIB 
 
 **STATUS: BELUM feasible tanpa beresin arity di compiler DB dulu.** Ini langkah #0 refactor.
 
+### HASIL TES (2026-09-29) — arity resisten diubah via CLI
+Dites langsung: opcode arity 3 di-define di file TEKS `sa_coop.db` (mode.xml `<classes>`), `classes.db`,
+`sa_coop.json` (mode.xml `<library>`) — line 3380: `CollectNetworkPlayersForTheMission,1D02,0,0,("player1: Char"...)`.
+Edit ketiganya ke 7 output + hapus cache `debug.bin` → compiler TETAP "Expected 3 params". Jadi Sanny nge-cache
+arity di tempat yg gak ketimpa lewat CLI (kemungkinan perlu regen via GUI, atau cache registry/appdata).
+**KESIMPULAN: arity mission-players di-DESAIN 4 oleh pembuat mod; ngubahnya fragile + NON-PORTABLE**
+(perubahan ada di install Sanny lokal, BUKAN repo — tiap recompile/reinstall/teman balik ke 4).
+**REKOMENDASI: JANGAN kerjakan. Misi tetap 4, freeroam tetap 8.** Ratio effort:risk:value jelek
+(untestable + non-portable + misi SP didesain ≤4 orang). Semua file Sanny udah di-restore ke kondisi bersih.
+
+### ✅ UPDATE (2026-09-29 malam) — TERNYATA BISA & SUDAH DIKERJAKAN
+Kunci yg tadi kelewat: param count opcode ada di **`SASCM.INI`** (mode.xml `<opcodes>`), baris
+`1D02=3,coop_collect_network_players_for_the_mission %1d% %2d% %3d%` — angka `3` = param count yg divalidasi
+compiler ("Expected 3 params"). Class DB (sa_coop.db/classes.db) juga list output-nya. Ubah KETIGA
+(SASCM.INI count 3→7 + %4d%..%7d%, sa_coop.db & classes.db output player4..7) → 7-var compile SUKSES.
+**Portability KEJAWAB:** file2 ini ada di repo `sdk/Sanny Builder 4/data/sa_sbl_coopandreas/` → edit repo + commit = portable
+(siapapun copy SDK ke Sanny-nya dapet arity 7).
+**DIKERJAKAN:** (1) SDK arity 7 (repo+install), (2) C++ CollectNetworkPlayersForTheMission StoreParameters(7) fill 7,
+(3) main.txt `$NETWORK_PLAYER`/`_VEHICLE` array 3→7, (4) SEMUA 56 Collect() call → 7-var, (5) loop `for 0 to 2`→`0 to 6`
+di 32 misi konversi (KECUALI upstream SWEET1/SWEET1B/INTRO1/INTRO2 — biarin 4, logika tuned). main.scm compile OK.
+**BELUM ditest in-game** (untestable oleh Claude) — butuh playtest >4 player. Deploy: DLL(build 20:50)+main.scm ke game
+& kirim ke SEMUA pemain (protocol+arity berubah, wajib seragam).
+
 ---
 
 ## LANGKAH REFACTOR (urut, semua wajib konsisten)

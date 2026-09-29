@@ -16,7 +16,7 @@ terminate_this_script
 
 :CAT4_47
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 World.SwitchEntryExit('GENOTB', False)
 if 
   Player.IsPlaying($player1)
@@ -1198,7 +1198,7 @@ if
 goto_if_false @CAT4_7434
 Char.SetCoordinates($scplayer, 832.4548, 7.0794, 1003.187)
 // COOP: entering the store interior (area 3) -> put all players in the same interior + teleport in together
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 3)
@@ -2279,7 +2279,7 @@ goto @CAT4_11751
 Streaming.SetAreaVisible(0)
 Char.SetCoordinates($scplayer, 1292.721, 271.0581, 18.5469)
 // COOP: leaving the store interior back outside (area 0) -> bring all players out together
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
@@ -3372,7 +3372,7 @@ return
 :CAT4_18425
 Text.ClearHelp
 // COOP: on mission end put any players still inside back to area 0 and regroup to host (no stranding)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)

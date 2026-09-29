@@ -3377,7 +3377,7 @@ $Coop
 $BEGIN
 AddChatMessage,1D00,0,0,("message: string")
 GetNetworkPlayerChar,1D01,0,0,("id: int" "player: Char")
-CollectNetworkPlayersForTheMission,1D02,0,0,("player1: Char" "player2: Char" "player3: Char")
+CollectNetworkPlayersForTheMission,1D02,0,0,("player1: Char" "player2: Char" "player3: Char" "player4: Char" "player5: Char" "player6: Char" "player7: Char")
 IsNetworkPlayerActorValid,1D03,1,0,("player_actor: Char")
 UpdateCarBlipForNetworkPlayer,1D04,0,0,("player_actor: Char" "car: Car" "isFriendly: bool" "display: BlipDisplay" "color: BlipColor" "scale: int")
 RemoveCarBlipForNetworkPlayer,1D05,0,0,("player_actor: Char" "car: Car")

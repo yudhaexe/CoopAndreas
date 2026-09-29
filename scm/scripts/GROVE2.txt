@@ -19,7 +19,7 @@ Game.MakeRoomInPlayerGangForMissionPeds(1)
 Text.LoadMissionText('GROVE2')
 Camera.SetFadingColor(0, 0, 0)
 Stat.RegisterMissionGiven
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Camera.SetFadingColor(0, 0, 0)
 Camera.DoFade(0, 1000)
 
@@ -132,7 +132,7 @@ while $temp_int == -1
     wait 0
     $temp_int = Coop.GetPedNetworkId($sweet)
 end
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet, True, BlipDisplay.Both, BlipColor.Blue, 3)
@@ -573,7 +573,7 @@ Blip.Remove(55@)
 
 :GROVE2_3381
 // COOP: clear per-player companion blip on mission end (pass/fail) so nothing is left stuck
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet)

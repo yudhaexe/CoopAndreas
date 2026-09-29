@@ -16,7 +16,7 @@ terminate_this_script
 
 :CRASH4_47
 $onmission = 1
-$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2] = Coop.CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 $flag_on_doberman_mission = 1
 49@ = 0
 50@ = 0
@@ -922,7 +922,7 @@ goto_if_false @CRASH4_5730
 Char.SetDecisionMaker(34@, 43@)
 35@ = Blip.AddForChar(34@)
 // COOP: blip target for every network player
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, false, BlipDisplay.Both, BlipColor.Red, 3)
@@ -1092,7 +1092,7 @@ $flag_on_doberman_mission = 0
 Blip.Remove(45@)
 Blip.Remove(35@)
 // COOP: clear target blip for followers
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
