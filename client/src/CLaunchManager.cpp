@@ -81,15 +81,8 @@ void CLaunchManager::CollectCommandLineArgs()
         }
     }
 
-    char* encrypted = Encrypt(id);
-
-    if (!serial[0] || !id[0] || strcmp(encrypted, serial) != 0)
-    {
-        MessageBoxA(0, "You have entered an incorrect serial key, please check that you have entered it correctly.\n\nFollow the instructions in the launcher.", "Failed to verify CoopAndreas serial key", MB_OK | MB_ICONERROR);
-        ExitProcess(0);
-        // crash the game
-        *(ushort*)0xDEAD = 0xDEAD;
-    }
-
-    delete[] encrypted;
+    // Serial key gate removed: CoopAndreas is free & open-source, no beta-key check.
+    // id/serial args are parsed for backward-compat but no longer validated.
+    (void)serial;
+    (void)id;
 }
