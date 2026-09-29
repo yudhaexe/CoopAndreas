@@ -123,7 +123,27 @@ Kegunaan umum:
   end
   ```
 
+## 3.5 MEKANISME START MISI (launcher — biasanya gak diubah pas konversi, tapi WAJIB paham)
+Misi di-trigger dari script LAUNCHER (mis. `SWEET.txt`, `INT.txt`), BUKAN body misi. Pola "lingkaran":
+```
+if Coop.LocateAllPlayersOnFoot3D(0, $sweetX, $sweetY, $sweetZ, 1.2, 1.2, 2.0)   // SEMUA player di radius?
+goto_if_false @SKIP
+if Player.CanStartMission($player1)
+goto_if_false @SKIP
+$onmission = 1
+Mission.LoadAndLaunchInternal(13)   // launch by NOMOR DEFINE MISSION
+```
+`Coop.LocateAllPlayersOnFoot3D` (teruji): HOST-ONLY evaluasi (non-host langsung false); cek host + loop
+SEMUA `m_pPlayers` di radius; true cuma kalau SEMUA (host+semua follower) berdiri di lingkaran. **Sudah dinamis
+(loop m_pPlayers, bukan hardcode-count)** — jadi lingkaran otomatis nunggu berapapun player. Ini INFRA upstream;
+biasanya gak disentuh saat konversi body misi.
+
 ## 4. BLIP / CHECKPOINT per-player (selalu Update↔Remove berpasangan)
+**Konvensi warna (teruji di 4 misi):**
+- Mobil objektif/konvoi → `BlipColor.Purple`, `BlipDisplay.Both`, scale 3.
+- NPC teman/kawalan → `UpdateCharBlipForNetworkPlayer(..., true, BlipDisplay.Both, BlipColor.Blue, 3)` (friendly=true).
+- Target musuh (kejar/bunuh) → `UpdateCharBlipForNetworkPlayer(..., false, BlipDisplay.Both, BlipColor.Red, 3)` (friendly=false).
+- Default display = `BlipDisplay.Both` (17/20 pemakaian). BlipOnly/MarkerOnly jarang (kasus khusus).
 - Mobil objektif/konvoi: `Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[i], <car>, true, BlipDisplay.Both, BlipColor.Purple, 3)`
 - NPC yg dikawal/dikejar: `Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[i], <ped>, <friendly?>, BlipDisplay.Both, BlipColor.Blue/Red, 3)`
 - Titik tujuan on-foot/drive: `Coop.UpdateCheckpointForNetworkPlayer(x, y, z, sx, sy, sz, $NETWORK_PLAYER[i])`
@@ -259,6 +279,8 @@ cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di p
   Yg TIDAK (Text.PrintNow 0x00BC, blip, checkpoint) → mirror manual. Verified: 0x00BA in-list, 0x00BC NOT in-list.
 - ✅ IsHost = 0x pemakaian di 4 misi. deatharrest/fail = vanilla. Cutscene = 0x wrapping (auto-synced).
 - ✅ GetNetworkPlayerInternalId → player-index utk Player.* opcodes (INTRO2 clothes).
+- ✅ Start misi (launcher SWEET.txt/INT.txt): `LocateAllPlayersOnFoot3D` host-only + loop m_pPlayers (dinamis, nunggu SEMUA di lingkaran) → `Mission.LoadAndLaunchInternal(N)`.
+- ✅ Konvensi blip: Purple=mobil objektif, Blue=NPC teman(friendly true), Red=target musuh(false), Both=default. Konversi kita sudah ikut konvensi ini.
 
 ## 10.5 CATATAN TAMBAHAN (teruji)
 - **`Coop.IsHost` TIDAK dipakai di 4 misi dev** (0x). Misi jalan IDENTIK di semua client; otoritas host dari
