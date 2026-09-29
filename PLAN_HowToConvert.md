@@ -4,6 +4,18 @@
 > `INTRO1` (Big Smoke, 58 calls), `INTRO2` (Ryder, 59), `SWEET1` (Tagging Up Turf, 103),
 > `SWEET1B` (Cleaning The Hood, 88). Ini pola KANONIK — tiru persis, jangan invent.
 >
+> **ARSITEKTUR FUNDAMENTAL (TERUJI — baca ini dulu, semua bergantung ke sini):**
+> **MISI SCM JALAN DI HOST DOANG.** Launcher (`SWEET.txt` dll) nge-gate `Mission.LoadAndLaunchInternal(N)`
+> di belakang `Coop.LocateAllPlayersOnFoot3D` yg **false buat non-host** → cuma HOST yg launch thread misi.
+> Non-host TIDAK menjalankan script misi — dia cuma MENERIMA: (a) opcode auto-sync yg di-broadcast host
+> (COpCodeSync.cpp:209 `if (m_bIsHost && ...)` = cuma host broadcast), dan (b) packet `Coop.*ForNetworkPlayer`.
+> Konsekuensi (semua nyambung ke sini):
+> - `$scplayer` = CJ HOST. `$NETWORK_PLAYER[i]` = ped follower (di game host). Host authoritative penuh.
+> - `Coop.IsHost` GAK PERLU di misi → di dalam thread misi lo SELALU host.
+> - Follower dimanipulasi lewat packet `Coop.*` (mereka gak run script). Bukan mereka yg "jalanin"nya.
+> - Follower MATI = non-event buat logika misi (host gak cek `IsDead($NETWORK_PLAYER)`; layer sync yg respawn).
+>   Cuma HOST ($scplayer) mati = misi gagal (vanilla deatharrest).
+>
 > **Prinsip inti (WAJIB):**
 > 1. **ADDITIVE-ONLY.** Jangan ubah/hapus logika vanilla. Host jalanin alur asli sebagai `$scplayer`.
 >    Co-op cuma NAMBAH lapisan di atasnya (follower = `$NETWORK_PLAYER[i]`).
@@ -281,6 +293,10 @@ cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di p
 - ✅ GetNetworkPlayerInternalId → player-index utk Player.* opcodes (INTRO2 clothes).
 - ✅ Start misi (launcher SWEET.txt/INT.txt): `LocateAllPlayersOnFoot3D` host-only + loop m_pPlayers (dinamis, nunggu SEMUA di lingkaran) → `Mission.LoadAndLaunchInternal(N)`.
 - ✅ Konvensi blip: Purple=mobil objektif, Blue=NPC teman(friendly true), Red=target musuh(false), Both=default. Konversi kita sudah ikut konvensi ini.
+- ✅ **ARSITEKTUR: misi jalan HOST-ONLY** (launcher gate LocateAllPlayers false utk non-host; COpCodeSync host-only broadcast).
+  Non-host cuma terima opcode+packet. Ini KOREKSI TERBESAR — dulu sempat kubilang "jalan di 2 client" (SALAH).
+  Menjelaskan: IsHost unused, follower via packet, auto-sync, follower-death non-event.
+- ✅ Follower mati = non-event (IsDead atas NETWORK_PLAYER = 0x). Mission-passed vanilla (RegisterMissionPassed 0x0318 auto-sync). Money reward gap (belum sync).
 
 ## 10.5 CATATAN TAMBAHAN (teruji)
 - **`Coop.IsHost` TIDAK dipakai di 4 misi dev** (0x). Misi jalan IDENTIK di semua client; otoritas host dari
@@ -291,6 +307,11 @@ cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di p
   opcode `Player.*` yg butuh index (mis. `Player.GetClothesItem`). Beda dari ped-handle. Dipakai INTRO2 utk baca clothes.
 - **`Coop.TeleportPlayersToHostSafely(p0,p1,p2)`** → tarik follower ke host (transisi paksa / interior). CATATAN:
   masih 3-arg di API lama; utk 8-player perlu cek apakah API-nya cukup (lihat R-01 TestLog soal warp saat di mobil).
+- **Follower mati mid-misi = NON-EVENT (teruji).** 4 misi dev NOL kali cek `Char.IsDead($NETWORK_PLAYER[...])`.
+  Jangan tambah logika fail/respawn per-follower — layer sync yg urus respawn. Cuma NPC misi ($sweet dll) & host yg dicek (vanilla).
+- **Mission-passed / reward = VANILLA (teruji).** `Stat.RegisterMissionPassed`(0x0318) ADA di synced-list → auto-sync.
+  Big "PASSED" text (print_big) auto-sync. `Mission.Finish`/`PlayerMadeProgress`/tune = vanilla, jangan di-wrap.
+  ⚠️ Money reward TIDAK di-sync (TODO `sync money` belum kelar) — kalau misi kasih uang, cuma host yg dapet (gap diketahui, minor).
 
 ## 11. BATAS (jujur — bukan semua misi cocok)
 - Tempur DRIVE-BY di kendaraan + ped mati (Drive-By/SWEET4) → crash engine ped-group (TestLog). Skip/unsupported.
