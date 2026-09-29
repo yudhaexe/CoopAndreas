@@ -48,6 +48,9 @@ DWORD WINAPI CNetwork::InitAsync(LPVOID)
             m_bConnected = true;
             m_bAuthenticated = false;
 
+            // Long timeout so a paused/alt-tabbed game (or the other side pausing) doesn't drop the link (~1 hour)
+            enet_peer_timeout(event.peer, 0, 3600000, 3600000);
+
             CChat::AddMessage("{cecedb}[Network] {00ff00}Successfully {cecedb}connected to the server.");
 
             Packets::System::PlayerConnected connectedPacket{};

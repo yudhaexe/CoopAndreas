@@ -90,7 +90,9 @@ void CNetwork::HandlePeerConnected(ENetEvent& event)
         (event.peer->address.host >> 8) & 0xFF, (event.peer->address.host >> 16) & 0xFF,
         (event.peer->address.host >> 24) & 0xFF, event.peer->address.port);
 
-    enet_peer_timeout(event.peer, 0, 30000, 60000);  // timeoutLimit, timeoutMinimum, timeoutMaximum
+    // Very long timeout so pausing / alt-tabbing (GTA pauses on focus loss) doesn't drop players.
+    // timeoutLimit, timeoutMinimum(ms), timeoutMaximum(ms) = ~1 hour
+    enet_peer_timeout(event.peer, 0, 3600000, 3600000);
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
