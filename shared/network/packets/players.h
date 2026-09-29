@@ -179,23 +179,6 @@ public:
     }
 };
 
-class PlayerWantedLevel : public Packet
-{
-    DEFINE_PACKET_TYPE(PlayerWantedLevel, ePacketType::PLAYER_WANTED_LEVEL, ePacketChannel::EVENT);
-
-public:
-    SenderPlayerId playerid{};
-    uint32_t wantedLevel{};
-
-    template <typename Stream>
-    bool Serialize(Stream& stream)
-    {
-        serialize_object(stream, playerid);
-        serialize_uint32(stream, wantedLevel);
-        return true;
-    }
-};
-
 class KeyPressed : public Packet
 {
     DEFINE_PACKET_TYPE(KeyPressed, ePacketType::PLAYER_KEY_SYNC, ePacketChannel::SYNC);

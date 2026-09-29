@@ -5,9 +5,6 @@
 #include <CEntryExitTransitionSync.h>
 #include <CProjectileInfo.h>
 #include <CFireManager.h>
-#include <CWanted.h>
-
-extern int lastLocalWantedLevel;
 
 PACKET_HANDLER(ePacketType::PLAYER_ONFOOT_UPDATE, Packets::Players::OnFootUpdate* pOnFootUpdate)
 {
@@ -278,29 +275,6 @@ PACKET_HANDLER(ePacketType::PLAYER_MAX_HEALTH, Packets::Players::PlayerMaxHealth
         return;
 
     pPed->m_fMaxHealth = pPlayerMaxHealth->maxHealth;
-}
-
-PACKET_HANDLER(ePacketType::PLAYER_WANTED_LEVEL, Packets::Players::PlayerWantedLevel* pPlayerWantedLevel)
-{
-    // Shared wanted level: whatever a player triggers, everyone gets the same heat.
-    CPlayerPed* pLocalPlayer = FindPlayerPed(0);
-    if (pLocalPlayer == nullptr)
-        return;
-
-    CWanted* pWanted = pLocalPlayer->GetWanted();
-    if (pWanted == nullptr)
-        return;
-
-    uint32_t level = pPlayerWantedLevel->wantedLevel;
-    if (level > 6)  // GTA:SA max wanted = 6; clamp against garbage/oversized values
-        level = 6;
-
-    if ((uint32_t)pLocalPlayer->GetWantedLevel() != level)
-    {
-        pWanted->SetWantedLevel(level);
-        // remember it so our own change-detector doesn't echo this back into a loop
-        lastLocalWantedLevel = (int)level;
-    }
 }
 
 PACKET_HANDLER(ePacketType::REBUILD_PLAYER, Packets::Players::RebuildPlayer* pRebuildPlayer)

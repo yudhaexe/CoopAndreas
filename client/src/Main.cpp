@@ -44,7 +44,6 @@ bool bBeenConnected;
 bool lastOnMissionFlag;
 bool lastLocalOnFire = false;
 float lastLocalMaxHealth = -1.0f;
-int lastLocalWantedLevel = -1;
 uint32_t startTime;
 
 class CoopAndreas
@@ -151,19 +150,6 @@ public:
                     Packets::Players::PlayerMaxHealth maxHpPacket{};
                     maxHpPacket.maxHealth = localPlayer->m_fMaxHealth;
                     GetPacketFactory().Send(maxHpPacket);
-                }
-
-                // Wanted level sync (shared): broadcast when the local player's wanted level changes
-                if (localPlayer)
-                {
-                    int wanted = localPlayer->GetWantedLevel();
-                    if (wanted != lastLocalWantedLevel)
-                    {
-                        lastLocalWantedLevel = wanted;
-                        Packets::Players::PlayerWantedLevel wantedPacket{};
-                        wantedPacket.wantedLevel = (uint32_t)wanted;
-                        GetPacketFactory().Send(wantedPacket);
-                    }
                 }
 
                 CDriveBy::Process(localPlayer);
