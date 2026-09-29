@@ -33,7 +33,36 @@ Format entry:
 - Status: OPEN / FIXED / MONITOR
 ```
 
-_(belum ada entry — nunggu playtest pertama)_
+### [2026-09-29] ✅ PLAYTEST BERHASIL — mod jalan, 2 player konek main bareng (setelah ASI dibuang)
+Milestone lolos. 2 bug misi ditemukan (di bawah).
+
+### [2026-09-29] SWEET2 (Nines and AK's) — non-host STUCK di marker Big Smoke
+- Gejala: player non-host nyampe marker Big Smoke tapi mission gak lanjut buat dia (stuck). Host jalan normal.
+- Diagnosa: DESAIN. Objektif vanilla ngecek `Char.IsSittingInCar($scplayer, $big_smoke_car)` — $scplayer = HOST doang. Follower kukasih mobil sendiri + checkpoint, jadi mereka nyampe marker tapi ARRIVAL gak trigger apa2 (cuma host yg majuin fase). Follower idle "stuck".
+- Fix kandidat: (a) buang checkpoint follower yg misleading, sisain car-blip aja (follower ngerti cuma ngikut); ATAU (b) pola teleport-together (tarik follower ke host di transisi fase) kayak misi skeleton — lebih pas buat misi yg objektifnya keiket host-in-car. Butuh keputusan + test.
+- Lesson umum? Y → pakai POLA SWEET1 (ride-together): teman naik mobil misi bareng + objektif NUNGGU semua teman deket tujuan (gate 206@). Bukan teleport, bukan own-car+checkpoint-buntu.
+- **FIX DITERAPKAN (SWEET2, 2026-09-29):** buang checkpoint buntu (sisain car blip Big Smoke), tambah gate 206@ di loop objektif drive (@SWEET2_1949): loop cek semua $NETWORK_PLAYER pakai Char.LocateAnyMeans3D deket tujuan (12m), kalau ada yg jauh 206@=1, tambah `206@ <> 0` ke kondisi OR objektif. Compile OK, deployed. Var 206@ bebas di SWEET2 (niru SWEET1).
+- Status: FIXED (nunggu re-test). Kalau lolos → terapin pola ke SWEET3/SMOKE2/RYDER2/DRUGS1/DRUGS4.
+
+### [2026-09-29] SWEET4 (Drive-By) — CRASH di non-host
+- Crash log: Downloads/2026-09-29_17-02-10.log (dari mesin teman, path C:\apps download\GTASA = non-host).
+- Exception 0x00642067 gta_sa.exe AV **read**, EAX=0x00000000 (null-ptr deref). Backtrace: gta_sa 0x642067 <- 0x841ADB <- 0x83BBF6 <- **CoopAndreasSA.dll (0x7484A6A3, 0x72FFB)** <- 0x53E986. Jadi crash lewat jalur SYNC mod, di kode ped/vehicle/task game.
+- Active scripts: SWEET4 TIDAK ada di list (thread misi udah ilang/entity invalid pas crash).
+- Diagnosa (hipotesis): entity yg di-sync (gang ped 394@/401@/408@ atau drive-by car 543@) jadi invalid/null di sisi non-host → mod proses task ped null → crash. Konversiku map ke-4 entity itu ke network id (handshake) = nambah sync surface. Drive-by (AI ped nembak dari mobil gerak) emang berat buat sync.
+- Fix kandidat: kurangi sync surface — JANGAN handshake/map gang PEDS (394@/401@/408@), sisain car 543@ blip aja. ATAU guard null. Belum pasti akar; butuh test ulang.
+- Lesson umum? Mungkin → hati2 map ped AI-heavy ke network id di misi combat kompleks.
+- Status: OPEN (nunggu keputusan fix + test)
+
+### [2026-09-29] STARTUP CRASH — modloader.asi (bentrok mod repack, BUKAN kode kita)
+- Kapan/Gejala: crash pas startup game (sebelum masuk), "Active scripts: (empty)" = SEBELUM SCM load. Player: host. Konsisten (3x berturut 14:38–14:39).
+- Crash log: `CoopAndreas_crashes/2026-09-29_14-38-27.log`. Exception 0x0074872E AV read.
+- Diagnosa: backtrace 0x5C17xxxx–0x5C180xxx = **modloader.asi** (base 0x5C160000) lagi scan path file (string game path + AppData\Local keliatan di stack dump). Repack "Original Trilogy" punya ~15 ASI (SilentPatchSA, skygfx, WidescreenFix, III.VC.SA.LimitAdjuster, MixSets, MobileHud, RealTrafficFix, SALodLights, modloader, GInputSA, skygfx, dll) yg bentrok sama hook CoopAndreas. Game versi bener (1.0.0.0 US) tapi ke-mod berat. Crash lama 01:28 (sebelum perubahan apapun hari ini) JUGA startup crash → pre-existing.
+- BUKAN dari: serial removal (itu crash 0xDEAD, beda), BUKAN dari main.scm/misi (crash sebelum SCM load).
+- Fix: TEST di GTA SA v1.0 US BERSIH, atau nonaktifkan ASI repack (pindahkan `scripts/*.asi` + `modloader/` keluar sementara, sisakan cuma eax.dll/eax_orig.dll/CoopAndreasSA.dll). CoopAndreas gak butuh CLEO/modloader.
+- Lesson umum? Y → §2 C-03. Revisi: N/A (bukan kode kita; masalah environment).
+- Status: MITIGATED (2026-09-29) — ASI repack dipindah ke `C:\Games\_coop_asi_backup` (root/ + scripts/ + modloader/ + cleo/). Game sekarang cuma load CoopAndreas. Nunggu user re-test.
+- **RESTORE mod repack** (kalau mau balikin): pindahkan balik dari `C:\Games\_coop_asi_backup`:
+  `_coop_asi_backup/root/*` -> game root, `_coop_asi_backup/scripts/*` -> game/scripts/, `modloader/` & `cleo/` -> game root.
 
 <!-- contoh (hapus/isi saat ada kejadian nyata):
 ### [2026-09-29] SWEET4 — freeze pas load misi

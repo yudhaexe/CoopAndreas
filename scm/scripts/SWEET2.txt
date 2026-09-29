@@ -244,12 +244,12 @@ while $temp_int == -1
 end
 44@ = Blip.AddForCar($big_smoke_car)
 Blip.SetAsFriendly(44@, True)
-// COOP: convoy car blip + destination checkpoint for followers (they use own vehicle)
+// COOP (SWEET1 pattern): blip Big Smoke's car for every teammate. They ride along
+// (fill the spare seats) or make their own way; objective waits for everyone (206@ gate below).
 for $temp_int = 0 to 2
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke_car, true, BlipDisplay.Both, BlipColor.Purple, 3)
-        Coop.UpdateCheckpointForNetworkPlayer(2453.07, -2003.96, 12.56, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
     end
 end
 35@ = Blip.AddForCoord(2453.07, -2003.96, 12.56)
@@ -264,10 +264,23 @@ TIMERB = 0
 56@ = 0
 
 :SWEET2_1949
+// COOP (SWEET1 pattern): don't complete the drive until EVERY teammate is near the destination
+206@ = 0
+for $temp_int = 0 to 2
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if
+            not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2453.07, -2003.96, 12.56, 12.0, 12.0, 12.0)
+        then
+            206@ = 1
+        end
+    end
+end
 if or
   not Car.Locate3D($big_smoke_car, $blob_flag, 2453.07, -2003.96, 12.56, 4.0, 4.0, 4.0)
   not Char.IsSittingInCar($big_smoke, $big_smoke_car)
   not Car.IsOnAllWheels($big_smoke_car)
+  206@ <> 0
 goto_if_false @SWEET2_2420
 wait 0
 if 
