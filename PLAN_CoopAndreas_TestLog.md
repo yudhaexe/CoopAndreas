@@ -53,6 +53,10 @@ Milestone lolos. 2 bug misi ditemukan (di bawah).
 - **CLUE dari user (2026-09-29): crash terjadi PAS NON-HOST MEMBUNUH (ped/musuh).** → ini ped-DEATH sync: pas ped mati, jalur sync mod proses ped (null) → deref. Kemungkinan besar isu CORE CoopAndreas (sync kematian ped), BUKAN dari edit SCM-ku (aku cuma map gang friendly + car, gak map Balla musuh). Fix butuh investigasi C++ (guard null di ped-death sync handler), kemungkinan gak bisa dari SCM.
 - Lesson umum? Ped-death sync di client rawan null-deref. Perlu cek C++ PacketHandlers/peds.cpp (death) + CNetworkPed destroy.
 - Status: OPEN (butuh investigasi C++ ped-death, bukan SCM)
+- **KONFIRMASI (2026-09-29):** Drive-By ASLINYA ditandai UNSUPPORTED oleh dev upstream (commit "add some unadapted mission warnings" — warning "may cause crashes"). Dev SENGAJA gak convert. User konfirmasi: Tagging Up Turf & Cleaning the Hood (dev-converted, JALAN KAKI, enemy statis) kill-ped AMAN; Drive-By (DI MOBIL + enemy WAVE/respawn) crash. → Akar = limitasi engine sync utk ped-mati-di-kendaraan + churn wave, BUKAN bug SCM-ku. Fix = C++ engine (guard ped-death-in-vehicle), butuh debug live.
+- **KATEGORISASI MISI (pedoman konversi):**
+  - ✅ AMAN diconvert: tempur JALAN KAKI (gang war, kill-target on-foot), drive-to-destination, escort. Contoh proven: Tagging Up Turf, Cleaning the Hood.
+  - ⚠️ CRASH-PRONE (hindari / butuh C++ dulu): tempur DI KENDARAAN (drive-by), enemy WAVE-respawn, misi mekanik-khusus (dansa/RC/terbang/kereta). Drive-By di sini.
 
 ### [2026-09-29] STARTUP CRASH — modloader.asi (bentrok mod repack, BUKAN kode kita)
 - Kapan/Gejala: crash pas startup game (sebelum masuk), "Active scripts: (empty)" = SEBELUM SCM load. Player: host. Konsisten (3x berturut 14:38–14:39).

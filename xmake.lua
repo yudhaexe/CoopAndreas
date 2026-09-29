@@ -84,7 +84,9 @@ target("client", function()
         add_defines("DEBUG")
     else
         add_defines("NDEBUG")
-        set_strip("all")
+        -- DIAGNOSTIC: emit PDB symbols (no strip) so crash logs name the exact mod
+        -- function instead of raw sub_offsets. Revert (set_strip("all")) for release.
+        set_symbols("debug")
         set_optimize("fastest")
     end
 
