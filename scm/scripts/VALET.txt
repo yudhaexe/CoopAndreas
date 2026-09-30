@@ -216,7 +216,7 @@ if
   5@ == 1
 goto_if_false @VALET_2095
 if 
-  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_2088
 5@ = 0
 
@@ -225,7 +225,7 @@ goto @VALET_2127
 
 :VALET_2095
 if 
-  not Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: not player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_2127
 5@ = 1
 
@@ -517,7 +517,7 @@ if
   Char.LocateOnFoot3D($scplayer, 1, -1753.936, 961.8587, 23.8906, 2.0, 2.0, 2.0)
 goto_if_false @VALET_3852
 if 
-  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_3836
 if 
   not Player.IsWantedLevelGreater($player1, 0)
@@ -550,7 +550,7 @@ Game.SwitchEmergencyServices(True)
 
 :VALET_3894
 if 
-  not Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: not player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_3958
 Text.PrintBig('VAL_A6', 4000, TextStyle.Middle)
 Text.Print('VAL_B1', 5000, 1)
@@ -1710,7 +1710,7 @@ if
   is_int_var_equal_to_int_var $a_Car == $valet_car(6@,3i)
 goto_if_false @VALET_12174
 if 
-  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_12174
 if and
   not Char.IsGettingInToACar($valet(6@,3i))
@@ -1802,7 +1802,7 @@ if
   is_int_var_equal_to_int_var $a_Car == $valet_car(6@,3i)
 goto_if_false @VALET_12774
 if 
-  Player.IsWearing($player1, "VALET", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "VALET" on_bodypart 17
 goto_if_false @VALET_12756
 goto @VALET_12767
 

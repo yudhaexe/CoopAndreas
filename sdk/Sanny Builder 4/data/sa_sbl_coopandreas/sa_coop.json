@@ -64662,35 +64662,35 @@
                             "name": "pos_x",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "pos_y",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "pos_z",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "radius_x",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "radius_y",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "radius_z",
                             "type": "float"
                         },
-						{
+                        {
                             "name": "model1",
                             "type": "int"
                         },
-						{
+                        {
                             "name": "model2",
                             "type": "int"
                         },
-						{
+                        {
                             "name": "model3",
                             "type": "int"
                         }
@@ -64760,7 +64760,7 @@
                     "member": "IsSyncingThisPed",
                     "attrs": {
                         "is_static": true,
-						"is_condition": true
+                        "is_condition": true
                     },
                     "short_desc": "coop_is_syncing_this_ped"
                 },
@@ -64787,7 +64787,7 @@
                             "name": "char",
                             "type": "Char"
                         },
-						{
+                        {
                             "name": "allowReturnToPreviousHost",
                             "type": "bool"
                         }
@@ -64809,12 +64809,12 @@
                             "type": "Char"
                         }
                     ],
-					"output": [
-						{
-							"name": "playerId",
+                    "output": [
+                        {
+                            "name": "playerId",
                             "type": "int"
-						}
-					],
+                        }
+                    ],
                     "id": "1D1B",
                     "name": "get_network_player_internal_id",
                     "num_params": 2,
@@ -64849,6 +64849,17 @@
                         "is_static": true
                     },
                     "short_desc": "args can be ignored by passing -1 or invalid (IsNetworkPlayerActorValid) char variable"
+                },
+                {
+                    "id": "1D1D",
+                    "name": "coop_teleport_all_players_to_host_safely",
+                    "num_params": 0,
+                    "class": "Coop",
+                    "member": "TeleportAllPlayersToHostSafely",
+                    "attrs": {
+                        "is_static": true
+                    },
+                    "short_desc": "teleport all mission network players safely around the host"
                 }
             ]
         }

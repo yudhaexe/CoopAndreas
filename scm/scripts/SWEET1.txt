@@ -185,7 +185,7 @@ Char.SetHeading($scplayer, 61.28)
 Char.GiveWeapon($scplayer, WeaponType.SprayCan, 30000)
 Char.SetCurrentWeapon($scplayer, WeaponType.SprayCan)
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -534,7 +534,7 @@ if
 goto_if_false @SWEET1_3094
 
 Text.PrintNow('SWE1_Q', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -547,7 +547,7 @@ goto @SWEET1_14575
 :SWEET1_3094
 
 206@ = 0
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -576,7 +576,7 @@ if
   Char.IsDead($sweet)
 goto_if_false @SWEET1_3221
 Text.PrintNow('SWE1_P', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -598,7 +598,7 @@ if
     Car.IsDead($sweet_car)
 then
     Text.PrintNow('SWE1_Q', 10000, 1)
-    for $temp_int = 0 to 2
+    for $temp_int = 0 to 6
         if 
             Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         then
@@ -637,7 +637,7 @@ else
     
     /// === NETWORK PLAYERS
     
-    for $temp_int = 0 to 2
+    for $temp_int = 0 to 6
         if 
             Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         then
@@ -714,7 +714,7 @@ goto @SWEET1_3094
 
 :SWEET1_3618
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -772,7 +772,7 @@ Task.LeaveCar($scplayer, $sweet_car)
 
 :SWEET1_3930
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -879,7 +879,7 @@ goto @SWEET1_4417
 :SWEET1_4521
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('SWE1_AR', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1103,7 +1103,7 @@ goto @SWEET1_5647
 :SWEET1_5751
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_CA', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1240,7 +1240,7 @@ if
 goto_if_false @SWEET1_6472
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('SWE1_CB', 2500, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1260,7 +1260,7 @@ if
   Audio.HasMissionAudioFinished(MissionAudioSlot.Slot2)
 goto_if_false @SWEET1_6535
 Text.PrintNow('SWE1_X', 6000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1346,7 +1346,7 @@ Car.LockDoors($sweet_car, CarLock.Unlocked)
 
 :SWEET1_7011
 Text.PrintNow('SWE1_S', 6000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1374,7 +1374,7 @@ Audio.LoadMissionAudio(37417, 1)
 
 :SWEET1_7075
 206@ = 0
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1435,7 +1435,7 @@ goto @SWEET1_7075
 58@ = 0
 TIMERA = 0
 $blob_flag = 1
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1485,7 +1485,7 @@ goto @SWEET1_7318
 :SWEET1_7463
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_AS', 3000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1540,7 +1540,7 @@ TIMERA = 0
 
 :SWEET1_7713
 206@ = 0
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1622,7 +1622,7 @@ else
     
     /// === NETWORK PLAYERS
     
-    for $temp_int = 0 to 2
+    for $temp_int = 0 to 6
         if 
             Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         then
@@ -1696,7 +1696,7 @@ if
   TIMERA > 3000
 goto_if_false @SWEET1_8216
 Text.PrintNow('HOOD3_B', 5000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1742,7 +1742,7 @@ Camera.SetFixedPosition(2329.675, -1499.911, 25.8505, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(2330.653, -1499.926, 25.644, SwitchType.JumpCut)
 Player.SetControl($player1, False)
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1788,7 +1788,7 @@ goto @SWEET1_8524
 :SWEET1_8628
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_AV', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -1917,7 +1917,7 @@ then
                 Camera.SetFixedPosition(2400.384, -1472.208, 23.9349, 0.0, 0.0, 0.0)
                 Camera.PointAtPoint(2399.49, -1471.763, 23.988, SwitchType.JumpCut)
                 Text.PrintHelp('SWE1_H')
-                Coop.TeleportPlayersToHostSafely($NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2])
+                Coop.TeleportAllPlayersToHostSafely()
                 wait 500
                 skip_cutscene_start_internal @SWEET1_9521
                 wait 6500
@@ -1970,7 +1970,7 @@ if
 goto_if_false @SWEET1_9775
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_BA', 2000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2007,7 +2007,7 @@ if
 goto_if_false @SWEET1_9916
 Audio.PlayMissionAudio(MissionAudioSlot.Slot2)
 Text.PrintNow('SWE1_BE', 2000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2110,7 +2110,7 @@ Blip.Remove(44@)
 Blip.Remove(41@)
 41@ = Blip.AddForCoord(2374.0, -1534.1, 23.0)
 Text.PrintNow('SWE1_Z', 5000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2121,7 +2121,7 @@ World.SetTagStatusInArea(84@, 85@, 86@, 87@, 0)
 $tag_percentage = World.GetPercentageTaggedInArea(85@, 86@, 87@, 84@)
 Streaming.RequestCarRecording(207)
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2142,7 +2142,7 @@ if
   TIMERA > 2500
 goto_if_false @SWEET1_10559
 Text.PrintNow('SWE1_M', 6000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2159,7 +2159,7 @@ goto_if_false @SWEET1_10599
 Blip.Remove(42@)
 
 :SWEET1_10599
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         200@($temp_int, 3i) == 0
     then
@@ -2356,7 +2356,7 @@ Blip.Remove(56@)
 Blip.SetAsFriendly(56@, True)
 
 :SWEET1_11695
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2443,7 +2443,7 @@ Audio.ReportMissionAudioEventAtCar($sweet_car, 1147)
 :SWEET1_12170
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 Text.PrintNow('SWE1_BH', 10000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2503,7 +2503,7 @@ Hud.SwitchWidescreen(False)
 Player.SetControl($player1, True)
 Camera.RestoreJumpcut
 Text.PrintNow('SWE1_S', 6000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2523,7 +2523,7 @@ Audio.LoadMissionAudio(38607, 1)
 
 :SWEET1_12488
 206@ = 0
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -2602,7 +2602,7 @@ else
         end
     end
     /// === NETWORK PLAYERS
-    for $temp_int = 0 to 2
+    for $temp_int = 0 to 6
         if 
             Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
         then
@@ -2688,7 +2688,7 @@ goto @SWEET1_12488
 :SWEET1_13006
 Hud.SwitchWidescreen(True)
 Player.SetControl($player1, False)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -3010,7 +3010,7 @@ return
 :SWEET1_14682
 $flag_sweet_mission_counter += 1
 
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
@@ -3254,7 +3254,7 @@ if
   Audio.HasMissionAudioLoaded(MissionAudioSlot.Slot1)
 goto_if_false @SWEET1_15875
 Text.PrintNow($sweet1_chat($sweet1_index,8s), 4000, 1)
-for $temp_int = 0 to 2
+for $temp_int = 0 to 6
     if 
         Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then

@@ -2804,7 +2804,7 @@ switch_start $iGFidx total_jumps 2 default_jump 0 @GFDATE_16933 jumps 2 @GFDATE_
 
 :GFDATE_16848
 if 
-  Player.IsWearing($player1, "COUNTRYTR", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "COUNTRYTR" on_bodypart 17
 goto_if_false @GFDATE_16884
 25@ += 25
 
@@ -2813,7 +2813,7 @@ goto @GFDATE_16933
 
 :GFDATE_16891
 if 
-  Player.IsWearing($player1, "POLICETR", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "POLICETR" on_bodypart 17
 goto_if_false @GFDATE_16926
 25@ += 25
 

@@ -4030,7 +4030,7 @@ end
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
     then
-        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke, false, BlipDisplay.Both, BlipColor.DarkRed, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke, false, BlipDisplay.Both, BlipColor.Red, 3)
     end
 end
 Char.SetHasUsedEntryExit($big_smoke, 2540.83, -1304.05, 1.0)

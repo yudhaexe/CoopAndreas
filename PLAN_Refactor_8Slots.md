@@ -80,3 +80,20 @@ HOODS5, CRASH4, TWAR7, MUSIC5, LA1FIN2.
 Beresin dulu bug misi dasar (SWEET4 crash ped-death, validasi pola SWEET1 di convoy LS) + playtest,
 BARU kerjain refactor 8-slot sbg effort terpisah (mulai dari langkah 0 blocker). Refactor gede di atas
 misi yg belum stabil = numpuk risiko.
+
+---
+
+## TABEL HASIL AUDIT FASE 1 & STATUS 8-PEMAIN (Terverifikasi 2026-09-30)
+
+> Berdasarkan pemindaian audit kode SCM empiris terhadap seluruh 304 script di `scm/scripts/*.txt`:
+> - **CollectNetworkPlayersForTheMission**: 100% dari 87 skrip aktif sudah menggunakan arity 7 output (`$NETWORK_PLAYER[0..6]`).
+> - **Opcode Baru 0x1D1D (`Coop.TeleportAllPlayersToHostSafely`)**: Telah diimplementasi di C++ client, didaftarkan di registrar, disinkronkan ke `sa_coop.db` & `sa_coop.json`, serta sukses terkompilasi melalui `xmake build client` (`CoopAndreasSA.dll`).
+
+| Kategori Status | Jumlah Misi | Keterangan & File Terkait |
+|---|:---:|---|
+| **SUDAH-0-6 (REFACTORED)** | 3 | `INTRO2.txt` (23 loop), `SWEET1.txt` (35 loop + teleport), `SWEET1B.txt` (27 loop + teleport) telah sukses dilebarkan dari `0 to 2` menjadi `0 to 6`. |
+| **SUDAH-0-6 (SEJAK AWAL)** | 84 | Seluruh misi konversi lainnya (`LA1FIN2`, `BCRASH1`, `CAT1`..`CAT4`, `TRUTH1`..`TRUTH2`, `GARAG1`, `DECON`, `ZERO1`..`ZERO4`, `SYN1`..`SYN7`, `DRIV2`..`DRIV6`, `STEAL1`..`STEAL5`, `TORENO1`..`TORENO2`, `DES3`..`DES10`, `CASINO1`..`CASINO9`, `HEIST1`..`HEIST5`, `MANSIO1`..`MANSIO5`, `GROVE1`..`GROVE3`, `FINALEA`..`FINALEC`) telah menggunakan `for $temp_int = 0 to 6`. |
+| **STUB-UNSUPPORTED** | 4 | `SWEET4` (Drive-By), `SWEET6` (Cesar Vialpando), `RYDER3` (Catalyst), `SMOKE3` (Wrong Side of the Tracks) — ditahan karena engine-level in-vehicle ped-group combat crash. |
+| **VANILLA (BELUM DICONVERT)** | 5 | `CRASH1` (Burning Desire), `GUNS1` (Home Invasion), `DESERT5` (Learning to Fly), `CASIN10` (Saint Mark's Bistro), `HEIST9` (Breaking the Bank at Caligula's). |
+| **N/A (NON-PLAYER LOOPS)** | — | Loop `for 0 to 2` non-pemain (seperti di minigame `VIDPOK`, `ROULET`, `BLACKJ`, dan array internal AI tank di `ZERO4`) diverifikasi aman dan sengaja dibiarkan. |
+

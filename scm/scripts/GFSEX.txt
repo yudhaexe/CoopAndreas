@@ -323,7 +323,7 @@ Camera.RestoreJumpcut
 Player.SetControl($player1, True)
 Game.SetEveryoneIgnorePlayer($player1, False)
 if 
-  Player.IsWearing($player1, "GIMPLEG", BodyPart.SpecialCostume)
+  0500: player $player1 skin == "GIMPLEG" on_bodypart 17
 goto_if_false @GFSEX_1938
 Player.GiveClothes($player1, 0, 0, BodyPart.SpecialCostume)
 Player.BuildModel($player1)
