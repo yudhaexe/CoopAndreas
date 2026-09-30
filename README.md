@@ -339,7 +339,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] High Noon
 - [!] Saint Mark's Bistro
 - [~] A Home In The Hills
-- [ ] Vertical Bird
+- [~] Vertical Bird
 - [~] Home Coming
 - [ ] Beat Down On B Dup
 - [~] Grove 4 Life
