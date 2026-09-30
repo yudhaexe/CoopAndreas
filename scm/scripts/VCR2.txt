@@ -12,9 +12,7 @@ terminate_this_script
 :VCR2_36
 $onmission = 1
 Coop.EnableSyncingThisScript()
-for $temp_int = 0 to 6
-    $NETWORK_PLAYER[$temp_int] = Coop.CollectNetworkPlayersForTheMission($temp_int)
-end
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 script_name 'VCR2'
 wait 0
@@ -275,9 +273,10 @@ Camera.RestoreJumpcut
 Text.PrintNow('VCR2__1', 15000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -337.9653, 2220.594, 41.4911)
         Char.SetHeading($NETWORK_PLAYER[$temp_int], 90.0)
-        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, 34@, BlipDisplay.Both, BlipColour.Red)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, false, BlipDisplay.Both, BlipColor.Red, 2)
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__1')
     end
 end
@@ -355,7 +354,8 @@ Task.CarDriveWander(113@, -1, 50.0, DrivingMode.AvoidCars)
 34@ = Blip.AddForChar(113@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, 34@, BlipDisplay.Both, BlipColour.Red)
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, false, BlipDisplay.Both, BlipColor.Red, 2)
     end
 end
 
@@ -371,6 +371,7 @@ Text.PrintNow('VCR2__2', 5000, 1)
 Blip.Remove(34@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__2')
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@)
     end
@@ -383,6 +384,7 @@ goto_if_false @VCR2_2468
 Text.PrintNow('VCR2__3', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__3')
     end
 end
@@ -520,6 +522,7 @@ $heading += 90.0
 Char.SetHeading($scplayer, $heading)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], $x, $y, $z)
         Char.SetHeading($NETWORK_PLAYER[$temp_int], $heading)
@@ -769,6 +772,7 @@ return
 Blip.Remove(34@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@)
     end
 end
