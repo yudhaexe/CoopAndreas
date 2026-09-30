@@ -14,6 +14,8 @@ gosub @RIOT1_3082
 terminate_this_script 
 
 :RIOT1_47
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 $onmission = 1
 Text.LoadMissionText('RIOT1')
@@ -137,6 +139,11 @@ Car.ChangeColor($r1_cesars_car, 3, 3)
 World.ClearArea(1, 1254.3, -806.6, 82.9, 5.0)
 Car.CustomPlateForNextCar(492, "GROVE4L_")
 $r1_sweets_car = Car.Create(492, 1254.3, -806.6, 82.9)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId($r1_sweets_car)
+end
 Car.ChangeColor($r1_sweets_car, 59, 34)
 Car.SetHeading($r1_sweets_car, 177.7)
 World.ClearArea(1, 1258.2, -814.4, 83.1, 60.0)
@@ -144,6 +151,11 @@ Char.SetCoordinates($scplayer, 1258.2, -814.4, 83.1)
 Char.SetHeading($scplayer, 40.0)
 World.ClearArea(1, 1257.6, -816.6, 83.1, 5.0)
 $sweet = Char.Create(25, 290, 1257.6, -816.6, 83.1)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId($sweet)
+end
 Char.SetHeading($sweet, 39.9)
 Char.SetGetOutUpsideDownCar($sweet, False)
 Char.SetNeverTargeted($sweet, True)
@@ -279,6 +291,12 @@ Char.WarpIntoCarAsPassenger($sweet, $r1_sweets_car, 0)
 39@ = 1
 Game.ShutAllCharsUp(False)
 34@ = Blip.AddForCoord(2505.4, -1670.6, 12.1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2505.4, -1670.6, 12.1, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.HideWeaponForScriptedCutscene($scplayer, False)
 Hud.SwitchWidescreen(False)
 Camera.SetBehindPlayer
@@ -440,6 +458,12 @@ if
   Char.LocateInCar3D($scplayer, 2505.4, -1670.6, 12.1, 4.0, 4.0, 4.0, True)
 goto_if_false @RIOT1_2600
 Player.SetControl($player1, False)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 36@ = 0
 35@ = 2
 
@@ -557,6 +581,16 @@ Streaming.MarkModelAsNoLongerNeeded(483)
 Char.RemoveElegantly($sweet)
 Streaming.UnloadSpecialCharacter(1)
 Blip.Remove(34@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead($r1_sweets_car)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $r1_sweets_car)
+        end
+    end
+end
 Game.EnableAmbientCrime(True)
 $timer_mobile_start = Clock.GetGameTimer()
 $onmission = 0
@@ -592,6 +626,13 @@ goto_if_false @RIOT1_3324
 Text.ClearThisPrint('R1_03')
 Blip.Remove(34@)
 34@ = Blip.AddForCoord(2505.4, -1670.6, 12.1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $r1_sweets_car)
+        Coop.UpdateCheckpointForNetworkPlayer(2505.4, -1670.6, 12.1, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 39@ = 1
 
 :RIOT1_3324
@@ -604,6 +645,13 @@ goto_if_false @RIOT1_3388
 Blip.Remove(34@)
 34@ = Blip.AddForCar($r1_sweets_car)
 Blip.SetAsFriendly(34@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $r1_sweets_car, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 39@ = 0
 
 :RIOT1_3388
