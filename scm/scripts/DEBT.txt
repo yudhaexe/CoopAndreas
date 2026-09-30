@@ -209,7 +209,7 @@ Streaming.MarkModelAsNoLongerNeeded(540)
 2@ = 0
 
 :DEBT_1151
-13@ = Char.CreateInsideCar(PedType.Mission1, 181, 12@)
+0129: 13@ = create_actor_pedtype PedType.Mission1 model 181 in_car 12@ driverseat
 if 
   3@ == 1
 goto_if_false @DEBT_1194

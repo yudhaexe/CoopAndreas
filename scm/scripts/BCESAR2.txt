@@ -124,7 +124,7 @@ Car.SetModelComponents(470, 2, 2)
 Car.CustomPlateForNextCar(470, "_ASSMAN_")
 26@ = Car.Create(470, $bce2_track_x, $bce2_track_y, $bce2_track_z)
 Car.SetLoadCollisionFlag(26@, False)
-25@ = Char.CreateInsideCar(PedType.CivMale, 107, 26@)
+0129: 25@ = create_actor_pedtype PedType.CivMale model 107 in_car 26@ driverseat
 Char.SetSuffersCriticalHits(25@, False)
 Char.SetProofs(25@, True, True, True, False, True)
 Car.SetProofs(26@, True, True, True, False, True)
@@ -137,21 +137,21 @@ Car.SetOnlyDamagedByPlayer(26@, True)
 if 
   $bce2_played > 0
 goto_if_false @BCESAR2_978
-28@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 0)
+01c8: 28@ = create_actor_pedtype PedType.CivMale model 107 in_car 26@ passenger_seat 0
 Char.GiveWeapon(28@, WeaponType.MicroUzi, 16000)
 Char.SetCurrentWeapon(28@, WeaponType.MicroUzi)
 Char.SetAccuracy(28@, 90)
 if 
   $bce2_played > 1
 goto_if_false @BCESAR2_978
-29@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 1)
+01c8: 29@ = create_actor_pedtype PedType.CivMale model 107 in_car 26@ passenger_seat 1
 Char.GiveWeapon(29@, WeaponType.MicroUzi, 16000)
 Char.SetCurrentWeapon(29@, WeaponType.MicroUzi)
 Char.SetAccuracy(29@, 90)
 if 
   $bce2_played > 2
 goto_if_false @BCESAR2_978
-30@ = Char.CreateAsPassenger(PedType.CivMale, 107, 26@, 2)
+01c8: 30@ = create_actor_pedtype PedType.CivMale model 107 in_car 26@ passenger_seat 2
 Char.GiveWeapon(30@, WeaponType.MicroUzi, 16000)
 Char.SetCurrentWeapon(30@, WeaponType.MicroUzi)
 Char.SetAccuracy(30@, 90)

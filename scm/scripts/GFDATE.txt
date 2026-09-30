@@ -4643,7 +4643,7 @@ goto_if_false @GFDATE_27868
 Car.ChangeColor($iGF_TT_Car, 126, 1)
 
 :GFDATE_27868
-$iGF_TT_driver = Char.CreateInsideCar(PedType.CivFemale, $iGF_TT_PedModel, $iGF_TT_Car)
+0129: $iGF_TT_driver = create_actor_pedtype PedType.CivFemale model $iGF_TT_PedModel in_car $iGF_TT_Car driverseat
 Char.SetCantBeDraggedOut($iGF_TT_driver, True)
 Car.SetHeading($iGF_TT_Car, 13@)
 $iGF_TT_Status = 3

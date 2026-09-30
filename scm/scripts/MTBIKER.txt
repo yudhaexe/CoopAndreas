@@ -640,7 +640,7 @@ Car.SetStrong(732@(644@,6i), True)
 Car.SetUpsidedownNotDamaged(732@(644@,6i), True)
 Car.SetStraightLineDistance(732@(644@,6i), 5)
 Car.SetCanBurstTires(732@(644@,6i), False)
-738@(644@,6i) = Char.CreateInsideCar(PedType.CivMale, 701@(644@,6i), 732@(644@,6i))
+0129: 738@(644@,6i) = create_actor_pedtype PedType.CivMale model 701@(644@,6i) in_car 732@(644@,6i) driverseat
 Char.ClearLastDamageEntity(738@(644@,6i))
 Streaming.MarkModelAsNoLongerNeeded(701@(644@,6i))
 Char.SetCanBeShotInVehicle(738@(644@,6i), False)

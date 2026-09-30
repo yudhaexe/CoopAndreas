@@ -590,8 +590,8 @@ Car.LockDoors($cop_car[0], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[1], CarLock.Unlocked)
 Car.LockDoors($cop_car[2], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[3], CarLock.Unlocked)
-$imp_cop[3] = Char.CreateInsideCar(PedType.Mission1, $cop_model, $cop_car[0])
-$imp_cop[4] = Char.CreateAsPassenger(PedType.Mission1, $cop_model, $cop_car[0], 0)
+0129: $imp_cop[3] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] driverseat
+01c8: $imp_cop[4] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] passenger_seat 0
 $imp_cop[5] = Char.Create(24, $cop_model, 2278.1, 2425.453, 2.4766)
 $imp_cop[6] = Char.Create(24, $cop_model, 2268.906, 2449.246, -8.1953)
 Char.SetHeading($imp_cop[5], 187.5721)
@@ -637,8 +637,8 @@ Car.LockDoors($cop_car[0], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[1], CarLock.Unlocked)
 Car.LockDoors($cop_car[2], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[3], CarLock.Unlocked)
-$imp_cop[3] = Char.CreateInsideCar(PedType.Mission1, $cop_model, $cop_car[0])
-$imp_cop[4] = Char.CreateAsPassenger(PedType.Mission1, $cop_model, $cop_car[0], 0)
+0129: $imp_cop[3] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] driverseat
+01c8: $imp_cop[4] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] passenger_seat 0
 $imp_cop[5] = Char.Create(24, $cop_model, -1606.067, 701.3859, -5.9062)
 $imp_cop[6] = Char.Create(24, $cop_model, -1615.934, 695.0814, -6.2422)
 Char.SetHeading($imp_cop[5], 270.5721)
@@ -687,8 +687,8 @@ Car.LockDoors($cop_car[0], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[1], CarLock.Unlocked)
 Car.LockDoors($cop_car[2], CarLock.LockoutPlayerOnly)
 Car.LockDoors($cop_car[3], CarLock.Unlocked)
-$imp_cop[3] = Char.CreateInsideCar(PedType.Mission1, $cop_model, $cop_car[0])
-$imp_cop[4] = Char.CreateAsPassenger(PedType.Mission1, $cop_model, $cop_car[0], 0)
+0129: $imp_cop[3] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] driverseat
+01c8: $imp_cop[4] = create_actor_pedtype PedType.Mission1 model $cop_model in_car $cop_car[0] passenger_seat 0
 $imp_cop[5] = Char.Create(24, $cop_model, 1527.145, -1675.299, 4.8984)
 $imp_cop[6] = Char.Create(24, $cop_model, 1603.711, -1714.294, 5.2187)
 $imp_cop[1] = Char.Create(24, $cop_model, 1608.285, -1715.779, 5.2187)
