@@ -126,6 +126,16 @@ KESIMPULAN:
 - Real & reproducible. Fix = guard null di jalur ped-group/anim sync (C++) ATAU streaming/ped-lifecycle rework (TODO besar).
   Mitigasi parsial yg udah ada: m_bStreamingDontDelete=true (belum nutup semua).
 
+### [2026-09-30] KONFIRMASI EKSTERNAL (riset internet) — 0x4D68BA = crash ANIMASI
+Database crash komunitas GTA SA (JuniorDjjr/CrashInfo, GTA-SA-10US) — verbatim utk 0x004D68BA:
+"It is related to the processing of animations. If you have 0x006BB8B0 in Backtrace at the end of the log,
+then it is related to a motorcycle animation."
+→ Sumber INDEPENDEN (dipakai komunitas modding GTA SA) MENGONFIRMASI: crash ini = pemrosesan ANIMASI ped,
+BUKAN memory/pool/spec/cheat. Validasi diagnosis internal.
+0x642067 (dominan) TIDAK ada di database publik → kemungkinan crash SPESIFIK CoopAndreas (dipicu cara mod
+nyinkronin state/anim ped), bukan crash vanilla. Konsisten: jalur ped-group/anim, robustness sync.
+Sumber: github.com/JuniorDjjr/CrashInfo (Lists/GTA-SA-10US/EN-CrashList.txt); wiki.multitheftauto.com/wiki/Famous_crash_offsets_and_their_meaning (0x642067 tidak terdaftar).
+
 ## 2. LESSONS → REVISI RETROAKTIF (aturan yang lahir dari crash nyata)
 > Tiap lesson di sini WAJIB dicek & diterapin ke SEMUA misi yang udah/akan dikonversi.
 > Kolom "Applied to" dicentang saat misi udah direvisi.
