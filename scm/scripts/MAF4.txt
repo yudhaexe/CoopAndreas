@@ -14,6 +14,8 @@ gosub @MAF4_30178
 terminate_this_script 
 
 :MAF4_47
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 wait 0
 Text.LoadMissionText('DSERT8')
@@ -923,6 +925,17 @@ Char.GiveWeapon($scplayer, WeaponType.Knife, 1)
 Char.GiveWeapon($scplayer, WeaponType.PistolSilenced, 70)
 Char.GiveWeapon($scplayer, WeaponType.Infrared, 1)
 Char.GiveWeapon($scplayer, WeaponType.Sniper, 35)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 69.91, 1916.007, 16.648)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 273.363)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Knife, 1)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.PistolSilenced, 70)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Infrared, 1)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Sniper, 35)
+    end
+end
 
 :MAF4_8492
 if 
@@ -1294,6 +1307,18 @@ Car.Delete(107@)
 Streaming.UnloadSpecialCharacter(1)
 Streaming.MarkModelAsNoLongerNeeded(483)
 227@ = Blip.AddForCoord(211.604, 1811.091, 20.8)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 69.91, 1916.007, 16.648)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 273.363)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Knife, 1)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.PistolSilenced, 70)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Infrared, 1)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Sniper, 35)
+        Coop.UpdateCheckpointForNetworkPlayer(211.604, 1811.091, 20.8, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('DST8_38', 5000, 1)
 Text.Print('DST8_7', 5000, 1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
@@ -1430,6 +1455,12 @@ if
 goto_if_false @MAF4_14255
 Blip.Remove(227@)
 227@ = Blip.AddForCoord(214.0, 1872.0, 12.14)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(214.0, 1872.0, 12.14, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('DST8_8', 5000, 1)
 TIMERB = 0
 Audio.ReportMissionAudioEventAtPosition(213.85, 1874.68, 14.12, 1007)
@@ -1513,6 +1544,12 @@ goto_if_false @MAF4_14871
 Audio.ReportMissionAudioEventAtPosition(213.85, 1874.68, 14.12, 1008)
 Blip.Remove(227@)
 227@ = Blip.AddForCoord(211.604, 1811.091, 20.8)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(211.604, 1811.091, 20.8, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('DST8_9', 5000, 1)
 179@ = 0
 180@ = 0
@@ -1695,6 +1732,12 @@ Blip.Remove(227@)
 198@ = 3
 196@ = 0
 227@ = Blip.AddForCoord(246.0, 1862.64, 19.89)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(246.0, 1862.64, 19.89, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 165@ = 15
 
 :MAF4_15888
@@ -1747,6 +1790,12 @@ goto_if_false @MAF4_16183
 Text.PrintHelp('DST8_10')
 Blip.Remove(227@)
 227@ = Blip.AddForCoord(224.99, 1859.18, 12.31)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(224.99, 1859.18, 12.31, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 175@ = 4
 
 :MAF4_16183
@@ -2032,6 +2081,12 @@ Task.FollowPatrolRoute(114@, 4, RouteMode.Loop)
 Blip.ChangeDisplay(210@, BlipDisplay.BlipOnly)
 Blip.SetAlwaysDisplayOnZoomedRadar(210@, True)
 228@ = Blip.AddForCoord(267.015, 1862.51, 7.76)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(267.015, 1862.51, 7.76, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Blip.SetAlwaysDisplayOnZoomedRadar(228@, True)
 Player.TakeOffGoggles($player1, False)
 Streaming.LoadScene(248.83, 1827.63, 7.46)
@@ -2819,6 +2874,12 @@ Streaming.MarkModelAsNoLongerNeeded(583)
 144@ = Pickup.CreateWithAmmo(370, 3, 0, 268.7, 1884.1, -30.085)
 Blip.Remove(228@)
 228@ = Blip.AddForPickup(144@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(268.7, 1884.1, -30.085, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Blip.SetAlwaysDisplayOnZoomedRadar(228@, True)
 Text.ClearPrints
 Text.PrintNow('DST8_34', 5000, 1)
@@ -2988,6 +3049,12 @@ Text.ClearPrints
 Blip.Remove(228@)
 Hud.SetRadarZoom(0)
 228@ = Blip.AddForCoord(268.9, 1884.33, 19.91)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(268.9, 1884.33, 19.91, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 109@ = Char.Create(24, 287, 271.62, 1878.08, -2.32)
 Char.SetDecisionMaker(109@, 159@)
 Char.SetHeading(109@, 212.7731)
@@ -3200,6 +3267,12 @@ goto @MAF4_28031
 :MAF4_28095
 Blip.Remove(228@)
 228@ = Blip.AddForCoord(-794.8, 2425.184, 156.124)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(-794.8, 2425.184, 156.124, 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('DST8_35', 7000, 1)
 107@ = Car.Create(483, -783.169, 2430.03, 156.23)
 Car.FreezePositionAndDontLoadCollision(107@, True)
@@ -3211,6 +3284,16 @@ Char.SetDecisionMaker(106@, 159@)
 Car.SetProofs(107@, True, True, True, True, True)
 Char.SetProofs(106@, True, True, True, True, True)
 Car.SetIsConsideredByPlayer(107@, False)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(107@)
+end
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(106@)
+end
 190@ = 1
 184@ = 9
 
@@ -3292,6 +3375,16 @@ goto @MAF4_28695
 Char.SetCoordinates($scplayer, -791.178, 2425.34, 156.16)
 Char.SetHeading($scplayer, 256.615)
 Char.ClearTasksImmediately($scplayer)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -791.178, 2425.34, 156.16)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 256.615)
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetCurrentWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Unarmed)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 190@ = 3
 
 :MAF4_28761
@@ -3652,6 +3745,12 @@ Game.SetArea51SamSite(True)
 Game.SetWantedMultiplier(1.0)
 Weather.Release
 $timer_mobile_start = Clock.GetGameTimer()
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Mission.Finish
 return 
 

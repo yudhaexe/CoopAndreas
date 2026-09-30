@@ -319,7 +319,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Verdant Meadows
 - [~] N.O.E.
 - [~] Stowaway
-- [ ] Black Project
+- [~] Black Project
 - [ ] Green Goo
 - [~] Fender Ketchup
 - [~] Explosive Situation
