@@ -18,9 +18,7 @@ Stat.RegisterMissionGiven
 Camera.SetFadingColor(0, 0, 0)
 $onmission = 1
 Coop.EnableSyncingThisScript()
-for $temp_int = 0 to 6
-    $NETWORK_PLAYER[$temp_int] = Coop.CollectNetworkPlayersForTheMission($temp_int)
-end
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Camera.DoFade(0, 2000)
 
 :HEIST3_71
@@ -361,7 +359,8 @@ Hud.SwitchWidescreen(False)
 Text.Print('HEI3_33', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 2169.0, 1662.0, 11.0, 3.0)
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2169.0, 1662.0, 11.0, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_33')
     end
 end
@@ -455,7 +454,9 @@ while 0@ == 0
     0@ = 1
     for $temp_int = 0 to 6
         if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        then
             if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2169.0, 1662.0, 11.0, 40.0, 40.0, 10.0)
+            then
                 0@ = 0
             end
         end
@@ -464,6 +465,7 @@ end
 Blip.Remove(72@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
@@ -517,7 +519,8 @@ Char.SetAnimGroup(56@, "SEXYWOMAN")
 68@ = Blip.AddForChar(56@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@, 68@, BlipDisplay.Both, BlipColour.Yellow)
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@, false, BlipDisplay.Both, BlipColor.Yellow, 2)
     end
 end
 Char.SetHeading(56@, 76.0)
@@ -881,8 +884,9 @@ Hud.SwitchWidescreen(False)
 Text.Print('HEI3_03', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@)
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 77@, 78@, 79@, 3.0)
+        Coop.UpdateCheckpointForNetworkPlayer(77@, 78@, 79@, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_03')
     end
 end
@@ -1197,7 +1201,9 @@ while 0@ == 0
     0@ = 1
     for $temp_int = 0 to 6
         if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        then
             if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2086.726, 2074.352, 10.0579, 30.0, 30.0, 10.0)
+            then
                 0@ = 0
             end
         end
@@ -1224,6 +1230,7 @@ Char.SetCoordinates($scplayer, -100.432, -23.1933, 999.7261)
 Char.SetHeading($scplayer, 0.0)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -100.432, -23.1933, 999.7261)
         Char.SetHeading($NETWORK_PLAYER[$temp_int], 0.0)
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 3)
@@ -2253,7 +2260,8 @@ Blip.SetEntryExit(73@, 2090.0, 2074.0, 10.0)
 Text.Print('HEI3_04', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -114.6156, -8.6308, 1000.713, 2.0)
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(-114.6156, -8.6308, 1000.713, 2.0, 2.0, 2.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_04')
     end
 end
@@ -2609,6 +2617,7 @@ Char.SetHeading($scplayer, 268.8011)
 Streaming.SetAreaVisible(0)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 2085.12, 2077.086, 15.8434)
         Char.SetHeading($NETWORK_PLAYER[$temp_int], 268.8011)
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
@@ -2627,7 +2636,8 @@ Char.SetAnimGroup(56@, "SEXYWOMAN")
 68@ = Blip.AddForChar(56@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@, 68@, BlipDisplay.Both, BlipColour.Yellow)
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@, false, BlipDisplay.Both, BlipColor.Yellow, 2)
     end
 end
 Char.SetHeading(56@, 271.0)
@@ -2664,6 +2674,7 @@ Text.ClearPrints
 Text.Print('HEI3_09', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_09')
     end
 end
@@ -2853,8 +2864,9 @@ Text.ClearPrints
 Text.Print('HEI3_96', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@)
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 2038.836, 2749.803, 9.8203, 3.0)
+        Coop.UpdateCheckpointForNetworkPlayer(2038.836, 2749.803, 9.8203, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_96')
     end
 end
@@ -3304,7 +3316,8 @@ Text.Print('HEI3_22', 5000, 1)
 71@ = Blip.AddForCoord(86@, 87@, 88@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 86@, 87@, 88@, 2.0)
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(86@, 87@, 88@, 2.0, 2.0, 2.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'HEI3_22')
     end
 end
@@ -3323,7 +3336,9 @@ while 0@ == 0
     0@ = 1
     for $temp_int = 0 to 6
         if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        then
             if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2037.307, 2722.106, 10.2989, 30.0, 30.0, 10.0)
+            then
                 0@ = 0
             end
         end
@@ -3333,6 +3348,7 @@ Text.ClearPrints
 Blip.Remove(71@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
@@ -4183,6 +4199,7 @@ Blip.Remove(72@)
 Blip.Remove(73@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
         Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 56@)
