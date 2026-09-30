@@ -345,7 +345,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Grove 4 Life
 - [~] Cut Throat Business
 - [~] Riot
-- [ ] Los Desperados
+- [~] Los Desperados
 - [ ] End Of The Line
 
 ## TODO Other Scripts

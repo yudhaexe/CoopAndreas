@@ -14,6 +14,8 @@ gosub @RIOT2_30499
 terminate_this_script 
 
 :RIOT2_47
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 $onmission = 1
 Stat.RegisterMissionGiven
 Text.LoadMissionText('RIOT2')
@@ -155,6 +157,11 @@ Char.SetCoordinates($scplayer, 2520.8, -1678.5, 14.2)
 Char.SetHeading($scplayer, 68.6)
 World.ClearArea(1, 2520.8, -1678.5, 14.2, 1.0)
 $cesar = Char.Create(24, 290, 2519.8, -1677.5, 13.7)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId($cesar)
+end
 Char.SetHeading($cesar, 68.6)
 Char.GiveWeapon($cesar, WeaponType.DesertEagle, 30000)
 Char.SetNeverTargeted($cesar, True)
@@ -395,6 +402,12 @@ goto_if_false @RIOT2_2730
 Blip.Remove(89@)
 89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
 Blip.SetAsFriendly(89@, False)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1774.9, -1974.9, 13.1, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('R2_13', 7000, 1)
 TIMERB = 0
 143@ = 4
@@ -461,6 +474,12 @@ if
   3 > 177@
 goto_if_false @RIOT2_3105
 Blip.Remove(89@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearThisPrint('R2_13')
 Text.PrintNow('R2_01', 60000, 1)
 178@ = 1
@@ -475,6 +494,12 @@ goto_if_false @RIOT2_3207
 Blip.Remove(89@)
 89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
 Blip.SetAsFriendly(89@, False)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1774.9, -1974.9, 13.1, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearThisPrint('R2_01')
 Text.PrintNow('R2_13', 7000, 1)
 178@ = 0
@@ -488,6 +513,12 @@ if
 goto_if_false @RIOT2_3308
 Char.ShutUpForScriptedSpeech($scplayer, False)
 Char.ShutUpForScriptedSpeech($cesar, False)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 187@ = 0
 143@ = 0
 142@ = 1
@@ -2249,6 +2280,12 @@ gosub @RIOT2_40912
 :RIOT2_13684
 Blip.Remove(89@)
 89@ = Blip.AddForCoord(1922.8, -2075.0, 12.5)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1922.8, -2075.0, 12.5, 2.0, 2.0, 2.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 187@ = 0
 165@ = 6
 
@@ -2269,6 +2306,12 @@ Text.PrintNow('R2_04', 11000, 1)
 if 
   Char.LocateOnFoot3D($scplayer, 1, 1922.8, -2075.0, 12.5, 1.2, 1.2, 2.0)
 goto_if_false @RIOT2_13879
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearPrints
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
@@ -4449,6 +4492,16 @@ Char.RemoveElegantly($cesar)
 Streaming.UnloadSpecialCharacter(1)
 Game.SetGunshotSenseRangeForRiot2(-1.0)
 Blip.Remove(89@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Char.IsDead($cesar)
+        then
+            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $cesar)
+        end
+    end
+end
 Blip.Remove(90@)
 Blip.Remove(91@)
 Blip.Remove(92@)
@@ -5264,6 +5317,13 @@ goto_if_false @RIOT2_37923
 Blip.Remove(89@)
 89@ = Blip.AddForChar($cesar)
 Blip.SetAsFriendly(89@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $cesar, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 167@ = 0
 
 :RIOT2_37923
@@ -5281,11 +5341,23 @@ Group.SetMember($cesar, $Players_Group)
 
 :RIOT2_38008
 Blip.Remove(89@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $cesar)
+    end
+end
 if 
   177@ > 2
 goto_if_false @RIOT2_38058
 89@ = Blip.AddForCoord(1774.9, -1974.9, 13.1)
 Blip.SetAsFriendly(89@, False)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1774.9, -1974.9, 13.1, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :RIOT2_38058
 167@ = 1
