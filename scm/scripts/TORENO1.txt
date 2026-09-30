@@ -17,7 +17,7 @@ terminate_this_script
 $onmission = 1
 Stat.RegisterMissionGiven
 Coop.EnableSyncingThisScript()
-CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Camera.SetFadingColor(0, 0, 0)
 Weather.Force(WeatherType.SunnyCountryside)
 Text.LoadMissionText('TORENO1')
@@ -306,7 +306,7 @@ World.ClearArea(1, -694.4335, 964.9288, 11.2431, 50.0)
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(80@)
+    0@ = Coop.GetVehicleNetworkId(80@)
 end
 Car.SetHeading(80@, 85.85)
 Car.FreezePosition(80@, True)
@@ -314,7 +314,7 @@ Car.FreezePosition(80@, True)
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(81@)
+    0@ = Coop.GetPedNetworkId(81@)
 end
 Char.SetHeading(81@, 211.0638)
 39@ = Car.GetHealth(80@)
@@ -760,6 +760,7 @@ Char.ClearTasks($scplayer)
 Text.Print('DES1_10', 10000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintNowForNetworkPlayer('DES1_10', 10000, 1, $NETWORK_PLAYER[$temp_int])
     end
 end
@@ -772,6 +773,7 @@ Char.Delete(81@)
 Blip.SetAsFriendly(82@, True)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@, 1, 3, 2, 2)
     end
 end
@@ -812,8 +814,9 @@ Blip.SetCoordAppearance(82@, 2)
 Text.Print('DES1_58', 5000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -719.5559, 980.5707, 11.1371, 6.0)
+        Coop.UpdateCheckpointForNetworkPlayer(-719.5559, 980.5707, 11.1371, 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintNowForNetworkPlayer('DES1_58', 5000, 1, $NETWORK_PLAYER[$temp_int])
     end
 end
@@ -873,8 +876,9 @@ Blip.Remove(82@)
 Blip.SetCoordAppearance(82@, 2)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -719.5559, 980.5707, 11.1371, 6.0)
+        Coop.UpdateCheckpointForNetworkPlayer(-719.5559, 980.5707, 11.1371, 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintNowForNetworkPlayer('DES1_58', 5000, 1, $NETWORK_PLAYER[$temp_int])
     end
 end
@@ -913,7 +917,8 @@ Checkpoint.Delete(199@)
 Blip.SetCoordAppearance(82@, 2)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0)
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
     end
 end
 86@ = 1
@@ -935,6 +940,7 @@ Text.ClearHelp
 Text.ClearPrints
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@, 1, 3, 2, 2)
         Coop.PrintNowForNetworkPlayer('DES1_10', 4000, 1, $NETWORK_PLAYER[$temp_int])
@@ -1033,6 +1039,7 @@ Blip.SetAsFriendly(82@, True)
 86@ = 0
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@, 1, 3, 2, 2)
     end
@@ -1093,8 +1100,9 @@ Blip.SetCoordAppearance(82@, 2)
 86@ = 1
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0)
+        Coop.UpdateCheckpointForNetworkPlayer(90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
         Coop.PrintNowForNetworkPlayer('DES1_44', 4000, 1, $NETWORK_PLAYER[$temp_int])
     end
 end
@@ -1146,7 +1154,8 @@ Blip.SetCoordAppearance(82@, 2)
 :TORENO1_7469
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0)
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(90@(88@,35f), 125@(88@,35f), 160@(88@,35f), 6.0, 6.0, 6.0, $NETWORK_PLAYER[$temp_int])
     end
 end
 if 
@@ -1173,6 +1182,7 @@ Checkpoint.Delete(199@)
 Blip.Remove(82@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
     end
 end
@@ -1263,7 +1273,9 @@ Char.SetCoordinates($scplayer, -684.8021, 948.1096, 11.125)
 Char.SetHeading($scplayer, 124.6699)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         if Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
             Char.WarpFromCarToCoord($NETWORK_PLAYER[$temp_int], -684.8021, 948.1096, 11.125)
         else
             Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -684.8021, 948.1096, 11.125)
@@ -1274,7 +1286,7 @@ end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(81@)
+    0@ = Coop.GetPedNetworkId(81@)
 end
 Char.SetHeading(81@, 293.1942)
 Camera.SetFixedPosition(-688.32, 945.02, 14.13, 0.0, 0.0, 0.0)
@@ -2017,6 +2029,7 @@ return
 0@, 1@, 2@ = Char.GetCoordinates($scplayer)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 0@, 1@, 2@)
     end
 end
@@ -2034,8 +2047,10 @@ return
 :TORENO1_14529
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
         if not Car.IsDead(80@)
+        then
             Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
         end
     end
