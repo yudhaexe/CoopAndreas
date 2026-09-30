@@ -10,6 +10,8 @@ gosub @FINALEA_32621
 terminate_this_script 
 
 :FINALEA_36
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 $onmission = 1
 Stat.RegisterMissionGiven
 script_name 'FINALEA'
@@ -94,15 +96,31 @@ Object.FreezePosition($carterwall, True)
 Object.SetCollisionDamageEffect($carterwall, True)
 Car.CustomPlateForNextCar(492, "GROVE4L_")
 $sweet_car = Car.Create(492, 2507.823, -1671.88, 12.1678)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId($sweet_car)
+end
 Car.SetHeading($sweet_car, 347.15)
 Car.SetOnlyDamagedByPlayer($sweet_car, True)
 128@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(128@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 Car.ChangeColor($sweet_car, 59, 34)
 Car.SetHealth($sweet_car, 2000)
 Car.SetCanBurstTires($sweet_car, False)
 Car.SetCanBeVisiblyDamaged($sweet_car, False)
 $sweet = Char.Create(23, 290, 2511.169, -1672.747, 12.493)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId($sweet)
+end
 Char.SetGetOutUpsideDownCar($sweet, False)
 Char.SetHeading($sweet, 68.365)
 Char.SetNeverTargeted($sweet, True)
@@ -234,6 +252,13 @@ if
 goto_if_false @FINALEA_1641
 Blip.Remove(128@)
 128@ = Blip.AddForCoord(2507.82, -1309.226, 33.6726)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+        Coop.UpdateCheckpointForNetworkPlayer(2507.82, -1309.226, 33.6726, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('RM4_2', 5000, 1)
 TIMERB = 0
 146@ = 1
@@ -397,6 +422,12 @@ Player.SetControl($player1, False)
 $car = Char.StoreCarIsInNoSave($scplayer)
 Task.CarTempAction($scplayer, $car, TempAction.HandbrakeStraight, 2000000)
 Blip.Remove(128@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 World.ClearAllScriptRoadblocks
 Char.SetProofs($sweet, True, True, True, True, True)
 Car.SetProofs($sweet_car, True, True, True, True, True)
@@ -756,6 +787,17 @@ if
 goto_if_false @FINALEA_5533
 129@ = Blip.AddForCar(57@)
 Blip.SetAsFriendly(129@, True)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(57@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 57@, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 Text.PrintNow('RM4_6', 7000, 1)
 152@ = 1
 
@@ -945,6 +987,13 @@ goto_if_false @FINALEA_6575
 Blip.Remove(129@)
 Text.PrintNow('RM4_8', 5000, 1)
 130@ = Blip.AddForCoord(2522.79, -1272.85, 34.19)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 57@)
+        Coop.UpdateCheckpointForNetworkPlayer(2522.79, -1272.85, 34.19, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 152@ = 2
 
 :FINALEA_6575
@@ -960,6 +1009,13 @@ goto_if_false @FINALEA_6671
 Blip.Remove(130@)
 129@ = Blip.AddForCar(57@)
 Blip.SetAsFriendly(129@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 57@, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 Text.PrintNow('RM4_9', 5000, 1)
 152@ = 1
 
@@ -1021,6 +1077,13 @@ goto_if_false @FINALEA_7063
 Blip.Remove(128@)
 128@ = Blip.AddForCar($sweet_car)
 Blip.SetAsFriendly(128@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 Text.PrintNow('RM4_7', 5000, 1)
 146@ = 100
 149@ = 0
@@ -1034,6 +1097,13 @@ if
 goto_if_false @FINALEA_7155
 Blip.Remove(128@)
 128@ = Blip.AddForCoord(2507.82, -1309.226, 33.6726)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+        Coop.UpdateCheckpointForNetworkPlayer(2507.82, -1309.226, 33.6726, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('RM4_2', 5000, 1)
 146@ = 1
 149@ = 1
@@ -1127,6 +1197,12 @@ Char.SetHealth(82@, 3)
 Task.PlayAnim(82@, "CRCKIDLE4", "CRACK", 1000.0, True, False, False, True, -1)
 Text.PrintNow('RM4_13', 5000, 1)
 130@ = Blip.AddForCoord(2542.1, -1303.99, 34.03)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2542.1, -1303.99, 34.03, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 155@ = 1
 
 :FINALEA_8155
@@ -1232,6 +1308,12 @@ goto @FINALEA_8640
 Player.SetMood($player1, 7, 360000)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
 Blip.Remove(130@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.Delete(71@)
 Char.Delete(72@)
 Char.Delete(73@)
@@ -1255,6 +1337,12 @@ Camera.PointAtPoint(2544.193, -1303.702, 1024.828, SwitchType.JumpCut)
 Char.SetAreaVisible($scplayer, 2)
 130@ = Blip.AddForCoord(2579.85, -1305.76, 1037.07)
 Blip.SetEntryExit(130@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2579.85, -1305.76, 1037.07, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 World.ClearArea(1, 2578.0, -1306.0, 200.0, 200.0)
 Camera.DoFade(1, 1000)
 Text.PrintBig('RM4_17', 1000, TextStyle.BottomRight)
@@ -2136,6 +2224,12 @@ goto_if_false @FINALEA_15360
 Hud.SwitchWidescreen(True)
 Player.SetControl($player1, False)
 Blip.Remove(130@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
 Char.SetCoordinates($scplayer, 2575.036, -1305.741, 1036.781)
 Char.SetHeading($scplayer, 273.5172)
@@ -2189,6 +2283,12 @@ if
 goto_if_false @FINALEA_17177
 130@ = Blip.AddForCoord(2521.52, -1301.89, 1047.37)
 Blip.SetEntryExit(130@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2521.52, -1301.89, 1047.37, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Streaming.RequestModel(144)
 Streaming.RequestModel(146)
 Streaming.RequestModel(173)
@@ -3074,6 +3174,12 @@ Char.SetMaxHealth(78@, 200)
 Blip.Remove(130@)
 130@ = Blip.AddForCoord(2579.0, -1284.0, 1054.686)
 Blip.SetEntryExit(130@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2579.0, -1284.0, 1054.686, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Player.SetControl($player1, True)
 Hud.SwitchWidescreen(False)
 Char.SetHeading($scplayer, 0.0)
@@ -3780,6 +3886,12 @@ Text.PrintNow('RM4_24', 5000, 1)
 Blip.Remove(130@)
 130@ = Blip.AddForCoord(2550.74, -1285.02, 1060.62)
 Blip.SetEntryExit(130@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2550.74, -1285.02, 1060.62, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 158@ = 9
 
 :FINALEA_26555
@@ -3791,6 +3903,12 @@ if or
   Char.LocateAnyMeans3D($scplayer, 0, 2575.4, -1300.35, 1061.016, 3.0, 3.0, 3.0)
 goto_if_false @FINALEA_27576
 Blip.Remove(130@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.Delete(92@)
 Char.Delete(93@)
 Char.Delete(71@)
@@ -3904,6 +4022,17 @@ Char.SetMaxHealth($big_smoke, 2000)
 Char.SetSuffersCriticalHits($big_smoke, False)
 Char.SetOnlyDamagedByPlayer($big_smoke, True)
 131@ = Blip.AddForChar($big_smoke)
+0@ = 0
+while 0@ == 0
+    wait 0
+    0@ = Coop.GetPedNetworkId($big_smoke)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke, false, BlipDisplay.Both, BlipColor.DarkRed, 3)
+    end
+end
 Char.SetHasUsedEntryExit($big_smoke, 2540.83, -1304.05, 1.0)
 Char.SetFollowNodeThresholdDistance($big_smoke, 2.0)
 Char.SetAreaVisible($big_smoke, 2)
@@ -4749,6 +4878,24 @@ Blip.Remove(129@)
 Blip.Remove(130@)
 Blip.Remove(131@)
 Blip.Remove(132@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead($sweet_car)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet_car)
+        end
+        if not Car.IsDead(57@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 57@)
+        end
+        if not Char.IsDead($big_smoke)
+        then
+            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $big_smoke)
+        end
+    end
+end
 Pickup.Remove(133@)
 Pickup.Remove(134@)
 Pickup.Remove(135@)

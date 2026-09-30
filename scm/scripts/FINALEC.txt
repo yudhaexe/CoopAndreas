@@ -13,6 +13,8 @@ terminate_this_script
 $onmission = 1
 script_name 'FINALEC'
 wait 0
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('RIOT4')
 97@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
 128@ = 11
@@ -191,6 +193,21 @@ $sweet = Char.Create(23, 290, 0.0, 0.0, 0.0)
 Char.SetProofs($sweet, True, True, True, True, True)
 Char.SetHeading($sweet, 0.3186)
 Char.SetDecisionMaker($sweet, 97@)
+0@ = 0
+while 0@ == 0
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(152@)
+end
+0@ = 0
+while 0@ == 0
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(153@)
+end
+0@ = 0
+while 0@ == 0
+    wait 0
+    0@ = Coop.GetPedNetworkId($sweet)
+end
 if 
   not Car.IsDead(152@)
 goto_if_false @FINALEC_1427
@@ -415,6 +432,12 @@ Car.StartPlayback(152@, 289)
 115@ = Blip.AddForChar($sweet)
 Blip.SetAsFriendly(115@, True)
 Blip.ChangeDisplay(115@, BlipDisplay.BlipOnly)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet, true, BlipDisplay.BlipOnly, BlipColor.Cyan, 2)
+    end
+end
 TIMERA = 0
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 203@ = 0
@@ -523,6 +546,13 @@ goto_if_false @FINALEC_4053
 Blip.Remove(115@)
 115@ = Blip.AddForCar(153@)
 Blip.SetAsFriendly(115@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet)
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 153@, true, BlipDisplay.Both, BlipColor.Cyan, 2)
+    end
+end
 Text.PrintNow('RM4_48', 5000, 1)
 200@ = 1
 
@@ -537,6 +567,13 @@ Blip.Remove(115@)
 115@ = Blip.AddForChar($sweet)
 Blip.SetAsFriendly(115@, True)
 Blip.ChangeDisplay(115@, BlipDisplay.BlipOnly)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 153@)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet, true, BlipDisplay.BlipOnly, BlipColor.Cyan, 2)
+    end
+end
 if 
   198@ > 0
 goto_if_false @FINALEC_4142
@@ -7854,6 +7891,23 @@ Hud.ClearCounter($igripbardisplay_fc)
 Hud.ClearCounter($carhealth_fc)
 Pad.SetPlayerEnterCarButton($player1, True)
 Blip.Remove(115@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.IsDead($sweet)
+        then
+            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $sweet)
+        end
+        if not Car.IsDead(153@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 153@)
+        end
+        if not Car.IsDead(152@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 152@)
+        end
+    end
+end
 Blip.Remove(238@)
 Blip.Remove(239@)
 Blip.Remove(240@)

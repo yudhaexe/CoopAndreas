@@ -346,7 +346,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Cut Throat Business
 - [~] Riot
 - [~] Los Desperados
-- [ ] End Of The Line
+- [~] End Of The Line
 
 ## TODO Other Scripts
 ### Already done ✓

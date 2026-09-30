@@ -13,6 +13,8 @@ terminate_this_script
 $onmission = 1
 script_name 'FINALEB'
 wait 0
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('RIOT4')
 97@ = DecisionMakerChar.Load(DecisionMakerType.Empty)
 98@ = DecisionMakerChar.Load(DecisionMakerType.Tough)
@@ -330,6 +332,12 @@ Hud.DisplayTimerWithString($escapetimer_fb, TimerDirection.Down, 'RM4_34')
 Hud.SetTimerBeepCountdownTime($escapetimer_fb, 32)
 118@ = Blip.AddForCoord(2577.82, -1284.6, 1053.99)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2577.82, -1284.6, 1053.99, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 TIMERA = 0
 132@ = 1
 152@ = 3
@@ -372,6 +380,12 @@ goto_if_false @FINALEB_3721
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2521.89, -1301.98, 1047.54)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2521.89, -1301.98, 1047.54, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearPrints
 34@ = Char.Create(24, 109, 2574.5, -1296.029, 1054.687)
 Char.SetHeading(34@, 4.7018)
@@ -649,6 +663,12 @@ Char.Delete(39@)
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2572.08, -1301.88, 1043.32)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2572.08, -1301.88, 1043.32, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Weather.SetHeathazeEffect(True)
 Char.Delete($big_smoke)
 Streaming.UnloadSpecialCharacter(2)
@@ -910,6 +930,12 @@ Blip.Remove(119@)
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2565.56, -1301.7, 1030.97)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2565.56, -1301.7, 1030.97, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Blip.Remove(119@)
 World.RemoveAllScriptFires
 Char.Delete(40@)
@@ -1174,6 +1200,12 @@ goto_if_false @FINALEB_10784
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2528.78, -1293.94, 1030.86)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2528.78, -1293.94, 1030.86, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.Delete(42@)
 Char.Delete(43@)
 Char.Delete(44@)
@@ -1502,6 +1534,12 @@ Pickup.Remove(130@)
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2540.92, -1304.14, 1024.39)
 Blip.SetEntryExit(118@, 2540.83, -1304.05, 1.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2540.92, -1304.14, 1024.39, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 34@ = Char.Create(24, 102, 2527.368, -1319.587, 1030.43)
 Char.SetHeading(34@, 1.4222)
 Char.SetDecisionMaker(34@, 97@)
@@ -1630,6 +1668,12 @@ goto @FINALEB_12922
 :FINALEB_12966
 Blip.Remove(118@)
 118@ = Blip.AddForCoord(2522.82, -1272.52, 34.151)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2522.82, -1272.52, 34.151, 0.0, 0.0, 0.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.SetCoordinates($scplayer, 2538.657, -1304.358, 34.0)
 Streaming.MarkModelAsNoLongerNeeded(104)
 Streaming.MarkModelAsNoLongerNeeded(349)
@@ -1800,6 +1844,12 @@ if
   132@ == 9
 goto_if_false @FINALEB_14945
 Blip.Remove(118@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Hud.SwitchWidescreen(True)
 Player.SetControl($player1, False)
 Camera.SetDarknessEffect(False, -1)
@@ -2345,6 +2395,12 @@ Streaming.MarkModelAsNoLongerNeeded(#LA_FUCKCAR2)
 Streaming.RemoveAnimation("FINALE")
 Streaming.RemoveAnimation("FINALE2")
 Blip.Remove(118@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Blip.Remove(119@)
 Pickup.Remove(120@)
 Pickup.Remove(121@)
