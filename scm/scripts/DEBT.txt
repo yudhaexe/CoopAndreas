@@ -225,7 +225,7 @@ Group.SetLeader(13@, 17@)
 18@ = DecisionMakerGroup.Copy(-1)
 DecisionMakerGroup.ClearEventResponse(18@, 41)
 Group.SetDecisionMaker(17@, 18@)
-14@ = Char.CreateAsPassenger(PedType.Mission1, 183, 12@, 0)
+01c8: 14@ = create_actor_pedtype PedType.Mission1 model 183 in_car 12@ passenger_seat 0
 if 
   4@ == 1
 goto_if_false @DEBT_1294
@@ -236,7 +236,7 @@ Streaming.MarkModelAsNoLongerNeeded(183)
 if 
   1@ > 1
 goto_if_false @DEBT_1357
-15@ = Char.CreateAsPassenger(PedType.Mission1, 206, 12@, 1)
+01c8: 15@ = create_actor_pedtype PedType.Mission1 model 206 in_car 12@ passenger_seat 1
 if 
   5@ == 1
 goto_if_false @DEBT_1357
@@ -247,7 +247,7 @@ Streaming.MarkModelAsNoLongerNeeded(206)
 if 
   1@ > 2
 goto_if_false @DEBT_1418
-16@ = Char.CreateAsPassenger(PedType.Mission1, 47, 12@, 2)
+01c8: 16@ = create_actor_pedtype PedType.Mission1 model 47 in_car 12@ passenger_seat 2
 if 
   6@ == 1
 goto_if_false @DEBT_1418
