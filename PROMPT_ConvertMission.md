@@ -17,6 +17,20 @@ gak tambal-sulam. Bikin senang buat dimainkan rame-rame.
 3. Referensi kode dev (contoh pola benar): `scm/scripts/SWEET1.txt` (103 Coop calls), `SWEET1B.txt` (88),
    `INTRO1.txt` (58), `INTRO2.txt` (59). Grep untuk situasi spesifik (interior, convoy, kill-target, dll).
 
+## ⚠️ WHITELIST OPCODE (pakai HANYA nama ini — agent lain pernah HALU & semua gagal compile)
+Method Coop yg ADA (28): AddChatMessage, CancelPedClaim, ClaimPedOnRelease, ClearAllEntityBlipsForNetworkPlayer,
+ClearThisPrintForNetworkPlayer, CollectNetworkPlayersForTheMission, EnableSyncingThisScript, GetNetworkPlayerChar,
+GetNetworkPlayerInternalId, GetPedInAreaWithModel, **GetPedNetworkId**, **GetVehicleNetworkId**, IsHost,
+IsNetworkPlayerActorValid, IsSyncingThisPed, LocateAllPlayersOnFoot3D, PedResetAllClaims, PedTakeHost,
+PrintBigForNetworkPlayer, PrintForNetworkPlayer, PrintHelpForNetworkPlayer, PrintNowForNetworkPlayer,
+RemoveCarBlipForNetworkPlayer, RemoveCharBlipForNetworkPlayer, RemoveCheckpointForNetworkPlayer,
+TeleportPlayersToHostSafely, **UpdateCarBlipForNetworkPlayer**, **UpdateCharBlipForNetworkPlayer**,
+**UpdateCheckpointForNetworkPlayer**.
+NAMA HALU yg TIDAK ADA (JANGAN dipakai): GetCarNetworkId(→GetVehicleNetworkId), GetCharNetworkId(→GetPedNetworkId),
+SetCheckpointForNetworkPlayer(→UpdateCheckpointForNetworkPlayer), AddCarBlipForNetworkPlayer(→UpdateCarBlip...),
+AddCharBlipForNetworkPlayer(→UpdateCharBlip...). Ragu? cek `sdk/Sanny Builder 4/data/sa_sbl_coopandreas/sa_coop.db`.
+**COMPILE-VERIFY (§VERIFIKASI) WAJIB tiap misi — itu yg nangkep nama halu instan. JANGAN skip.**
+
 ## PRINSIP NON-NEGOTIABLE (ringkasan dari PLAN_HowToConvert.md — teruji empiris)
 - **Misi jalan HOST-ONLY.** `$scplayer` = host. `$NETWORK_PLAYER[0..6]` = follower (teman, di-drive via packet).
   `Coop.IsHost` gak perlu di misi. Follower mati = non-event (jangan cek IsDead-nya). Cuma host mati = gagal (vanilla).
