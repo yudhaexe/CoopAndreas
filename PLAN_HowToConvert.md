@@ -44,6 +44,24 @@
 ```
 Definisi resmi: `sdk/Sanny Builder 4/data/sa_sbl_coopandreas/opcodes.txt`. Kalau butuh yg gak ada di list → CEK dulu, jangan asumsi.
 
+### ⚠️ WHITELIST 28 METHOD Coop RESMI (dari sa_coop.db — JANGAN pakai selain ini; agent lain pernah HALU)
+```
+AddChatMessage · CancelPedClaim · ClaimPedOnRelease · ClearAllEntityBlipsForNetworkPlayer ·
+ClearThisPrintForNetworkPlayer · CollectNetworkPlayersForTheMission · EnableSyncingThisScript ·
+GetNetworkPlayerChar · GetNetworkPlayerInternalId · GetPedInAreaWithModel · GetPedNetworkId ·
+GetVehicleNetworkId · IsHost · IsNetworkPlayerActorValid · IsSyncingThisPed · LocateAllPlayersOnFoot3D ·
+PedResetAllClaims · PedTakeHost · PrintBigForNetworkPlayer · PrintForNetworkPlayer ·
+PrintHelpForNetworkPlayer · PrintNowForNetworkPlayer · RemoveCarBlipForNetworkPlayer ·
+RemoveCharBlipForNetworkPlayer · RemoveCheckpointForNetworkPlayer · TeleportPlayersToHostSafely ·
+UpdateCarBlipForNetworkPlayer · UpdateCharBlipForNetworkPlayer · UpdateCheckpointForNetworkPlayer
+```
+**NAMA HALU yg TIDAK ADA (jangan dipakai — pernah di draft agent lain, semua gagal compile):**
+`GetCarNetworkId`(→GetVehicleNetworkId), `GetCharNetworkId`(→GetPedNetworkId),
+`SetCheckpointForNetworkPlayer`(→UpdateCheckpointForNetworkPlayer),
+`AddCarBlipForNetworkPlayer`(→UpdateCarBlipForNetworkPlayer),
+`AddCharBlipForNetworkPlayer`(→UpdateCharBlipForNetworkPlayer).
+> Ini KENAPA compile-verify CLI wajib tiap misi: nama halu keliatan instan pas compile.
+
 ---
 
 ## 0.5 PRINSIP PEMERSATU (TERUJI) — "auto-synced vs mirror manual"
@@ -297,12 +315,19 @@ cleanup gak wajib 1:1; follower jangan di-warp. (MD versi awal sempat salah di p
   Non-host cuma terima opcode+packet. Ini KOREKSI TERBESAR — dulu sempat kubilang "jalan di 2 client" (SALAH).
   Menjelaskan: IsHost unused, follower via packet, auto-sync, follower-death non-event.
 - ✅ Follower mati = non-event (IsDead atas NETWORK_PLAYER = 0x). Mission-passed vanilla (RegisterMissionPassed 0x0318 auto-sync). Money reward gap (belum sync).
+- ✅ deatharrest INTRO1 (Big Smoke): check baris 9-12 VANILLA; fail-sub cuma M_FAIL (no coop); cleanup Coop ada di PASS path (19683) + reset $NETWORK_PLAYER[i]=0. KOREKSI: "cleanup di semua fail path" itu overgeneralisasi (cuma SWEET1 over-remove).
 
 ## 10.5 CATATAN TAMBAHAN (teruji)
 - **`Coop.IsHost` TIDAK dipakai di 4 misi dev** (0x). Misi jalan IDENTIK di semua client; otoritas host dari
   layer sync C++, bukan cabang SCM. JANGAN reach for IsHost pas konversi misi kecuali ada alasan sangat spesifik.
-- **deatharrest (fail-on-death) = VANILLA, jangan sentuh** (baris 10 tiap misi: `has_deatharrest_been_executed`).
-  Misi gagal kalau HOST ($scplayer) mati (vanilla). Follower mati → respawn via layer sync, gak nge-fail misi.
+- **deatharrest (fail-on-death) = VANILLA, jangan sentuh** (baris ~10 tiap misi: `if has_deatharrest_been_executed`).
+  TERUJI di INTRO1 (Big Smoke): check-nya persis vanilla; sub fail-nya (INTRO1_19665) CUMA `Text.PrintBig('M_FAIL')`
+  — TANPA cleanup Coop. Misi gagal kalau HOST ($scplayer) mati (vanilla). Follower mati → respawn via sync, gak nge-fail.
+- **Penempatan cleanup Coop (teruji, KOREKSI):** di INTRO1 cleanup Coop (`ClearAllEntityBlipsForNetworkPlayer` +
+  `RemoveCheckpointForNetworkPlayer` + reset `$NETWORK_PLAYER[i] = 0`) ada di **PASS path** (INTRO1_19683), BUKAN di
+  fail/deatharrest path. Jadi "cleanup di SEMUA fail path" itu overgeneralisasi dari SWEET1 (yg over-remove). Aman minimal:
+  taruh cleanup Coop di titik mission-END yg PASTI dilewati (pass path / general cleanup sebelum Mission.Finish).
+  Reset `$NETWORK_PLAYER[i] = 0` setelah clear itu idiom dev (INTRO1) — biar array bersih buat misi berikut.
 - **`Coop.GetNetworkPlayerInternalId($NETWORK_PLAYER[i])`** → convert network-player jadi **player-index** buat
   opcode `Player.*` yg butuh index (mis. `Player.GetClothesItem`). Beda dari ped-handle. Dipakai INTRO2 utk baca clothes.
 - **`Coop.TeleportPlayersToHostSafely(p0,p1,p2)`** → tarik follower ke host (transisi paksa / interior). CATATAN:
