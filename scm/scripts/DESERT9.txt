@@ -20,7 +20,7 @@ terminate_this_script
 
 :DESERT9_49
 Coop.EnableSyncingThisScript()
-CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 Text.LoadMissionText('DSERT9')
 Game.SetWantedMultiplier(0.0)
@@ -196,7 +196,7 @@ goto_if_false @DESERT9_1607
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(34@)
+    0@ = Coop.GetVehicleNetworkId(34@)
 end
 36@ = Car.Create(422, -22.1321, 2504.942, 15.2566)
 37@ = Car.Create(422, -15.9009, 2507.28, 15.2543)
@@ -692,47 +692,47 @@ Car.ChangeColor(38@, 0, 0)
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(36@)
+    0@ = Coop.GetVehicleNetworkId(36@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(37@)
+    0@ = Coop.GetVehicleNetworkId(37@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(38@)
+    0@ = Coop.GetVehicleNetworkId(38@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(40@)
+    0@ = Coop.GetPedNetworkId(40@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(41@)
+    0@ = Coop.GetPedNetworkId(41@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(42@)
+    0@ = Coop.GetPedNetworkId(42@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(43@)
+    0@ = Coop.GetPedNetworkId(43@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(44@)
+    0@ = Coop.GetPedNetworkId(44@)
 end
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCharNetworkId(45@)
+    0@ = Coop.GetPedNetworkId(45@)
 end
 if 
   not Car.IsDead(34@)
@@ -758,21 +758,43 @@ Car.SetCanBurstTires(35@, False)
 0@ = -1
 while 0@ == -1
     wait 0
-    0@ = Coop.GetCarNetworkId(35@)
+    0@ = Coop.GetVehicleNetworkId(35@)
 end
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         0@ = 2527.523
-        1@ = float $temp_int
-        1@ *= 2.5
-        0@ += 1@
+        if $temp_int == 1
+        then
+            0@ = 2530.0
+        end
+        if $temp_int == 2
+        then
+            0@ = 2532.5
+        end
+        if $temp_int == 3
+        then
+            0@ = 2535.0
+        end
+        if $temp_int == 4
+        then
+            0@ = 2537.5
+        end
+        if $temp_int == 5
+        then
+            0@ = 2540.0
+        end
+        if $temp_int == 6
+        then
+            0@ = 2542.5
+        end
         $NETWORK_PLAYER_VEHICLE[$temp_int] = Car.Create(461, 435.2751, 0@, 15.871)
         Car.SetHeading($NETWORK_PLAYER_VEHICLE[$temp_int], 90.0)
         Car.SetCanBurstTires($NETWORK_PLAYER_VEHICLE[$temp_int], False)
         2@ = -1
         while 2@ == -1
             wait 0
-            2@ = Coop.GetCarNetworkId($NETWORK_PLAYER_VEHICLE[$temp_int])
+            2@ = Coop.GetVehicleNetworkId($NETWORK_PLAYER_VEHICLE[$temp_int])
         end
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $NETWORK_PLAYER_VEHICLE[$temp_int], 1, 3, 2, 2)
     end
@@ -787,11 +809,8 @@ Char.SetCoordinates($scplayer, 412.6561, 2530.908, 15.617)
 Char.SetHeading($scplayer, 136.0)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
-        0@ = 2530.908
-        1@ = float $temp_int
-        1@ *= 1.5
-        0@ += 1@
-        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 412.6561, 0@, 15.617)
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 412.6561, 2530.908, 15.617)
         Char.SetHeading($NETWORK_PLAYER[$temp_int], 136.0)
     end
 end
@@ -915,6 +934,7 @@ goto_if_false @DESERT9_6182
 Char.GiveWeapon($scplayer, WeaponType.Satchel, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Satchel, 1)
     end
 end
@@ -939,6 +959,7 @@ Text.ClearPrints
 Text.Print('DES9_A4', 4000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintNowForNetworkPlayer('DES9_A4', 4000, 1, $NETWORK_PLAYER[$temp_int])
         Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, 0, 3, 0, 2)
     end
@@ -1132,6 +1153,7 @@ Char.SetCanBeKnockedOffBike($scplayer, True)
 Blip.Remove(152@)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
     end
 end
@@ -1638,6 +1660,13 @@ Car.StopPlayback(35@)
 :DESERT9_10499
 Hud.SwitchWidescreen(False)
 Player.SetControl($player1, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 9)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 331.8417, 1038.314, 1956.177)
+    end
+end
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Object.Delete(85@)
@@ -1867,6 +1896,13 @@ if
   not Char.IsDead($scplayer)
 goto_if_false @DESERT9_11887
 Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Parachute, 1)
+        Char.SetCurrentWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Parachute)
+    end
+end
 Particle.Kill(174@)
 68@ = 9
 71@ = 0
@@ -2319,6 +2355,17 @@ Char.SetVelocity($scplayer, $x, -30.0, $z)
 Car.SetVisible(186@, True)
 Car.ControlMovablePart(186@, 1.0)
 Streaming.SetAreaVisible(0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 177.9967, 1099.621, 1977.491)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 180.0)
+        Char.SetVelocity($NETWORK_PLAYER[$temp_int], $x, -30.0, $z)
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Parachute, 1)
+        Char.SetCurrentWeapon($NETWORK_PLAYER[$temp_int], WeaponType.Parachute)
+    end
+end
 Char.SetCurrentWeapon($scplayer, WeaponType.Parachute)
 Hud.SwitchWidescreen(True)
 Player.SetControl($player1, False)
@@ -3626,6 +3673,15 @@ Hud.DisplayRadar(True)
 $onmission = 0
 $timer_mobile_start = Clock.GetGameTimer()
 $para_control_off = 0
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], $NETWORK_PLAYER_VEHICLE[$temp_int])
+    end
+end
 return 
 return 
 

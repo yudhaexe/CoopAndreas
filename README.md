@@ -318,7 +318,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Interdiction
 - [~] Verdant Meadows
 - [~] N.O.E.
-- [ ] Stowaway
+- [~] Stowaway
 - [ ] Black Project
 - [ ] Green Goo
 - [~] Fender Ketchup
