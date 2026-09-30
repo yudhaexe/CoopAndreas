@@ -17,7 +17,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 $onmission = 1
 Coop.EnableSyncingThisScript()
-CollectNetworkPlayersForTheMission()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('DSERT4')
 Weather.Force(WeatherType.ExtraSunnyDesert)
@@ -65,6 +65,7 @@ wait 1000
 Text.PrintNow('BUY_AIR', 10000, 1)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Coop.PrintNowForNetworkPlayer('BUY_AIR', 10000, 1, $NETWORK_PLAYER[$temp_int])
     end
 end
@@ -78,6 +79,7 @@ return
 0@, 1@, 2@ = Char.GetCoordinates($scplayer)
 for $temp_int = 0 to 6
     if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
         Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 0@, 1@, 2@)
     end
 end
