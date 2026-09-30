@@ -15,6 +15,8 @@ World.DisableAllEntryExits(True)
 Game.SetScriptLimitToGangSize(0)
 Stat.RegisterMissionGiven
 script_name 'ZERO1'
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Player.SetControl($player1, False)
 Text.LoadMissionText('ZERO1')
 Camera.SetFadingColor(0, 0, 0)
@@ -257,6 +259,12 @@ goto @ZERO1_1710
 
 :ZERO1_1736
 Text.PrintNow('ZER1_AA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_AA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_1756
@@ -431,6 +439,12 @@ goto @ZERO1_3139
 
 :ZERO1_3165
 Text.PrintNow('ZER1_BD', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BD', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_3185
@@ -474,6 +488,12 @@ goto @ZERO1_3319
 
 :ZERO1_3345
 Text.PrintNow('ZER1_AB', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_AB', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_3365
@@ -496,6 +516,12 @@ goto @ZERO1_3411
 
 :ZERO1_3437
 Text.PrintNow('ZER1_AC', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_AC', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_3457
@@ -532,6 +558,12 @@ goto @ZERO1_3625
 
 :ZERO1_3651
 Text.PrintNow('ZER1_BA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_3671
@@ -584,6 +616,12 @@ goto @ZERO1_3940
 
 :ZERO1_3966
 Text.PrintNow('ZER1_BB', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BB', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_3986
@@ -625,6 +663,12 @@ goto @ZERO1_4165
 
 :ZERO1_4191
 Text.PrintNow('ZER1_AD', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_AD', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_4211
@@ -647,6 +691,12 @@ goto @ZERO1_4257
 
 :ZERO1_4283
 Text.PrintNow('ZER1_AE', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_AE', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_4303
@@ -765,6 +815,12 @@ goto @ZERO1_4962
 
 :ZERO1_4988
 Text.PrintNow('ZER1_BE', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BE', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_5008
@@ -1173,6 +1229,12 @@ goto @ZERO1_7490
 
 :ZERO1_7516
 Text.PrintNow('ZER1_BN', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BN', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_7536
@@ -1223,6 +1285,12 @@ goto @ZERO1_7845
 
 :ZERO1_7871
 Text.PrintNow('ZER1_EA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_EA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_7891
@@ -1281,6 +1349,12 @@ goto @ZERO1_8109
 
 :ZERO1_8135
 Text.PrintNow('ZER1_BK', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BK', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_8155
@@ -1303,6 +1377,12 @@ goto @ZERO1_8201
 
 :ZERO1_8227
 Text.PrintNow('ZER1_BL', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BL', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_8247
@@ -1325,6 +1405,12 @@ goto @ZERO1_8293
 
 :ZERO1_8319
 Text.PrintNow('ZER1_BM', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BM', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_8339
@@ -1374,6 +1460,12 @@ goto @ZERO1_8513
 
 :ZERO1_8539
 Text.PrintNow('ZER1_BJ', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BJ', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_8559
@@ -1423,6 +1515,12 @@ goto @ZERO1_8733
 
 :ZERO1_8759
 Text.PrintNow('ZER1_BG', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BG', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_8779
@@ -1673,6 +1771,12 @@ goto @ZERO1_9990
 
 :ZERO1_10016
 Text.PrintNow('ZER1_CA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_CA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_10036
@@ -2007,6 +2111,12 @@ goto @ZERO1_11991
 
 :ZERO1_12017
 Text.PrintNow('ZER1_BC', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BC', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_12037
@@ -2083,6 +2193,12 @@ goto @ZERO1_12568
 
 :ZERO1_12594
 Text.PrintNow('ZER1_BG', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BG', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_12614
@@ -2139,6 +2255,12 @@ goto @ZERO1_12865
 
 :ZERO1_12891
 Text.PrintNow('ZER1_BJ', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BJ', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_12911
@@ -2195,6 +2317,12 @@ goto @ZERO1_13162
 
 :ZERO1_13188
 Text.PrintNow('ZER1_BK', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_BK', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_13208
@@ -2249,6 +2377,12 @@ goto @ZERO1_13549
 
 :ZERO1_13575
 Text.PrintNow('ZER1_EA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_EA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_13595
@@ -2303,6 +2437,12 @@ goto @ZERO1_13893
 
 :ZERO1_13919
 Text.PrintNow('ZER1_EA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_EA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_13939
@@ -2548,6 +2688,12 @@ goto @ZERO1_15707
 
 :ZERO1_15733
 Text.PrintNow('ZER1_FA', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FA', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_15753
@@ -2570,6 +2716,12 @@ goto @ZERO1_15799
 
 :ZERO1_15825
 Text.PrintNow('ZER1_FB', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FB', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_15845
@@ -2623,6 +2775,12 @@ Char.StartFacialTalk(55@, 10000)
 
 :ZERO1_16113
 Text.PrintNow('ZER1_FC', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FC', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_16133
@@ -2657,6 +2815,12 @@ Char.StartFacialTalk(55@, 10000)
 
 :ZERO1_16250
 Text.PrintNow('ZER1_FD', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FD', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_16270
@@ -2717,6 +2881,12 @@ goto @ZERO1_16553
 
 :ZERO1_16579
 Text.PrintNow('ZER1_FE', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FE', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   not Char.IsDead(55@)
 goto_if_false @ZERO1_16619
@@ -2751,6 +2921,12 @@ goto @ZERO1_16690
 
 :ZERO1_16716
 Text.PrintNow('ZER1_FG', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FG', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   not Char.IsDead(55@)
 goto_if_false @ZERO1_16756
@@ -2797,6 +2973,12 @@ Char.StartFacialTalk(55@, 10000)
 
 :ZERO1_16898
 Text.PrintNow('ZER1_FF', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('ZER1_FF', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Audio.PlayMissionAudio(MissionAudioSlot.Slot1)
 
 :ZERO1_16918
@@ -3011,6 +3193,12 @@ Char.RemoveElegantly(55@)
 Object.MarkAsNoLongerNeeded(34@)
 Streaming.RemoveAnimation("CASINO")
 Streaming.RemoveAnimation("ON_LOOKERS")
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Mission.Finish
 return 
 
