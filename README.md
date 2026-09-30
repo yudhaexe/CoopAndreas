@@ -293,7 +293,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Deconstruction
 - [~] Air Raid
 - [~] Supply Lines...
-- [ ] New Model Army
+- [~] New Model Army
 - [~] Photo Opportunity
 - [~] Jizzy
 - [~] T-Bone Mendez

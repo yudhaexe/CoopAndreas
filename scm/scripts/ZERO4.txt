@@ -3,6 +3,7 @@
 
 :ZERO4
 script_name 'ZERO4'
+Coop.EnableSyncingThisScript()
 gosub @ZERO4_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :ZERO4_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -1526,6 +1528,12 @@ if
   549@ == 0
 goto_if_false @ZERO4_12289
 Text.PrintNow('Z4_M26', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M26', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   Object.DoesExist(92@)
 goto_if_false @ZERO4_12282
@@ -1560,6 +1568,12 @@ Blip.Remove(166@)
 
 :ZERO4_12383
 Text.PrintNow('Z4_M27', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M27', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 167@ += 1
 
 :ZERO4_12406
@@ -1705,6 +1719,12 @@ if
   548@ <> 1
 goto_if_false @ZERO4_13234
 Text.PrintNow('Z4_M28', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M28', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   Object.DoesExist(89@)
 goto_if_false @ZERO4_13234
@@ -1729,6 +1749,12 @@ if
   171@ == 1
 goto_if_false @ZERO4_13337
 Text.PrintNow('Z4_M29', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M29', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :ZERO4_13337
 if 
@@ -1946,12 +1972,24 @@ if
   127@ == 2
 goto_if_false @ZERO4_14797
 Text.PrintNow('Z4_M14', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M14', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :ZERO4_14797
 if 
   127@ == 1
 goto_if_false @ZERO4_14831
 Text.PrintNow('Z4_M23', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M23', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :ZERO4_14831
 if 
@@ -2226,6 +2264,12 @@ if
   147@ == 99
 goto_if_false @ZERO4_16757
 Text.PrintNow('Z4_M20', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M20', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 155@ += 1
 
 :ZERO4_16757
@@ -2260,6 +2304,12 @@ if
   44@ == 1
 goto_if_false @ZERO4_16935
 Text.PrintNow('Z4_M21', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M21', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 155@ += 1
 
 :ZERO4_16935
@@ -2354,6 +2404,12 @@ if
   156@ == 1
 goto_if_false @ZERO4_17564
 Text.PrintNow('Z4_M20', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M20', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 156@ += 1
 
 :ZERO4_17564
@@ -2388,6 +2444,12 @@ if
   44@ == 1
 goto_if_false @ZERO4_17742
 Text.PrintNow('Z4_M21', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M21', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 156@ += 1
 
 :ZERO4_17742
@@ -2469,6 +2531,12 @@ Car.PausePlayback(68@)
 120@ = 1
 157@ = 2
 Text.PrintNow('Z4_M18', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M18', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @ZERO4_18434
 
 :ZERO4_18310
@@ -3332,6 +3400,12 @@ if
 goto_if_false @ZERO4_23707
 gosub @ZERO4_23930
 Text.PrintNow('Z4_M15', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M15', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 37@ = 1
 
 :ZERO4_23707
@@ -3340,6 +3414,12 @@ if
 goto_if_false @ZERO4_23755
 gosub @ZERO4_23930
 Text.PrintNow('Z4_M13', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M13', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 37@ = 1
 
 :ZERO4_23755
@@ -3348,6 +3428,12 @@ if
 goto_if_false @ZERO4_23803
 gosub @ZERO4_23930
 Text.PrintNow('Z4_M12', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M12', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 37@ = 1
 
 :ZERO4_23803
@@ -3677,6 +3763,12 @@ if
   is_int_lvar_equal_to_int_lvar 139@(551@,3i) == 68@
 goto_if_false @ZERO4_26240
 Text.PrintNow('Z4_M19', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('Z4_M19', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :ZERO4_26240
 Audio.ReportMissionAudioEventAtCar(72@(551@,3i), 1157)
@@ -3884,6 +3976,12 @@ $flag_zero_mission_counter += 1
 $timer_mobile_start = Clock.GetGameTimer()
 Player.SetControl($player1, True)
 $onmission = 0
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.ClearAllEntityBlipsForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Mission.Finish
 return 
 
