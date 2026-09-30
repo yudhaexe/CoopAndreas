@@ -113,6 +113,19 @@ Masuk TODO "stream in/out players/peds" yg BELUM dikerjain (fragility engine). B
 FAKTA KUNCI: makin banyak player (6-8) makin sering crash — cost nyata dari naikin cap 8. Di 4 player jauh lebih stabil.
 Status: OPEN (engine streaming; fix beneran = rework streaming, effort besar+RE).
 
+### [2026-09-30] DIAGNOSIS crash rusuh (multi-log) — engine null-deref, BUKAN memory/spec/pool
+Konteks user: main rusuh (tembak, rocket, ada yg cheat), cuma SEBAGIAN player crash, GAK peduli spec PC.
+Bukti 6 crash log: dominan **0x642067 (CPedGroups, proses grup ped) 3x**, + 0x4D68BA (anim-blend) 1x, + dalam DLL 1x, + 0x400005 (startup lama) 1x.
+Pool dari crash log: Ped 24/255, Vehicle 24/255, Object 93/350 → **JAUH dari penuh**. 
+KESIMPULAN:
+- BUKAN pool/memory exhaustion (pool longgar). **Hipotesis LimitAdjuster-removal = SALAH** (dikoreksi).
+- BUKAN spec PC (spec gak ngaruh + cuma sebagian crash) → ciri NULL-POINTER DEREF (bug kode), bukan beban resource.
+- Akar: robustness engine+sync di jalur PED-GROUP (0x642067) & anim (0x4D68BA) pas banyak ped sinkron mati/berubah cepat
+  (rusuh/rocket memperbanyak churn ped-group → lebih sering nyentuh bug). Cheat bisa nyumbang kalau spawn ped aneh, bukan akar.
+- Client yg crash = yg nerima state sync ped "kececer" di momen itu; client lain di momen itu aman → makanya cuma sebagian.
+- Real & reproducible. Fix = guard null di jalur ped-group/anim sync (C++) ATAU streaming/ped-lifecycle rework (TODO besar).
+  Mitigasi parsial yg udah ada: m_bStreamingDontDelete=true (belum nutup semua).
+
 ## 2. LESSONS → REVISI RETROAKTIF (aturan yang lahir dari crash nyata)
 > Tiap lesson di sini WAJIB dicek & diterapin ke SEMUA misi yang udah/akan dikonversi.
 > Kolom "Applied to" dicentang saat misi udah direvisi.
