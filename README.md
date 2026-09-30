@@ -292,7 +292,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] 555 WE TIP
 - [~] Deconstruction
 - [~] Air Raid
-- [ ] Supply Lines...
+- [~] Supply Lines...
 - [ ] New Model Army
 - [~] Photo Opportunity
 - [~] Jizzy
