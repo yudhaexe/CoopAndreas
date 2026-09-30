@@ -76,6 +76,8 @@ goto @GROVE1_606
 return 
 
 :GROVE1_608
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 $onmission = 1
 77@ = 50
 78@ = 50
@@ -217,6 +219,11 @@ Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Streaming.LoadScene(2497.324, -1684.744, 12.44)
 38@ = Char.Create(24, 290, 2496.633, -1684.573, 12.435)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(38@)
+end
 Char.SetHeading(38@, 0.0)
 Char.SetDecisionMaker(38@, 65542)
 Char.SetAnimGroup(38@, "GANG2")
@@ -257,6 +264,12 @@ Char.SetProofs(38@, False, False, False, False, False)
 :GROVE1_1672
 Text.PrintNow('GM1_18', 8000, 1)
 89@ = Blip.AddForCoord(2293.032, -1795.767, 12.5469)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(2293.032, -1795.767, 12.5469, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 $blob_flag = 1
 TIMERA = 0
 93@ = 0
@@ -419,6 +432,13 @@ goto_if_false @GROVE1_2638
 Blip.Remove(89@)
 39@ = Blip.AddForChar(38@)
 Blip.SetAsFriendly(39@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 Text.PrintNow('GM1_2', 8000, 1)
 $blob_flag = 0
 73@ = 0
@@ -449,6 +469,13 @@ Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
 89@ = Blip.AddForCoord(2293.032, -1795.767, 12.5469)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        Coop.UpdateCheckpointForNetworkPlayer(2293.032, -1795.767, 12.5469, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('GM1_18', 8000, 1)
 $blob_flag = 1
 87@ = 0
@@ -493,6 +520,13 @@ Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
 89@ = Blip.AddForCoord(2293.032, -1795.767, 12.5469)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        Coop.UpdateCheckpointForNetworkPlayer(2293.032, -1795.767, 12.5469, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('GM1_18', 8000, 1)
 $blob_flag = 1
 37@ = 0
@@ -537,6 +571,12 @@ goto @GROVE1_1771
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Text.ClearPrints
 Blip.Remove(89@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Player.SetControl($player1, False)
 Game.SetPoliceIgnorePlayer($player1, True)
 Game.SetEveryoneIgnorePlayer($player1, True)
@@ -722,6 +762,12 @@ Game.SetEveryoneIgnorePlayer($player1, False)
 Game.SetPoliceIgnorePlayer($player1, False)
 Text.PrintNow('GM1_1', 5000, 1)
 40@ = Blip.AddSpriteForCoord(62, 1988.316, -1199.675, 19.135)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1988.316, -1199.675, 19.135, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Zone.SetGangStrength('GLN1', GangType.Ballas, 40)
 Zone.SetGangStrength('GLN1', GangType.Grove, 0)
 91@ = Zone.GetGangStrength('GLN1', GangType.Vagos)
@@ -851,6 +897,12 @@ if and
 goto_if_false @GROVE1_5086
 39@ = Blip.AddForChar(38@)
 Blip.SetAsFriendly(39@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 Text.PrintNow('GM1_2', 8000, 1)
 $blob_flag = 0
 73@ = 0
@@ -880,6 +932,12 @@ goto_if_false @GROVE1_5273
 Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+    end
+end
 $blob_flag = 1
 87@ = 0
 37@ = 0
@@ -922,6 +980,12 @@ goto @GROVE1_5475
 Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+    end
+end
 $blob_flag = 1
 37@ = 0
 
@@ -1240,6 +1304,12 @@ goto @GROVE1_5826
 
 :GROVE1_7131
 Blip.Remove(40@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearThisPrint('GM1_16')
 Text.ClearThisPrint('GRO1_GA')
 Text.ClearThisPrint('GM1_2')
@@ -2583,6 +2653,13 @@ goto_if_false @GROVE1_14786
 Blip.Remove(36@)
 39@ = Blip.AddForChar(38@)
 Blip.SetAsFriendly(39@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 Text.PrintNow('GM1_2', 8000, 1)
 $blob_flag = 0
 73@ = 0
@@ -2613,6 +2690,13 @@ Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
 36@ = Blip.AddForCoord(2000.269, -1117.084, 25.821)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        Coop.UpdateCheckpointForNetworkPlayer(2000.269, -1117.084, 25.821, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 $blob_flag = 1
 87@ = 0
 37@ = 0
@@ -2656,6 +2740,13 @@ Group.SetFollowStatus($Players_Group, True)
 Group.SetMember(38@, $Players_Group)
 Blip.Remove(39@)
 36@ = Blip.AddForCoord(2000.269, -1117.084, 25.821)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        Coop.UpdateCheckpointForNetworkPlayer(2000.269, -1117.084, 25.821, 3.0, 3.0, 3.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 $blob_flag = 1
 37@ = 0
 
@@ -2698,6 +2789,12 @@ goto @GROVE1_14507
 :GROVE1_15390
 Hud.ClearCounter($sweets_health_grove1)
 Blip.Remove(36@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearPrints
 Player.SetControl($player1, False)
 Game.SetEveryoneIgnorePlayer($player1, True)
@@ -3359,6 +3456,16 @@ $grove_contact_blip = Blip.AddSpriteForContactPoint($grove_blip_icon, $sweetX, $
 return 
 
 :GROVE1_18963
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Char.IsDead(38@)
+        then
+            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        end
+    end
+end
 Char.RemoveElegantly(38@)
 $onmission = 0
 Path.SwitchPedRoadsBackToOriginal(1965.968, -1096.668, 20.0, 2081.465, -1163.309, 30.0)
