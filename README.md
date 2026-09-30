@@ -320,7 +320,7 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] N.O.E.
 - [~] Stowaway
 - [~] Black Project
-- [ ] Green Goo
+- [~] Green Goo
 - [~] Fender Ketchup
 - [~] Explosive Situation
 - [~] You've Had Your Chips

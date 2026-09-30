@@ -10,6 +10,8 @@ gosub @DES10_4515
 terminate_this_script 
 
 :DES10_36
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 $onmission = 1
 Stat.RegisterMissionGiven
 script_name 'DES10'
@@ -141,6 +143,15 @@ Camera.SetBehindPlayer
 Pad.SetPlayerEnterCarButton($player1, False)
 Task.Jetpack($scplayer)
 Char.GiveWeapon($scplayer, WeaponType.MicroUzi, 2000)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 419.4488, 2529.914, 15.6219)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 180.0)
+        Task.Jetpack($NETWORK_PLAYER[$temp_int])
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.MicroUzi, 2000)
+    end
+end
 
 :DES10_678
 if 
@@ -157,7 +168,19 @@ Player.SetControl($player1, True)
 Car.LockDoors(58@, CarLock.Locked)
 Train.SetSpeed(58@, 5.0)
 Train.SetCruiseSpeed(58@, 5.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(58@)
+end
 Text.PrintNow('DE10_01', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('DE10_01', 5000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 58@, 0, 3, 0, 2)
+    end
+end
 $x, $y, $z = Car.GetCoordinates(58@)
 $z += 10.0
 44@ = 0
@@ -396,6 +419,14 @@ Audio.ClearMissionAudio(MissionAudioSlot.Slot3)
 Text.PrintNow('DE10_04', 5000, 1)
 Blip.Remove(81@(44@,3i))
 81@(44@,3i) = Blip.AddForCoord(408.7383, 2515.838, 15.4918)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 58@)
+        Coop.UpdateCheckpointForNetworkPlayer(408.7383, 2515.838, 15.4918, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('DE10_04', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 104@(44@,3i) += 1
 35@ += 1
 
@@ -455,6 +486,14 @@ World.ClearArea(0, 402.8737, 2531.582, 15.5558, 0.5)
 Streaming.LoadScene(402.8737, 2531.582, 15.5558)
 Char.SetCoordinates($scplayer, 402.8737, 2531.582, 15.5558)
 Char.SetHeading($scplayer, 224.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 402.8737, 2531.582, 15.5558)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 224.0)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Camera.SetBehindPlayer
 Player.SetControl($player1, True)
 goto @DES10_4130
@@ -555,6 +594,13 @@ Streaming.MarkModelAsNoLongerNeeded(287)
 Streaming.MarkModelAsNoLongerNeeded(370)
 Game.SwitchRandomTrains(True)
 $onmission = 0
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 58@)
+    end
+end
 Mission.Finish
 return 
 
