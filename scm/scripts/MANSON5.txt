@@ -14,6 +14,8 @@ gosub @MANSON5_13159
 terminate_this_script 
 
 :MANSON5_47
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 $onmission = 1
 Text.LoadMissionText('MAN_5')
@@ -78,6 +80,11 @@ Char.SetHeading($scplayer, 144.1434)
 51@ = Player.GetGroup($player1)
 Group.SetDefaultTaskAllocator(51@, DefaultTaskAllocator.FollowAnyMeans)
 34@ = Char.Create(23, 290, 1254.311, -810.8859, 83.1484)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(34@)
+end
 Char.SetHeading(34@, 60.7435)
 Char.SetNeverLeavesGroup(34@, True)
 Group.SetMember(34@, 51@)
@@ -94,6 +101,12 @@ Streaming.CustomPlateDesignForNextCar(424, Town.LV)
 Car.SetHeading(45@, 180.0)
 Car.ChangeColor(45@, 0, 3)
 50@ = Blip.AddForCoord(-12.2064, -1117.876, 7.0705)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(-12.2064, -1117.876, 7.0705, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 118@ = 0
 119@ = 0
 set_lvar_text_label 168@s = 'MAN5_AA'
@@ -321,6 +334,12 @@ Skip.SetUp(-126.6673, -1260.804, 2.0469, 280.0)
 
 :MANSON5_2147
 Blip.Remove(37@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+    end
+end
 66@ += 1
 
 :MANSON5_2159
@@ -334,6 +353,12 @@ Skip.Clear
 37@ = Blip.AddForChar(34@)
 Blip.SetAsFriendly(37@, True)
 Blip.ChangeDisplay(37@, BlipDisplay.BlipOnly)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 66@ -= 1
 
 :MANSON5_2213
@@ -838,6 +863,19 @@ Blip.Remove(37@)
 38@ = Blip.AddForCar(41@)
 37@ = Blip.AddForCar(40@)
 Blip.SetAsFriendly(37@, True)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(41@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 41@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 
 :MANSON5_5285
 if and
@@ -1279,6 +1317,21 @@ Car.StopPlayback(44@)
 :MANSON5_7860
 Car.StartPlayback(44@, 704)
 38@ = Blip.AddForCar(44@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(44@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Car.IsDead(41@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 41@)
+        end
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 44@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 
 :MANSON5_7876
 if 
@@ -1361,6 +1414,15 @@ Camera.DoFade(0, Fade.Out)
 Audio.SetRadioChannel(RadioChannel.UserTracks)
 Blip.Remove(37@)
 Blip.Remove(38@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Car.IsDead(44@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 44@)
+        end
+    end
+end
 if 
   Char.IsInAnyCar($scplayer)
 goto_if_false @MANSON5_8333
@@ -2096,6 +2158,24 @@ Text.PrintNow(63@s, 5000, 1)
 return 
 
 :MANSON5_13159
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Char.IsDead(34@)
+        then
+            Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        end
+        if not Car.IsDead(41@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 41@)
+        end
+        if not Car.IsDead(44@)
+        then
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 44@)
+        end
+    end
+end
 if 
   Player.IsPlaying($player1)
 goto_if_false @MANSON5_13186
