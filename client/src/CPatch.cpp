@@ -188,8 +188,12 @@ void FixCrashes()
     patch::SetUInt(0x74754B, 0x900);
 
     // Don't create a ped group on player creation (Fixes a crash)
-    /*patch::Nop(0x60D64D, 1);
-    patch::SetUChar(0x60D64E, 0xE9);*/
+    // ENABLED: each network player (CREATE_PLAYER id+2) otherwise gets a ped-group; CPedGroups::Process
+    // then iterates it and null-derefs on a stale/streamed synced member -> the 0x642067 chaos crash.
+    // Skipping player ped-group creation removes that crash source. Tradeoff: player can't hold a
+    // recruited follower group (acceptable in co-op; street NPCs/traffic are unaffected).
+    patch::Nop(0x60D64D, 1);
+    patch::SetUChar(0x60D64E, 0xE9);
 
     // Disable the call to FxSystem_c::GetCompositeMatrix in CAEFireAudioEntity::UpdateParameters
     // Which was causing a crash. The crash happens if you create 40 or
