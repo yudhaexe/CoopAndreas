@@ -14,6 +14,8 @@ gosub @MANSIO1_39063
 terminate_this_script 
 
 :MANSIO1_47
+Coop.EnableSyncingThisScript()
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Stat.RegisterMissionGiven
 $onmission = 1
 Char.SetCoordinates($scplayer, 2175.412, 1681.548, 9.8203)
@@ -898,6 +900,14 @@ goto @MANSIO1_6265
 :MANSIO1_6302
 Weather.ForceNow(WeatherType.ExtraSunnyLa)
 Player.SetControl($player1, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.GiveWeapon($NETWORK_PLAYER[$temp_int], WeaponType.M4, 500)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1291.266, -788.1172, 96.7736)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 90.0)
+    end
+end
 Camera.DoFade(1, 500)
 
 :MANSIO1_6320
@@ -3440,6 +3450,14 @@ goto @MANSIO1_22450
 Char.SetHeading($scplayer, 270.0)
 Hud.SwitchWidescreen(False)
 Player.SetControl($player1, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 5)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1267.785, -781.2607, 1090.898)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 270.0)
+    end
+end
 set_var_int_to_constant $load_sample = 23821
 set_var_text_label s$load_text = 'MAN1_EB'
 start_new_script @A_ALAP 2 101 143@ 
@@ -5632,6 +5650,30 @@ if
   not Car.IsDead(527@)
 goto_if_false @MANSIO1_37517
 329@ = Blip.AddForCar(527@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(527@)
+end
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(528@)
+end
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(328@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1244.026, -808.5705, 83.1484)
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 527@, 0, 3, 0, 2)
+        Coop.PrintNowForNetworkPlayer('MAN1_23', 8000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :MANSIO1_37517
 Text.PrintNow('MAN1_23', 8000, 1)
@@ -6017,6 +6059,14 @@ StreamedScript.MarkAsNoLongerNeeded(1)
 Streaming.RemoveAnimation("PARACHUTE")
 $timer_mobile_start = Clock.GetGameTimer()
 $onmission = 0
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 527@)
+    end
+end
 Mission.Finish
 return 
 
