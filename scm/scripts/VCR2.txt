@@ -11,6 +11,10 @@ terminate_this_script
 
 :VCR2_36
 $onmission = 1
+Coop.EnableSyncingThisScript()
+for $temp_int = 0 to 6
+    $NETWORK_PLAYER[$temp_int] = Coop.CollectNetworkPlayersForTheMission($temp_int)
+end
 Stat.RegisterMissionGiven
 script_name 'VCR2'
 wait 0
@@ -153,6 +157,11 @@ set_lvar_int_to_var_int 111@ = $game_timer
 111@ += 6000
 Car.CustomPlateForNextCar(402, "PULASKI")
 112@ = Car.Create(402, -371.0292, 2209.82, 41.4921)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(112@)
+end
 Car.SetHeading(112@, 159.2268)
 Car.ChangeColor(112@, 8, 0)
 Car.SetPetrolTankWeakpoint(112@, False)
@@ -161,6 +170,11 @@ Car.SetCanGoAgainstTraffic(112@, True)
 Car.SetProofs(112@, True, True, True, True, True)
 Car.SetHealth(112@, 2250)
 113@ = Char.Create(24, 290, -335.4141, 2218.942, 41.4921)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(113@)
+end
 Char.SetRelationship($scplayer, RelationshipType.Hate, PedType.Mission1)
 Char.SetHeading(113@, 104.108)
 Char.SetOnlyDamagedByPlayer(113@, True)
@@ -193,6 +207,11 @@ Char.SetCoordinates($scplayer, -334.1724, 2214.62, 40.4911)
 Char.SetHeading($scplayer, 232.082)
 Camera.SetBehindPlayer
 114@ = Car.Create(568, -342.2552, 2221.39, 41.4911)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(114@)
+end
 Car.SetHeading(114@, 168.7771)
 Camera.DoFade(1, 500)
 $game_timer = Clock.GetGameTimer()
@@ -254,6 +273,14 @@ Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 34@ = Blip.AddForChar(113@)
 Text.PrintNow('VCR2__1', 15000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -337.9653, 2220.594, 41.4911)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 90.0)
+        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, 34@, BlipDisplay.Both, BlipColour.Red)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__1')
+    end
+end
 set_lvar_int_to_var_int 35@ = $game_timer
 35@ += 26000
 47@ += 1
@@ -326,6 +353,11 @@ if
 goto_if_false @VCR2_2368
 Task.CarDriveWander(113@, -1, 50.0, DrivingMode.AvoidCars)
 34@ = Blip.AddForChar(113@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.AddCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@, 34@, BlipDisplay.Both, BlipColour.Red)
+    end
+end
 
 :VCR2_2368
 goto @VCR2_2468
@@ -337,12 +369,23 @@ goto_if_false @VCR2_2426
 Task.CarDriveWander(113@, -1, 28.0, DrivingMode.AvoidCars)
 Text.PrintNow('VCR2__2', 5000, 1)
 Blip.Remove(34@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__2')
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@)
+    end
+end
 
 :VCR2_2426
 if 
   is_int_var_greater_than_int_lvar $game_timer > 116@
 goto_if_false @VCR2_2468
 Text.PrintNow('VCR2__3', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'VCR2__3')
+    end
+end
 goto @VCR2_5040
 
 :VCR2_2468
@@ -426,6 +469,11 @@ $x = Path.GetClosestCarNode($y, $z, $x, $y, $z)
 World.ClearArea(1, $x, $y, $z, 100.0)
 Car.CustomPlateForNextCar(402, "PULASKI")
 112@ = Car.Create(402, $x, $y, $z)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(112@)
+end
 Car.ChangeColor(112@, 8, 0)
 World.SetCarDensityMultiplier(0.0)
 World.SetPedDensityMultiplier(0.0)
@@ -453,6 +501,11 @@ goto @VCR2_5058
 $x = Car.GetOffsetInWorldCoords($y, $z, 112@, 1.6, -1.0, 0.0)
 $z = World.GetGroundZFor3DCoord($x, $y, $z)
 117@ = Char.Create(24, 290, $x, $y, $z)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(117@)
+end
 $heading = Car.GetHeading(112@)
 $heading += -90.0
 Char.SetHeading(117@, $heading)
@@ -465,6 +518,13 @@ Char.SetCoordinates($scplayer, $x, $y, $z)
 $heading = Car.GetHeading(112@)
 $heading += 90.0
 Char.SetHeading($scplayer, $heading)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], $x, $y, $z)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], $heading)
+    end
+end
 $x = Car.GetOffsetInWorldCoords($y, $z, 112@, 3.3455, -1.6234, 1.1443)
 Camera.SetFixedPosition($x, $y, $z, 0.0, 0.0, 0.0)
 $x = Car.GetOffsetInWorldCoords($y, $z, 112@, 2.5461, -1.3539, 0.6073)
@@ -707,6 +767,11 @@ return
 
 :VCR2_5126
 Blip.Remove(34@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 113@)
+    end
+end
 $timer_mobile_start = Clock.GetGameTimer()
 Streaming.UnloadSpecialCharacter(1)
 Streaming.MarkModelAsNoLongerNeeded(568)

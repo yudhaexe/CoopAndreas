@@ -16,6 +16,8 @@ terminate_this_script
 :TORENO2_47
 $onmission = 1
 Stat.RegisterMissionGiven
+Coop.EnableSyncingThisScript()
+CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('TORENO2')
 Text.ClearPrints
 wait 0
@@ -179,13 +181,28 @@ World.ClearArea(1, -685.1, 922.0, 10.9, 180.0)
 World.ClearArea(1, -692.2, 948.0, 11.2, 100.0)
 Car.CustomPlateForNextCar(461, "PREACHER")
 36@ = Car.Create(461, -712.5, 943.5, 10.8)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(36@)
+end
 Car.SetHeading(36@, 32.7)
 World.ClearArea(1, -709.0, 952.0, 11.2, 5.0)
 Car.CustomPlateForNextCar(567, "_LVA4L__")
 39@ = Car.Create(567, -709.0, 952.0, 11.2)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(39@)
+end
 Car.SetHeading(39@, 240.7)
 Car.ChangeColor(39@, 3, 3)
 $cesar = Char.Create(24, 290, -703.7, 932.4, 11.4)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId($cesar)
+end
 Char.SetGetOutUpsideDownCar($cesar, False)
 Char.SetHeading($cesar, 214.6)
 Char.SetNeverTargeted($cesar, True)
@@ -310,6 +327,12 @@ Group.SetDefaultTaskAllocator($Players_Group, DefaultTaskAllocator.FollowLimited
 40@ = Blip.AddForCar(36@)
 Blip.SetAsFriendly(40@, True)
 Text.PrintNow('TOR1_01', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 36@, 1, 3, 2, 2)
+        Coop.PrintNowForNetworkPlayer('TOR1_01', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Game.ShutAllCharsUp(False)
 Hud.SwitchWidescreen(False)
 Player.MakeGangReappear
@@ -353,13 +376,28 @@ if
   Char.IsInCar($scplayer, 36@)
 goto_if_false @TORENO2_2472
 34@ = Car.Create(514, -1687.8, 537.7, 36.8)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(34@)
+end
 Car.SetHeading(34@, 137.0)
 37@ = Car.Create(584, -1679.5, 545.9, 36.9)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(37@)
+end
 Car.SetHeading(37@, 137.0)
 Trailer.AttachToCab(37@, 34@)
 Car.SetCanBurstTires(34@, False)
 Car.LockDoors(34@, CarLock.LockoutPlayerOnly)
 35@ = Char.CreateRandomAsDriver(34@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(35@)
+end
 Car.SetOnlyDamagedByPlayer(34@, True)
 Char.SetCanBeShotInVehicle(35@, False)
 Car.SetCruiseSpeed(34@, 0.0)
@@ -379,6 +417,16 @@ goto_if_false @TORENO2_2458
 40@ = Blip.AddForCar(34@)
 
 :TORENO2_2458
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(36@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 36@)
+        end
+        if not Car.IsDead(34@)
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, 0, 3, 0, 2)
+        end
+    end
+end
 75@ = 0
 41@ = 2
 
@@ -976,6 +1024,12 @@ Blip.Remove(40@)
 Blip.SetAsFriendly(40@, True)
 Char.ShutUpForScriptedSpeech($cesar, False)
 Text.PrintNow('TOR1_11', 4000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, 1, 3, 2, 2)
+        Coop.PrintNowForNetworkPlayer('TOR1_11', 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 42@ = 0
 73@ = 0
 75@ = 0
@@ -1220,6 +1274,15 @@ goto_if_false @TORENO2_8309
 Blip.Remove(40@)
 40@ = Blip.AddForCoord(-2016.5, 157.7, 26.7)
 Text.Print('TOR1_06', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(34@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        end
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -2016.5, 157.7, 26.7, 4.0)
+        Coop.PrintNowForNetworkPlayer('TOR1_06', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 55@ = 1
 goto @TORENO2_8352
 
@@ -1228,6 +1291,15 @@ Blip.Remove(40@)
 40@ = Blip.AddForCar(37@)
 Blip.SetAsFriendly(40@, True)
 Text.Print('TOR1_21', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(37@)
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@, 1, 3, 2, 2)
+        end
+        Coop.PrintNowForNetworkPlayer('TOR1_21', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 55@ = 0
 
 :TORENO2_8352
@@ -1609,6 +1681,12 @@ Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
 return 
 
 :TORENO2_10715
+0@, 1@, 2@ = Char.GetCoordinates($scplayer)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 0@, 1@, 2@)
+    end
+end
 $flag_desert_mission_counter += 1
 Text.PrintWithNumberBig('M_PASS', 7000, 5000, TextStyle.Middle)
 Player.AddScore($player1, 7000)
@@ -1621,6 +1699,20 @@ Stat.PlayerMadeProgress(1)
 return 
 
 :TORENO2_10787
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(36@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 36@)
+        end
+        if not Car.IsDead(34@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        end
+        if not Car.IsDead(37@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@)
+        end
+    end
+end
 if 
   is_var_text_label_empty s$shop_name
 goto_if_false @TORENO2_10805
@@ -1705,11 +1797,27 @@ goto_if_false @TORENO2_11205
 Blip.Remove(40@)
 40@ = Blip.AddForCar(37@)
 Blip.SetAsFriendly(40@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(37@)
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@, 1, 3, 2, 2)
+        end
+    end
+end
 goto @TORENO2_11230
 
 :TORENO2_11205
 Blip.Remove(40@)
 40@ = Blip.AddForCoord(-2016.5, 157.7, 26.7)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(37@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@)
+        end
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -2016.5, 157.7, 26.7, 4.0)
+    end
+end
 
 :TORENO2_11230
 45@ = 1
@@ -1724,6 +1832,14 @@ goto_if_false @TORENO2_11301
 Blip.Remove(40@)
 40@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(40@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(34@)
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, 1, 3, 2, 2)
+        end
+    end
+end
 45@ = 0
 
 :TORENO2_11301
@@ -1747,6 +1863,15 @@ Blip.Remove(40@)
 40@ = Blip.AddForCar(37@)
 Blip.SetAsFriendly(40@, True)
 Text.PrintNow('TOR1_21', 4000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(37@)
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@, 1, 3, 2, 2)
+        end
+        Coop.PrintNowForNetworkPlayer('TOR1_21', 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 55@ = 0
 
 :TORENO2_11425
@@ -1759,6 +1884,15 @@ goto_if_false @TORENO2_11510
 Blip.Remove(40@)
 40@ = Blip.AddForCoord(-2016.5, 157.7, 26.7)
 Text.Print('TOR1_06', 4000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(37@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 37@)
+        end
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -2016.5, 157.7, 26.7, 4.0)
+        Coop.PrintNowForNetworkPlayer('TOR1_06', 4000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 55@ = 1
 
 :TORENO2_11510

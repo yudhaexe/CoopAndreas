@@ -3,6 +3,7 @@
 
 :CASINO1
 script_name 'CASINO1'
+Coop.EnableSyncingThisScript()
 gosub @CASINO1_484
 if 
   has_deatharrest_been_executed 
@@ -85,6 +86,7 @@ return
 :CASINO1_484
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 34@ = -1
 35@ = 0
@@ -316,6 +318,23 @@ goto @CASINO1_2470
 :CASINO1_2496
 gosub @CASINO1_47
 gosub @CASINO1_125
+// COOP: handshake target car+driver (barrier, wait server replication) then blip target for all followers
+$temp_int = Coop.GetVehicleNetworkId(322@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(322@)
+end
+$temp_int = Coop.GetPedNetworkId(324@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(324@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 322@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 Streaming.LoadSceneInDirection(1908.156, 977.3071, 10.2294, 136.9741)
 Hud.SwitchWidescreen(True)
 wait 150
@@ -850,6 +869,12 @@ Camera.SetFirstPersonInCarMode(False)
 101@ = Clock.GetGameTimer()
 Blip.Remove(323@)
 Blip.Remove(50@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 if and
   34@ > 0
   4 > 34@
@@ -862,6 +887,12 @@ if
   34@ == 4
 goto_if_false @CASINO1_5648
 50@ = Blip.AddForCoord(79@, 80@, 81@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(79@, 80@, 81@, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :CASINO1_5648
 36@ = 1
@@ -1019,6 +1050,12 @@ $ca1_spooked = 100
 $ca1_random_dialogue = 0
 Hud.ClearCounter($ca1_spooked)
 50@ = Blip.AddForCoord(79@, 80@, 81@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(79@, 80@, 81@, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 62@ = Clock.GetGameTimer()
 34@ = 4
 
@@ -2968,8 +3005,20 @@ goto_if_false @CASINO1_18321
 335@ = 2
 
 :CASINO1_18321
-if 
-  Char.LocateAnyMeans3D($scplayer, 1, 79@, 80@, 81@, 4.0, 4.0, 4.0)
+30@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 79@, 80@, 81@, 20.0, 20.0, 20.0)
+        then
+            30@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 79@, 80@, 81@, 4.0, 4.0, 4.0)
+  30@ == 0
 goto_if_false @CASINO1_18500
 Player.SetControl($player1, False)
 if 
@@ -3188,6 +3237,14 @@ Task.DiveFromAttachmentAndGetUp(324@, 10000)
 Object.SetCoordinates($fourdragons_door, 1903.383, 967.62, 11.438)
 Blip.Remove(323@)
 Blip.Remove(50@)
+// COOP: clear target blip and checkpoint for all followers
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 322@)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   34@ == 5
 goto_if_false @CASINO1_19700

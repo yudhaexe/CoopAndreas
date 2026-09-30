@@ -3,6 +3,7 @@
 
 :HEIST4
 script_name 'HEIST4'
+Coop.EnableSyncingThisScript()
 gosub @HEIST4_47
 if 
   has_deatharrest_been_executed 
@@ -18,6 +19,9 @@ $onmission = 1
 Stat.RegisterMissionGiven
 Text.LoadMissionText('HEIST4')
 wait 0
+for $temp_int = 0 to 6
+    $NETWORK_PLAYER[$temp_int] = Coop.CollectNetworkPlayersForTheMission($temp_int)
+end
 Streaming.SetAreaVisible(10)
 Char.SetHasUsedEntryExit($scplayer, 2016.422, 1017.102, 10.0)
 Char.SetCoordinates($scplayer, 2033.974, 1017.29, 9.8203)
@@ -63,6 +67,11 @@ Game.SwitchCopsOnBikes(False)
 Streaming.LoadScene(2031.168, 1030.918, 9.813)
 Streaming.RequestCollision(2031.168, 1030.918)
 Streaming.SetAreaVisible(0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+    end
+end
 wait 0
 Player.SetControl($player1, False)
 104@ = 0
@@ -205,6 +214,11 @@ goto @HEIST4_1011
 World.ClearArea(0, 2710.525, 1567.009, 100.0, 100.0)
 Car.CustomPlateForNextCar(443, "CFC_1888")
 244@ = Car.Create(443, 2711.326, 1567.045, 6.2)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(244@)
+end
 Car.SetHeading(244@, 175.1379)
 Car.ChangeColor(244@, 16, 16)
 Car.SetUpsidedownNotDamaged(244@, True)
@@ -217,7 +231,17 @@ Car.SetOnlyDamagedByPlayer(244@, True)
 Car.LockDoors(244@, CarLock.Locked)
 Car.SetCanGoAgainstTraffic(244@, False)
 245@ = Char.CreateInsideCar(PedType.Mission1, 117, 244@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(245@)
+end
 115@ = Char.Create(24, 50, 2715.326, 1569.045, 7.2)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(115@)
+end
 Char.SetProofs(115@, True, True, True, True, True)
 Char.SetNeverTargeted(115@, True)
 Char.AttachToCar(115@, 244@, 1.0, 3.1, 0.4, 2, 0.0, WeaponType.Unarmed)
@@ -298,46 +322,106 @@ goto @HEIST4_2102
 47@ = 0
 275@ = 0
 76@ = Char.Create(24, 284, 2311.019, 2438.368, 9.8203)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(76@)
+end
 Char.SetDecisionMaker(76@, 61@)
 Char.SetHeading(76@, 297.0)
 Char.GiveWeapon(76@, WeaponType.Pistol, 2000)
 77@ = Char.Create(24, 284, 2311.85, 2439.375, 9.8203)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(77@)
+end
 Char.SetDecisionMaker(77@, 61@)
 Char.SetHeading(77@, 115.0)
 Char.GiveWeapon(77@, WeaponType.Pistol, 2000)
 82@ = Char.Create(24, 284, 1612.244, 1845.855, 9.828)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(82@)
+end
 Char.SetDecisionMaker(82@, 61@)
 Char.SetHeading(82@, 110.0)
 Char.GiveWeapon(82@, WeaponType.Pistol, 2000)
 Char.SetCanBeKnockedOffBike(82@, 3)
 63@ = Char.Create(24, 284, 2768.797, 1431.239, 9.487)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(63@)
+end
 Char.GiveWeapon(63@, WeaponType.Pistol, 2000)
 Char.SetDecisionMaker(63@, 61@)
 Char.SetHeading(63@, 111.0)
 Streaming.MarkModelAsNoLongerNeeded(284)
 68@ = Char.Create(24, 34, 2767.537, 1424.877, 9.2195)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(68@)
+end
 Char.SetAnimGroup(68@, "DRUNKMAN")
 Char.SetDecisionMaker(68@, 61@)
 Char.SetHeading(68@, 347.0)
 70@ = Char.Create(24, 284, 2619.858, 2339.256, 10.0081)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(70@)
+end
 Char.SetCanBeKnockedOffBike(70@, 3)
 Char.GiveWeapon(70@, WeaponType.Pistol, 2000)
 Char.SetDecisionMaker(70@, 61@)
 Char.SetHeading(70@, 300.0)
 92@ = Car.Create(463, 2634.011, 2343.212, 9.6797)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(92@)
+end
 Car.SetHeading(92@, 120.0386)
 Car.SetLoadCollisionFlag(92@, False)
 93@ = Car.Create(463, 2625.69, 2336.85, 9.6875)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(93@)
+end
 Car.SetHeading(93@, 183.0386)
 Car.SetLoadCollisionFlag(93@, False)
 94@ = Car.Create(463, 2637.847, 2347.576, 9.6797)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(94@)
+end
 Car.SetHeading(94@, 126.0963)
 Car.SetLoadCollisionFlag(94@, False)
 95@ = Char.CreateInsideCar(PedType.Mission1, 34, 92@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(95@)
+end
 Char.SetDecisionMaker(95@, 61@)
 96@ = Char.CreateInsideCar(PedType.Mission1, 32, 93@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(96@)
+end
 Char.SetDecisionMaker(96@, 61@)
 97@ = Char.CreateInsideCar(PedType.Mission1, 33, 94@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(97@)
+end
 Char.SetDecisionMaker(97@, 61@)
 Streaming.MarkModelAsNoLongerNeeded(34)
 Streaming.MarkModelAsNoLongerNeeded(32)
@@ -491,6 +575,11 @@ Char.EnableSpeech($scplayer)
 Char.Delete(276@)
 Text.ClearPrints
 Text.PrintNow('HEI4_01', 8000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('HEI4_01', 8000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 TIMERA = 0
 TIMERB = 0
 60@ = 2
@@ -788,9 +877,19 @@ goto @HEIST4_5319
 
 :HEIST4_5346
 86@ = Car.Create(497, 1589.198, 1850.619, 9.8358)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(86@)
+end
 Car.SetHeading(86@, 51.0)
 Car.OpenDoor(86@, CarDoor.LeftFrontDoor)
 87@ = Char.CreateInsideCar(PedType.Mission1, 284, 86@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(87@)
+end
 Char.SetLoadCollisionFlag(87@, False)
 Heli.SetBladesFullSpeed(86@)
 Streaming.MarkModelAsNoLongerNeeded(497)
@@ -809,6 +908,11 @@ goto_if_false @HEIST4_5544
 Text.ClearPrints
 Text.ClearThisPrint('HEI4_01')
 Text.PrintNow('HEI4_11', 8000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('HEI4_11', 8000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Hud.DisplayTimerWithString($hst4_deliverytimer, TimerDirection.Down, 'HEI4_12')
 131@ = 1
 60@ = 3
@@ -887,6 +991,13 @@ goto @HEIST4_5917
 Blip.Remove(35@)
 35@ = Blip.AddForCar(244@)
 Blip.SetAsFriendly(35@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 279@(48@,4i))
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 244@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+        Coop.PrintNowForNetworkPlayer('HEI4_02', 8000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   273@ <> 4
 goto_if_false @HEIST4_6012
@@ -918,6 +1029,11 @@ if
   Char.LocateInCarCar2D($scplayer, 244@, 30.0, 30.0, False)
 goto_if_false @HEIST4_6251
 Text.PrintNow('HEI4_13', 8000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('HEI4_13', 8000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :HEIST4_6251
 if 
@@ -967,6 +1083,11 @@ TIMERB = 0
 274@ += 10.0
 266@(48@,4i) = 2
 Blip.Remove(35@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 244@)
+    end
+end
 Text.ClearThisPrint('HEI4_02')
 43@ = 0
 
@@ -986,6 +1107,11 @@ if
 goto_if_false @HEIST4_6750
 283@(43@,4i) = Blip.AddForCar(279@(43@,4i))
 Blip.ChangeColor(283@(43@,4i), BlipColor.Green)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 279@(43@,4i), true, BlipDisplay.Both, BlipColor.Green, 3)
+    end
+end
 
 :HEIST4_6750
 goto @HEIST4_6787
@@ -1047,6 +1173,15 @@ goto @HEIST4_7066
 Blip.Remove(35@)
 Blip.ChangeColor(283@(43@,4i), BlipColor.Green)
 Text.PrintNow('HEI4_03', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 244@)
+        if not Car.IsDead(279@(43@,4i))
+            Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 279@(43@,4i), true, BlipDisplay.Both, BlipColor.Green, 3)
+        end
+        Coop.PrintNowForNetworkPlayer('HEI4_03', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :HEIST4_7098
 43@ += 1
@@ -1064,6 +1199,11 @@ if
 goto_if_false @HEIST4_7347
 World.ClearArea(0, 246@(48@,4f), 250@(48@,4f), 254@(48@,4f), 40.0)
 279@(48@,4i) = Car.Create(523, 246@(48@,4f), 250@(48@,4f), 254@(48@,4f))
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(279@(48@,4i))
+end
 Car.SetHeading(279@(48@,4i), 258@(48@,4f))
 Car.SetCanBurstTires(279@(48@,4i), False)
 Car.SetLoadCollisionFlag(279@(48@,4i), False)
@@ -1073,6 +1213,11 @@ goto_if_false @HEIST4_7336
 Blip.Remove(283@(48@,4i))
 283@(48@,4i) = Blip.AddForCar(279@(48@,4i))
 Blip.ChangeColor(283@(48@,4i), BlipColor.Green)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 279@(48@,4i), true, BlipDisplay.Both, BlipColor.Green, 3)
+    end
+end
 
 :HEIST4_7336
 262@(48@,4i) = 1
@@ -1317,6 +1462,12 @@ Hud.SwitchWidescreen(False)
 Char.ClearTasks($scplayer)
 Char.SetCoordinates($scplayer, 1014.013, 1902.325, 9.8125)
 Char.SetHeading($scplayer, 59.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1014.013, 1902.325, 9.8125)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 59.0)
+    end
+end
 Camera.RestoreJumpcut
 Camera.SetBehindPlayer
 Player.SetControl($player1, True)
@@ -2132,6 +2283,15 @@ Blip.Remove(283@)
 Blip.Remove(284@)
 Blip.Remove(285@)
 Blip.Remove(286@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 244@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 279@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 280@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 281@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 282@)
+    end
+end
 Streaming.MarkModelAsNoLongerNeeded(443)
 Streaming.MarkModelAsNoLongerNeeded(523)
 Streaming.MarkModelAsNoLongerNeeded(346)

@@ -3,6 +3,7 @@
 
 :DOC2
 script_name 'DOC2'
+Coop.EnableSyncingThisScript()
 gosub @DOC2_47
 if 
   has_deatharrest_been_executed 
@@ -24,6 +25,7 @@ $d2_rnd = 0
 Camera.SetFadingColor(0, 0, 0)
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Text.LoadMissionText('DOC2')
 Player.SetControl($player1, False)
 Camera.DoFade(0, Fade.Out)
@@ -312,6 +314,17 @@ Car.ChangeColor(34@, 1, 1)
 35@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(35@, True)
 Blip.ChangeDisplay(35@, BlipDisplay.Both)
+$temp_int = Coop.GetVehicleNetworkId(34@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetVehicleNetworkId(34@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, true, BlipDisplay.Both, BlipColor.Purple, 3)
+    end
+end
 109@ = 0.0
 if 
   not Car.IsDead(34@)
@@ -588,6 +601,12 @@ goto @DOC2_5553
 :DOC2_5560
 Blip.ChangeDisplay(35@, BlipDisplay.Neither)
 Blip.ChangeDisplay(92@, BlipDisplay.Both)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(105@, 106@, 107@, 4.0, 4.0, 4.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 91@ = 1
 goto @DOC2_5609
 
@@ -600,8 +619,22 @@ Blip.ChangeDisplay(92@, BlipDisplay.Neither)
 if 
   91@ == 1
 goto_if_false @DOC2_5748
-if and
-  Char.LocateAnyMeans3D($scplayer, 1, 105@, 106@, 107@, 4.0, 4.0, 4.0)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 105@, 106@, 107@, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 105@, 106@, 107@, 4.0, 4.0, 4.0)
+  12@ == 0
+goto_if_false @DOC2_5748
+if 
   not Char.IsDead($scplayer)
 goto_if_false @DOC2_5748
 Player.SetControl($player1, False)
@@ -1134,6 +1167,12 @@ set_lvar_int_to_lvar_int 37@ = 36@
 Hud.DisplayCounterWithString($d2_instance_health, CounterDisplay.Bar, 'DOC2_07')
 Blip.ChangeDisplay(93@, BlipDisplay.Both)
 Blip.ChangeDisplay(92@, BlipDisplay.Neither)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1878.546, 2240.82, 9.813, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 39@ = 0
 
 :DOC2_8838
@@ -1170,6 +1209,12 @@ goto_if_false @DOC2_8838
 Streaming.RemoveAnimation("ON_LOOKERS")
 wait 1000
 Text.PrintNow('DOC2_06', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('DOC2_06', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 TIMERA = 0
 
 :DOC2_9058
@@ -1505,10 +1550,24 @@ goto_if_false @DOC2_12980
 if 
   Char.IsInCar($scplayer, 34@)
 goto_if_false @DOC2_12980
-if and
-  Char.LocateAnyMeans3D($scplayer, 1, 1878.546, 2240.82, 9.813, 4.0, 4.0, 4.0)
-  not Car.IsDead(34@)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 1878.546, 2240.82, 9.813, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 1878.546, 2240.82, 9.813, 4.0, 4.0, 4.0)
+  12@ == 0
 goto_if_false @DOC2_12980
+if 
+  Car.IsDead(34@)
+goto @DOC2_12980
 Player.SetControl($player1, False)
 if 
   not Char.IsDead(95@)
@@ -2069,6 +2128,13 @@ if
   Blip.DoesExist(35@)
 goto_if_false @DOC2_13848
 Blip.Remove(35@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 
 :DOC2_13848
 Hud.ClearCounter($d2_instance_health)

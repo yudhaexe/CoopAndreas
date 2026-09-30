@@ -3,6 +3,7 @@
 
 :CASINO7
 script_name 'CASINO7'
+Coop.EnableSyncingThisScript()
 gosub @CASINO7_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Text.LoadMissionText('CASINO7')
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Streaming.SetAreaVisible(11)
 Cutscene.Load('CAS_7B')

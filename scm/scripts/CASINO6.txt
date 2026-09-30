@@ -3,6 +3,7 @@
 
 :CASINO6
 script_name 'CASINO6'
+Coop.EnableSyncingThisScript()
 gosub @CASINO6_47
 if 
   has_deatharrest_been_executed 
@@ -16,6 +17,7 @@ terminate_this_script
 :CASINO6_47
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 World.SwitchEntryExit('ABATOIR', True)
 Text.LoadMissionText('CASINO6')
 Char.SetCoordinates($scplayer, 2179.934, 1684.148, 10.0533)
@@ -98,6 +100,17 @@ Blip.Remove(40@)
 40@ = Blip.AddForChar(39@)
 Blip.ChangeDisplay(40@, BlipDisplay.BlipOnly)
 Blip.SetAsFriendly(40@, True)
+$temp_int = Coop.GetPedNetworkId(39@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(39@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 39@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 Char.SetDecisionMaker(39@, 34@)
 Char.SetNeverTargeted(39@, True)
 Char.SetSuffersCriticalHits(39@, False)
@@ -107,6 +120,13 @@ Group.SetMember(39@, 310@)
 Char.SetShootRate(39@, 100)
 218@ = Blip.AddForCoord(967.3132, 2161.154, 9.8203)
 Text.PrintNow('CAS6_10', 8000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('CAS6_10', 8000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCheckpointForNetworkPlayer(967.3132, 2161.154, 9.8203, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.FreezePosition($scplayer, False)
 Player.SetControl($player1, True)
 231@ = Pickup.Create(#HEALTH, 3, 958.9762, 2096.836, 1011.1)
@@ -202,9 +222,27 @@ goto_if_false @CASINO6_1502
 Text.ClearPrints
 Audio.ClearMissionAudio(MissionAudioSlot.Slot1)
 Audio.ClearMissionAudio(MissionAudioSlot.Slot2)
-if 
-  Char.LocateAnyMeans2D($scplayer, 0, 967.3132, 2161.154, 5.0, 5.0)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 967.3132, 2161.154, 9.8203, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans2D($scplayer, 0, 967.3132, 2161.154, 5.0, 5.0)
+  12@ == 0
 goto_if_false @CASINO6_1466
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @CASINO6_2758
 goto @CASINO6_1502
 
@@ -627,6 +665,18 @@ Streaming.LoadScene(942.8142, 2111.484, 1010.031)
 Streaming.RequestCollision(942.8142, 2111.484)
 Char.SetCoordinates($scplayer, 961.4175, 2111.39, 1010.03)
 Char.SetHeading($scplayer, 100.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if Char.IsInAnyCar($NETWORK_PLAYER[$temp_int])
+        then
+            Char.WarpFromCarToCoord($NETWORK_PLAYER[$temp_int], 961.4175, 2111.39, 1010.03)
+        end
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 1)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 961.4175, 2111.39, 1010.03)
+    end
+end
 Char.FreezePosition($scplayer, False)
 36@ = 0
 Streaming.RequestModel(124)
@@ -4145,6 +4195,15 @@ gosub @CASINO6_27815
 World.SwitchEntryExit('ABATOIR', False)
 Blip.Remove(218@)
 218@ = Blip.AddForCoord(2165.185, 1692.317, 9.8203)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 970.7965, 2155.644, 9.8203)
+        Coop.UpdateCheckpointForNetworkPlayer(2165.185, 1692.317, 9.8203, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Player.ClearWantedLevel($player1)
 if 
   not Char.IsDead(39@)
@@ -4306,8 +4365,20 @@ wait 0
 if 
   not Char.IsDead(39@)
 goto_if_false @CASINO6_29528
-if 
-  Char.LocateAnyMeans3D($scplayer, 1, 2165.185, 1692.317, 9.8203, 4.0, 4.0, 4.0)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2165.185, 1692.317, 9.8203, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 2165.185, 1692.317, 9.8203, 4.0, 4.0, 4.0)
+  12@ == 0
 goto_if_false @CASINO6_29439
 if 
   Char.LocateAnyMeansChar2D($scplayer, 39@, 15.0, 15.0, False)
@@ -4885,6 +4956,14 @@ goto @CASINO6_32388
 :CASINO6_32485
 Char.MarkAsNoLongerNeeded(39@)
 Blip.Remove(40@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 39@)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 216@ = 0
 
 :CASINO6_32502

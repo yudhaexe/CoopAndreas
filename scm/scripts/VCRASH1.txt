@@ -1,4 +1,6 @@
 :VCRASH1
+script_name 'VCRASH1'
+Coop.EnableSyncingThisScript()
 gosub @VCRASH1_36
 if 
   has_deatharrest_been_executed 
@@ -12,7 +14,7 @@ terminate_this_script
 :VCRASH1_36
 $onmission = 1
 Stat.RegisterMissionGiven
-script_name 'VCRASH1'
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('VCR1')
 Player.MakeGangDisappear
@@ -80,6 +82,13 @@ Restart.SetRespawnPointForDurationOfMission(1599.09, 2667.725, 9.8203)
 Text.PrintNow('VCR1__1', 15000, 1)
 34@ = Blip.AddForCoord(-1306.191, 2532.48, 86.7332)
 Blip.ChangeColor(34@, BlipColor.Red)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('VCR1__1', 15000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCheckpointForNetworkPlayer(-1306.191, 2532.48, 86.7332, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 59@ = 0
 60@ = 0
 61@ = 0
@@ -280,7 +289,24 @@ Char.SetHeading(80@, 259.3965)
 Char.GiveWeapon(80@, WeaponType.MicroUzi, 9999)
 Char.SetInformRespectedFriends(80@, 30.0, 5)
 Blip.Remove(34@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 34@ = Blip.AddForChar(80@)
+$temp_int = Coop.GetPedNetworkId(80@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(80@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@, false, BlipDisplay.Both, BlipColor.Red, 3)
+    end
+end
 Char.SetOnlyDamagedByPlayer(80@, True)
 Char.SetHealth(80@, 200)
 90@ = DecisionMakerChar.Copy(-1)
@@ -832,6 +858,14 @@ Blip.Remove(34@)
 106@ = Pickup.Create(#BRIEFCASE, 3, 103@, 104@, 105@)
 34@ = Blip.AddForPickup(106@)
 Text.PrintNow('VCR1__3', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
+        Coop.UpdateCheckpointForNetworkPlayer(103@, 104@, 105@, 2.0, 2.0, 2.0, $NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('VCR1__3', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 60@ = 2
 61@ = 1
 
@@ -1097,6 +1131,12 @@ if
   Pickup.HasBeenCollected(106@)
 goto_if_false @VCRASH1_7866
 Blip.Remove(34@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.PrintNow('VCR1__6', 5000, 1)
 goto @VCRASH1_7980
 
@@ -1133,6 +1173,14 @@ return
 :VCRASH1_8041
 Blip.Remove(34@)
 Blip.Remove(35@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 80@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Game.SetArea51SamSite(True)
 Pickup.Remove(106@)
 if 

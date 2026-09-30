@@ -16,6 +16,8 @@ terminate_this_script
 :DESERT4_47
 Stat.RegisterMissionGiven
 $onmission = 1
+Coop.EnableSyncingThisScript()
+CollectNetworkPlayersForTheMission()
 wait 0
 Text.LoadMissionText('DSERT4')
 Weather.Force(WeatherType.ExtraSunnyDesert)
@@ -61,6 +63,11 @@ Streaming.LoadScene(-696.0359, 948.1198, 11.276)
 Camera.DoFade(1, 1000)
 wait 1000
 Text.PrintNow('BUY_AIR', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('BUY_AIR', 10000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 goto @DESERT4_310
 
 :DESERT4_292
@@ -68,6 +75,12 @@ Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
 return 
 
 :DESERT4_310
+0@, 1@, 2@ = Char.GetCoordinates($scplayer)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 0@, 1@, 2@)
+    end
+end
 $flag_desert_mission_counter += 1
 Stat.RegisterMissionPassed('DESERT4')
 Blip.Remove($desert_contact_blip)

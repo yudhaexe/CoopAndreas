@@ -3,6 +3,7 @@
 
 :CASINO4
 script_name 'CASINO4'
+Coop.EnableSyncingThisScript()
 gosub @CASINO4_86
 if 
   has_deatharrest_been_executed 
@@ -25,6 +26,7 @@ goto @CASINO4_62
 :CASINO4_86
 Stat.RegisterMissionGiven
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 Weather.Force(WeatherType.SunnyVegas)
 Text.LoadMissionText('CASINO4')
 Cutscene.Load('CAS_4A')
@@ -673,6 +675,12 @@ goto @CASINO4_4899
 :CASINO4_4923
 66@ = Blip.AddForCoord(-735.0, 2398.69, 126.0)
 Blip.SetCoordAppearance(66@, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(-735.0, 2398.69, 126.0, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Char.SetHeading($scplayer, 265.5486)
 Camera.SetBehindPlayer
 Text.Print('CAS4_01', 10000, 1)
@@ -704,10 +712,28 @@ goto_if_false @CASINO4_5112
 77@ = Char.StoreCarIsIn($scplayer)
 
 :CASINO4_5112
-if 
-  Char.LocateAnyMeans3D($scplayer, 1, -735.0, 2398.69, 126.0, 4.0, 4.0, 2.0)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, -735.0, 2398.69, 126.0, 25.0, 25.0, 25.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, -735.0, 2398.69, 126.0, 4.0, 4.0, 2.0)
+  12@ == 0
 goto_if_false @CASINO4_5179
 Blip.Remove(66@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 47@ = 1
 goto @CASINO4_5645
 
@@ -885,6 +911,23 @@ Char.ClearTasks(71@)
 Blip.SetAsFriendly(68@, True)
 67@ = Blip.AddForChar(72@)
 Blip.SetAsFriendly(67@, True)
+$temp_int = Coop.GetPedNetworkId(71@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(71@)
+end
+$temp_int = Coop.GetPedNetworkId(72@)
+while $temp_int == -1
+    wait 0
+    $temp_int = Coop.GetPedNetworkId(72@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 71@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+        Coop.UpdateCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 72@, true, BlipDisplay.Both, BlipColor.Blue, 3)
+    end
+end
 
 :CASINO4_6395
 if or
@@ -3130,6 +3173,12 @@ TIMERA = 0
 Text.ClearPrints
 Text.Print('CAS4_16', 8000, 1)
 70@ = Blip.AddForCoord(-24.0, 2331.0, 24.0)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(-24.0, 2331.0, 24.0, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 52@ = 1
 272@ = 0
 273@ = 0
@@ -3860,12 +3909,32 @@ if and
   not Char.IsDead(72@)
   not Char.IsDead(71@)
 goto_if_false @CASINO4_29660
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, -24.0, 2331.0, 24.0, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
+  12@ == 0
+goto_if_false @CASINO4_29660
 if and
-  Char.LocateAnyMeans3D($scplayer, 1, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
   Char.LocateAnyMeans3D(72@, 0, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
   Char.LocateAnyMeans3D(71@, 0, -24.0, 2331.0, 24.0, 4.0, 4.0, 2.0)
 goto_if_false @CASINO4_29660
 Blip.Remove(70@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Text.ClearPrints
 Camera.SetFixedPosition(-21.46, 2335.33, 23.52, 0.0, 0.0, 0.0)
 Camera.PointAtPoint(-49.14, 2356.75, 26.09, SwitchType.JumpCut)
@@ -4931,6 +5000,13 @@ if
 goto_if_false @CASINO4_29643
 69@ = Blip.AddForCoord(2175.21, 1679.37, 9.85)
 Text.PrintNow('CAS4_06', 8000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('CAS4_06', 8000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCheckpointForNetworkPlayer(2175.21, 1679.37, 9.85, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 46@ = 1
 
 :CASINO4_29643
@@ -6070,12 +6146,32 @@ gosub @CASINO4_39181
 goto @CASINO4_35960
 
 :CASINO4_35824
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 2175.21, 1679.37, 9.85, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 2175.21, 1679.37, 9.85, 4.0, 4.0, 2.0)
+  12@ == 0
+goto_if_false @CASINO4_35960
 if and
-  Char.LocateAnyMeans3D($scplayer, 1, 2175.21, 1679.37, 9.85, 4.0, 4.0, 2.0)
   Char.LocateAnyMeans3D(72@, 0, 2175.21, 1679.37, 9.85, 6.0, 6.0, 2.0)
   Char.LocateAnyMeans3D(71@, 0, 2175.21, 1679.37, 9.85, 6.0, 6.0, 2.0)
 goto_if_false @CASINO4_35960
 Blip.Remove(69@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 45@ = 1
 Text.ClearPrints
 
@@ -7875,6 +7971,14 @@ Blip.Remove(107@)
 Blip.Remove(108@)
 Blip.Remove(117@)
 Blip.Remove(118@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 71@)
+        Coop.RemoveCharBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 72@)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Car.MarkAsNoLongerNeeded(77@)
 Car.MarkAsNoLongerNeeded(78@)
 Car.MarkAsNoLongerNeeded(79@)

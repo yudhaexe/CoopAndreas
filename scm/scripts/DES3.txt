@@ -16,6 +16,8 @@ terminate_this_script
 :DES3_47
 Stat.RegisterMissionGiven
 $onmission = 1
+Coop.EnableSyncingThisScript()
+CollectNetworkPlayersForTheMission()
 34@ = 0
 35@ = 0
 36@ = 0
@@ -417,6 +419,11 @@ goto @DES3_3064
 
 :DES3_3091
 $car = Car.Create(424, -701.5853, 965.8546, 11.3768)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId($car)
+end
 Car.SetHeading($car, 90.4785)
 Streaming.MarkModelAsNoLongerNeeded(424)
 Audio.SetRadioChannel(RadioChannel.WCTR)
@@ -433,6 +440,12 @@ Camera.RestoreJumpcut
 Weather.Force(WeatherType.ExtraSunnyDesert)
 101@ = Blip.AddForCoord(-429.025, 2226.223, 41.4297)
 Text.Print('AIR1_13', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -429.025, 2226.223, 41.4297, 4.0)
+        Coop.PrintNowForNetworkPlayer('AIR1_13', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Streaming.RequestModel(568)
 Streaming.RequestModel(471)
 Streaming.RequestModel(468)
@@ -462,8 +475,23 @@ goto @DES3_3318
 :DES3_3342
 Player.SetControl($player1, True)
 71@ = Car.Create(471, -434.5365, 2237.567, 41.869)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(71@)
+end
 72@ = Car.Create(468, -426.2288, 2240.41, 41.4297)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(72@)
+end
 73@ = Car.Create(568, -428.1476, 2235.207, 42.3505)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(73@)
+end
 Car.SetHeading(71@, 291.5598)
 Car.SetHeading(72@, 179.3694)
 Car.SetHeading(73@, 102.7597)
@@ -761,6 +789,12 @@ goto_if_false @DES3_5260
 97@ = Pickup.CreateWithAmmo(359, 3, 40, -431.3719, 2240.132, 42.6177)
 106@ = Blip.AddForPickup(97@)
 Text.PrintNow('AIR1_15', 5000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('AIR1_15', 5000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 TIMERA = 0
 35@ += 1
 
@@ -776,6 +810,12 @@ Blip.Remove(106@)
 Blip.Remove(101@)
 101@ = Blip.AddForCoord(-804.5877, 2377.843, 151.7558)
 Text.PrintNow('AIR1_16', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -804.5877, 2377.843, 151.7558, 4.0)
+        Coop.PrintNowForNetworkPlayer('AIR1_16', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Streaming.RequestAnimation("BOMBER")
 
 :DES3_5358
@@ -1697,6 +1737,12 @@ gosub @DES3_17557
 Char.ClearTasksImmediately($scplayer)
 Char.SetCoordinates($scplayer, -789.7678, 2416.916, 156.022)
 Char.SetHeading($scplayer, 190.8497)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], -789.7678, 2416.916, 156.022)
+        Coop.PrintNowForNetworkPlayer('AIR1_06', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Player.SetControl($player1, True)
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
@@ -2167,6 +2213,11 @@ goto @DES3_13840
 Car.MarkAsNoLongerNeeded(80@)
 World.ClearArea(1, -804.5877, 2377.843, 151.7558, 5.0)
 80@ = Car.Create(568, -804.5877, 2377.843, 151.7558)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(80@)
+end
 107@ = Blip.AddForCar(80@)
 
 :DES3_13840
@@ -2175,9 +2226,24 @@ World.ClearArea(1, $x, $y, $z, 20.0)
 Blip.SetAsFriendly(107@, True)
 Streaming.MarkModelAsNoLongerNeeded(568)
 79@ = Car.Create(508, -680.7584, 2466.081, 114.9057)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(79@)
+end
 Car.SetHeading(79@, 75.939)
 92@ = Char.CreateInsideCar(PedType.CivMale, 68, 79@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(92@)
+end
 93@ = Char.CreateAsPassenger(PedType.CivFemale, 75, 79@, 0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(93@)
+end
 Task.CarDriveToCoord(92@, 79@, -726.9384, 2357.388, 125.5138, 10.0, DriveMode.Normal, 1, DrivingMode.AvoidCars)
 Streaming.MarkModelAsNoLongerNeeded(68)
 Streaming.MarkModelAsNoLongerNeeded(75)
@@ -2200,6 +2266,11 @@ if
   35@ == 0
 goto_if_false @DES3_14308
 Text.PrintNow('AIR1_09', 7000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintNowForNetworkPlayer('AIR1_09', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Streaming.RequestModel(487)
 Streaming.RequestModel(61)
 Streaming.RequestModel(355)
@@ -2242,6 +2313,11 @@ Object.Delete(96@)
 :DES3_14272
 gosub @DES3_16532
 105@ = Blip.AddForObject(96@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 264.2501, 2877.011, 13.7096, 4.0)
+    end
+end
 Object.SetScale(96@, 0.3)
 Game.SwitchPoliceHelis(True)
 35@ += 1
@@ -2277,6 +2353,11 @@ Blip.Remove(107@)
 :DES3_14492
 Object.Delete(96@)
 Blip.Remove(105@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 TIMERA = 0
 35@ += 1
 
@@ -2374,6 +2455,12 @@ if
 goto_if_false @DES3_15195
 Text.PrintNow('AIR1_10', 7000, 1)
 101@ = Blip.AddForCoord(-394.8462, 2226.622, 41.4259)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], -394.8462, 2226.622, 41.4259, 4.0)
+        Coop.PrintNowForNetworkPlayer('AIR1_10', 7000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 198@ = 0
 35@ += 1
 
@@ -2769,14 +2856,29 @@ return
 
 :DES3_17557
 74@ = Car.Create(417, 227@, 228@, 229@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(74@)
+end
 Car.SetHeading(74@, 230@)
 Heli.SetBladesFullSpeed(74@)
 Heli.SetStabiliser(74@, True)
 81@ = Char.CreateInsideCar(PedType.Mission1, 61, 74@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(81@)
+end
 Car.SetHealth(74@, 5000)
 Car.SetProofs(74@, False, False, False, True, False)
 104@ = Blip.AddForCar(74@)
 Blip.SetAsFriendly(104@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 74@, 1, 3, 2, 2)
+    end
+end
 Car.SetLoadCollisionFlag(74@, False)
 Car.SetOnlyDamagedByPlayer(74@, True)
 return 
@@ -2791,6 +2893,11 @@ Char.Delete(81@)
 if 
   Car.DoesExist(74@)
 goto_if_false @DES3_17702
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 74@)
+    end
+end
 Car.Delete(74@)
 
 :DES3_17702
@@ -2875,6 +2982,11 @@ if
   not Car.DoesExist(75@)
 goto_if_false @DES3_18341
 75@ = Car.Create(487, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(75@)
+end
 Car.CanBeTargetedByHsMissile(75@, True)
 Car.SetLoadCollisionFlag(75@, False)
 
@@ -2883,30 +2995,55 @@ if
   not Char.DoesExist(82@)
 goto_if_false @DES3_18370
 82@ = Char.CreateInsideCar(PedType.Mission2, 166, 75@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(82@)
+end
 
 :DES3_18370
 if 
   not Char.DoesExist(84@)
 goto_if_false @DES3_18411
 84@ = Char.Create(25, 165, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(84@)
+end
 
 :DES3_18411
 if 
   not Char.DoesExist(85@)
 goto_if_false @DES3_18452
 85@ = Char.Create(25, 166, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(85@)
+end
 
 :DES3_18452
 if 
   not Char.DoesExist(86@)
 goto_if_false @DES3_18493
 86@ = Char.Create(25, 165, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(86@)
+end
 
 :DES3_18493
 if 
   not Char.DoesExist(87@)
 goto_if_false @DES3_18534
 87@ = Char.Create(25, 166, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(87@)
+end
 
 :DES3_18534
 if 
@@ -3004,6 +3141,11 @@ Blip.Remove(102@)
 
 :DES3_19116
 102@ = Blip.AddForCar(75@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@, 0, 3, 0, 2)
+    end
+end
 
 :DES3_19124
 set_lvar_int_to_constant 109@ = 0
@@ -3037,6 +3179,11 @@ goto @DES3_19175
 if 
   Car.DoesExist(75@)
 goto_if_false @DES3_19257
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)
+    end
+end
 Car.Delete(75@)
 
 :DES3_19257
@@ -3688,6 +3835,11 @@ if
   not Car.DoesExist(76@)
 goto_if_false @DES3_23524
 76@ = Car.Create(487, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCarNetworkId(76@)
+end
 Car.CanBeTargetedByHsMissile(76@, True)
 Car.SetLoadCollisionFlag(76@, False)
 
@@ -3709,6 +3861,11 @@ if
   not Char.DoesExist(83@)
 goto_if_false @DES3_23605
 83@ = Char.CreateInsideCar(PedType.Mission2, 166, 76@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(83@)
+end
 
 :DES3_23605
 43@ = 0
@@ -3732,24 +3889,44 @@ if
   not Char.DoesExist(88@)
 goto_if_false @DES3_23725
 88@ = Char.Create(25, 165, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(88@)
+end
 
 :DES3_23725
 if 
   not Char.DoesExist(89@)
 goto_if_false @DES3_23766
 89@ = Char.Create(25, 166, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(89@)
+end
 
 :DES3_23766
 if 
   not Char.DoesExist(90@)
 goto_if_false @DES3_23807
 90@ = Char.Create(25, 165, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(90@)
+end
 
 :DES3_23807
 if 
   not Char.DoesExist(91@)
 goto_if_false @DES3_23848
 91@ = Char.Create(25, 166, 0.0, 0.0, 0.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetCharNetworkId(91@)
+end
 
 :DES3_23848
 if 
@@ -3842,6 +4019,11 @@ Blip.Remove(103@)
 
 :DES3_24391
 103@ = Blip.AddForCar(76@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 76@, 0, 3, 0, 2)
+    end
+end
 
 :DES3_24399
 110@ = 0
@@ -3875,6 +4057,11 @@ goto @DES3_24450
 if 
   Car.DoesExist(76@)
 goto_if_false @DES3_24532
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 76@)
+    end
+end
 Car.Delete(76@)
 
 :DES3_24532
@@ -4289,6 +4476,12 @@ Text.PrintBig('M_FAIL', 5000, TextStyle.Middle)
 return 
 
 :DES3_26934
+0@, 1@, 2@ = Char.GetCoordinates($scplayer)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 0@, 1@, 2@)
+    end
+end
 Text.PrintWithNumberBig('M_PASS', 1000, 5000, TextStyle.Middle)
 Player.AddScore($player1, 1000)
 Player.ClearWantedLevel($player1)
@@ -4310,6 +4503,20 @@ goto @DES3_27006
 return 
 
 :DES3_27032
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        if not Car.IsDead(74@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 74@)
+        end
+        if not Car.IsDead(75@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 75@)
+        end
+        if not Car.IsDead(76@)
+            Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 76@)
+        end
+    end
+end
 if 
   not Garage.IsClosed('GHOSTDR')
 goto_if_false @DES3_27065

@@ -313,30 +313,30 @@ monobank: https://send.monobank.ua/jar/8wPrs73MBa
 - [~] Test Drive
 - [~] Customs Fast Track
 - [~] Puncture Wounds
-- [ ] Monster
-- [ ] Highjack
-- [ ] Interdiction
-- [ ] Verdant Meadows
-- [ ] N.O.E.
+- [~] Monster
+- [~] Highjack
+- [~] Interdiction
+- [~] Verdant Meadows
+- [~] N.O.E.
 - [ ] Stowaway
 - [ ] Black Project
 - [ ] Green Goo
-- [ ] Fender Ketchup
-- [ ] Explosive Situation
-- [ ] You've Had Your Chips
-- [ ] Don Peyote
-- [ ] Architectural Espionage
-- [ ] Key To Her Heart
-- [ ] Dam And Blast
-- [ ] Cop Wheels
-- [ ] Up, Up And Away!
-- [ ] Intensive Care
-- [ ] The Meat Business
-- [ ] Fish In A Barrel
-- [ ] Misappropriation
-- [ ] Madd Dogg
-- [ ] Freefall
-- [ ] High Noon
+- [~] Fender Ketchup
+- [~] Explosive Situation
+- [~] You've Had Your Chips
+- [~] Don Peyote
+- [~] Architectural Espionage
+- [~] Key To Her Heart
+- [~] Dam And Blast
+- [~] Cop Wheels
+- [~] Up, Up And Away!
+- [~] Intensive Care
+- [~] The Meat Business
+- [~] Fish In A Barrel
+- [~] Misappropriation
+- [~] Madd Dogg
+- [~] Freefall
+- [~] High Noon
 - [!] Saint Mark's Bistro
 - [ ] A Home In The Hills
 - [ ] Vertical Bird

@@ -16,6 +16,10 @@ terminate_this_script
 :CASINO9_47
 Stat.RegisterMissionGiven
 $onmission = 1
+Coop.EnableSyncingThisScript()
+for $temp_int = 0 to 6
+    $NETWORK_PLAYER[$temp_int] = Coop.CollectNetworkPlayersForTheMission($temp_int)
+end
 Text.LoadMissionText('CASINO9')
 Char.SetCoordinates($scplayer, 2175.412, 1681.548, 9.8203)
 Char.SetHeading($scplayer, 90.0)
@@ -122,6 +126,11 @@ goto_if_false @CASINO9_501
 Camera.SetBehindPlayer
 Game.SwitchAmbientPlanes(False)
 37@ = Car.Create(521, 2163.249, 1679.976, 9.8125)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(37@)
+end
 Car.SetHeading(37@, 350.0)
 Hud.SwitchWidescreen(False)
 Player.SetControl($player1, True)
@@ -131,6 +140,12 @@ Restart.SetRespawnPointForDurationOfMission(1581.374, 1768.996, 9.8203)
 Camera.DoFade(1, 500)
 Text.PrintNow('CAS9_08', 8500, 1)
 43@ = Blip.AddForCoord(1707.828, 1606.639, 9.055)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'CAS9_08')
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 1707.828, 1606.639, 9.055, 3.0)
+    end
+end
 50@ = 0
 36@ = 0
 39@ = 0
@@ -156,12 +171,36 @@ goto_if_false @CASINO9_875
 if 
   Char.LocateAnyMeans2D($scplayer, 0, 1707.828, 1606.639, 4.0, 4.0)
 goto_if_false @CASINO9_868
+0@ = 0
+while 0@ == 0
+    wait 0
+    0@ = 1
+    for $temp_int = 0 to 6
+        if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+            if not Char.LocateAnyMeans2D($NETWORK_PLAYER[$temp_int], 0, 1707.828, 1606.639, 40.0, 40.0)
+                0@ = 0
+            end
+        end
+    end
+end
 Blip.Remove(43@)
 34@ = Car.Create(593, 1279.625, 1361.605, 9.8203)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(34@)
+end
 Car.SetHeading(34@, 270.0)
 35@ = Blip.AddForCar(34@)
 Blip.SetAsFriendly(35@, True)
 Text.PrintNow('CAS9_09', 6000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.AddCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@, 35@, BlipDisplay.Both, BlipColour.Cyan)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'CAS9_09')
+    end
+end
 47@ += 1
 
 :CASINO9_868
@@ -185,6 +224,13 @@ if
 goto_if_false @CASINO9_988
 Text.PrintNow('CAS9_50', 8000, 1)
 36@ += 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 53@, 54@, 55@, 15.0)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'CAS9_50')
+    end
+end
 
 :CASINO9_988
 $x, $y, $z = Car.GetCoordinates(34@)
@@ -215,6 +261,16 @@ goto @CASINO9_1645
 :CASINO9_1173
 Blip.Remove(43@)
 38@ = Car.Create(519, 53@, 54@, 55@)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(38@)
+end
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 Car.SetHeading(38@, 180.0)
 Plane.SetUndercarriageUp(38@, True)
 Car.FreezePosition(38@, True)
@@ -622,6 +678,16 @@ Char.SetCoordinates($scplayer, 1.6127, 34.7411, 1199.0)
 Char.SetHeading($scplayer, 180.0)
 Char.FreezePosition($scplayer, False)
 Char.SetAreaVisible($scplayer, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Char.ClearTasksImmediately($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 1)
+        Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1.6127, 34.7411, 1199.0)
+        Char.SetHeading($NETWORK_PLAYER[$temp_int], 180.0)
+    end
+end
 Camera.RestoreJumpcut
 Camera.SetBehindPlayer
 goto @CASINO9_4375
@@ -773,6 +839,11 @@ Player.SetHeadingForAttached($player1, 30.0, 30.0)
 Char.FreezePosition($scplayer, True)
 Hud.DisplayRadar(False)
 108@ = Char.Create(24, 124, 2.9739, 28.7207, 1198.594)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(108@)
+end
 Char.SetAreaVisible(108@, 1)
 Char.SetHeading(108@, 0.0)
 Char.SetHealth(108@, 150)
@@ -791,6 +862,11 @@ Char.SetAccuracy(108@, 0)
 154@ = 1199.851
 158@ = 1200.366
 109@ = Char.Create(24, 125, 0.5102, 27.6804, 1198.594)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(109@)
+end
 Char.SetAreaVisible(109@, 1)
 Char.SetHeading(109@, 0.0)
 Char.SetHealth(109@, 150)
@@ -809,6 +885,11 @@ Char.SetAccuracy(109@, 0)
 155@ = 1199.972
 159@ = 1200.34
 110@ = Char.Create(24, 126, 2.8831, 26.4404, 1198.601)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(110@)
+end
 Char.SetAreaVisible(110@, 1)
 Char.SetHeading(110@, 0.0)
 Char.SetHealth(110@, 150)
@@ -827,6 +908,11 @@ Char.SetAccuracy(110@, 0)
 156@ = 200.1145
 160@ = 200.3232
 111@ = Char.Create(24, 127, 0.5068, 25.3824, 1198.601)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(111@)
+end
 Char.SetAreaVisible(111@, 1)
 Char.SetHeading(111@, 0.0)
 Char.SetHealth(111@, 150)
@@ -1730,6 +1816,11 @@ goto @CASINO9_10891
 
 :CASINO9_10921
 40@ = Char.Create(24, 61, 1.881, 34.9202, 1198.602)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetPedNetworkId(40@)
+end
 Char.SetHeading(40@, 180.0)
 Char.GiveWeapon(40@, WeaponType.Pistol, 3000)
 Char.SetCurrentWeapon(40@, WeaponType.Pistol)
@@ -1877,9 +1968,25 @@ Char.SetAreaVisible($scplayer, 0)
 Streaming.LoadScene(1405.0, 6000.0, 210.0)
 Streaming.RequestCollision(1405.0, 6000.0)
 38@ = Car.Create(519, 1405.0, 6000.0, 210.0)
+0@ = -1
+while 0@ == -1
+    wait 0
+    0@ = Coop.GetVehicleNetworkId(38@)
+end
 Car.SetHeading(38@, 210.0)
 Car.SetAreaVisible(38@, 0)
 Char.WarpIntoCar($scplayer, 38@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Task.WarpCharIntoCarAsPassenger($NETWORK_PLAYER[$temp_int], 38@, -1)
+        wait 0
+        if not Char.IsInCar($NETWORK_PLAYER[$temp_int], 38@)
+            Char.SetCoordinates($NETWORK_PLAYER[$temp_int], 1476.219, 1463.623, 9.8203)
+            Char.SetHeading($NETWORK_PLAYER[$temp_int], 210.0)
+        end
+    end
+end
 Car.SetForwardSpeed(38@, 45.0)
 Plane.SetUndercarriageUp(38@, True)
 Camera.RestoreJumpcut
@@ -1889,6 +1996,12 @@ Hud.SwitchWidescreen(False)
 Hud.DisplayZoneNames(True)
 Camera.DoFade(1, 100)
 43@ = Blip.AddForCoord(1476.219, 1463.623, 9.8203)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 1476.219, 1463.623, 9.8203, 10.0)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'CAS9_41')
+    end
+end
 233@ = 1
 234@ = 1
 Game.SetMaxWantedLevel(6)
@@ -1909,6 +2022,13 @@ Text.ClearPrints
 Text.PrintNow('CAS9_41', 8000, 1)
 Blip.Remove(43@)
 43@ = Blip.AddForCoord(1476.219, 1463.623, 9.8203)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+        Coop.SetCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int], 1476.219, 1463.623, 9.8203, 10.0)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'CAS9_41')
+    end
+end
 233@ = 1
 
 :CASINO9_12001
@@ -1923,6 +2043,13 @@ Text.PrintNow('IN_VEH', 8000, 1)
 Blip.Remove(43@)
 43@ = Blip.AddForCar(38@)
 Blip.SetAsFriendly(43@, True)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.AddCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@, 43@, BlipDisplay.Both, BlipColour.Cyan)
+        Coop.PrintHelpForNetworkPlayer($NETWORK_PLAYER[$temp_int], 'IN_VEH')
+    end
+end
 233@ = 0
 
 :CASINO9_12071
@@ -2051,6 +2178,14 @@ Game.SetMaxWantedLevel(6)
 Game.SwitchAmbientPlanes(True)
 Blip.Remove(35@)
 Blip.Remove(43@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+        Char.SetAreaVisible($NETWORK_PLAYER[$temp_int], 0)
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 34@)
+        Coop.RemoveCarBlipForNetworkPlayer($NETWORK_PLAYER[$temp_int], 38@)
+    end
+end
 $timer_mobile_start = Clock.GetGameTimer()
 $onmission = 0
 Mission.Finish

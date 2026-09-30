@@ -3,6 +3,7 @@
 
 :CASINO3
 script_name 'CASINO3'
+Coop.EnableSyncingThisScript()
 gosub @CASINO3_47
 if 
   has_deatharrest_been_executed 
@@ -17,6 +18,7 @@ terminate_this_script
 Stat.RegisterMissionGiven
 Text.LoadMissionText('CASINO3')
 $onmission = 1
+$NETWORK_PLAYER[0], $NETWORK_PLAYER[1], $NETWORK_PLAYER[2], $NETWORK_PLAYER[3], $NETWORK_PLAYER[4], $NETWORK_PLAYER[5], $NETWORK_PLAYER[6] = Coop.CollectNetworkPlayersForTheMission()
 wait 0
 Streaming.SetAreaVisible(11)
 Char.SetHasUsedEntryExit($scplayer, 2016.422, 1017.102, 10.0)
@@ -325,6 +327,13 @@ goto @CASINO3_2866
 
 :CASINO3_2890
 Text.PrintNow('CA3_1', 10000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('CA3_1', 10000, 1, $NETWORK_PLAYER[$temp_int])
+        Coop.UpdateCheckpointForNetworkPlayer(1057.636, 2089.694, 9.8203, 10.0, 10.0, 10.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Camera.SetBehindPlayer
 Camera.RestoreJumpcut
 Player.SetControl($player1, True)
@@ -1028,6 +1037,12 @@ if
   55@ == 2
 goto_if_false @CASINO3_7231
 Blip.Remove(37@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 284@ = 0
 
 :CASINO3_7001
@@ -1046,6 +1061,12 @@ goto @CASINO3_7001
 :CASINO3_7113
 Text.ClearPrints
 Text.PrintNow('CA3_7', 6000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('CA3_7', 6000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 if 
   not Char.IsDead(76@)
 goto_if_false @CASINO3_7160
@@ -1074,9 +1095,21 @@ if
   55@ == 8
 goto_if_false @CASINO3_7360
 Text.PrintNow('CA3_23', 6000, 1)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.PrintNowForNetworkPlayer('CA3_23', 6000, 1, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Game.SetMaxWantedLevel(34@)
 39@ = Blip.AddForCoord(1918.59, 958.3391, 9.8203)
 Blip.ChangeColor(39@, BlipColor.Yellow)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.UpdateCheckpointForNetworkPlayer(1918.59, 958.3391, 9.8203, 5.0, 5.0, 5.0, $NETWORK_PLAYER[$temp_int])
+    end
+end
 Streaming.MarkModelAsNoLongerNeeded(126)
 Streaming.MarkModelAsNoLongerNeeded(50)
 Streaming.RequestModel(117)
@@ -1107,8 +1140,20 @@ goto_if_false @CASINO3_7421
 Player.SetControl($player1, True)
 
 :CASINO3_7421
-if 
-  Char.LocateAnyMeans3D($scplayer, 1, 1918.59, 958.3391, 9.8203, 4.0, 4.0, 2.0)
+12@ = 1
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        if not Char.LocateAnyMeans3D($NETWORK_PLAYER[$temp_int], 0, 1918.59, 958.3391, 9.8203, 20.0, 20.0, 20.0)
+        then
+            12@ = 0
+            break
+        end
+    end
+end
+if or
+  not Char.LocateAnyMeans3D($scplayer, 1, 1918.59, 958.3391, 9.8203, 4.0, 4.0, 2.0)
+  12@ == 0
 goto_if_false @CASINO3_7704
 if 
   Char.IsInAnyCar($scplayer)
@@ -2186,6 +2231,12 @@ Object.SetCoordinates($ca3_loadingbay, 1055.629, 2087.67, 12.469)
 :CASINO3_14380
 Blip.Remove(37@)
 Blip.Remove(39@)
+for $temp_int = 0 to 6
+    if Coop.IsNetworkPlayerActorValid($NETWORK_PLAYER[$temp_int])
+    then
+        Coop.RemoveCheckpointForNetworkPlayer($NETWORK_PLAYER[$temp_int])
+    end
+end
 284@ = 0
 
 :CASINO3_14397
