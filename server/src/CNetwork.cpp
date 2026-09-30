@@ -90,9 +90,11 @@ void CNetwork::HandlePeerConnected(ENetEvent& event)
         (event.peer->address.host >> 8) & 0xFF, (event.peer->address.host >> 16) & 0xFF,
         (event.peer->address.host >> 24) & 0xFF, event.peer->address.port);
 
-    // Very long timeout so pausing / alt-tabbing (GTA pauses on focus loss) doesn't drop players.
-    // timeoutLimit, timeoutMinimum(ms), timeoutMaximum(ms) = ~1 hour
-    enet_peer_timeout(event.peer, 0, 3600000, 3600000);
+    // Balanced timeout: a crashed client is cleaned up (ghost removed) within ~25s, while a brief
+    // pause/alt-tab is still tolerated up to ~10-25s. (1-hour was too long -> crashed players lingered
+    // as ghosts. The proper long-term fix is disabling GTA's pause-on-focus-loss client-side so a
+    // short timeout is safe for both.) timeoutLimit, timeoutMinimum(ms), timeoutMaximum(ms).
+    enet_peer_timeout(event.peer, 0, 10000, 25000);
 }
 
 void CNetwork::HandlePlayerDisconnected(ENetEvent& event)
